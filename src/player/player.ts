@@ -39,7 +39,7 @@ export class Player {
     let dx = fx * moveY + rx * moveX;
     let dz = fz * moveY + rz * moveX;
     const len = Math.hypot(dx, dz);
-    const target = sprint ? 8.5 : 4.6;
+    const target = sprint ? 17 : 9.2;
     if (len > 0.01) {
       dx /= len;
       dz /= len;

@@ -186,8 +186,9 @@ export function buildBuilding(mb: MeshBuilder, lot: Lot, era: Era, groundY: numb
   // ---------------- foundation ----------------
   // a stone podium from below the lowest corner up to the floor level, slightly wider than the body
   mb.material(TILE.STONE, 0.4);
-  if (t.round) mb.cylinder(x, minY - 0.6, z, w / 2 + 0.12, w / 2 + 0.12, foundationDepth, shade(wall, 0.62), 12, rot);
-  else mb.box(x, minY - 0.6, z, w + 0.24, foundationDepth, d + 0.24, shade(wall, 0.62), rot, 0.8);
+  const fw = F.has('plinth') ? 0.3 : 0.24; // same width as the plinth so the two stack without a double edge
+  if (t.round) mb.cylinder(x, minY - 0.6, z, w / 2 + fw / 2, w / 2 + fw / 2, foundationDepth, shade(wall, 0.62), 12, rot);
+  else mb.box(x, minY - 0.6, z, w + fw, foundationDepth, d + fw, shade(wall, 0.62), rot, 0.8);
   // steps up to the door when the ground in front is lower than the floor
   {
     const [sx, sz] = P(front, 0, 0.9);
@@ -288,7 +289,7 @@ export function buildBuilding(mb: MeshBuilder, lot: Lot, era: Era, groundY: numb
   if (F.has('plinth')) {
     stoneMat();
     const ins = insetAt(base);
-    mb.box(x, base - 0.05, z, w - ins * 2 + 0.3, 0.75, d - ins * 2 + 0.3, shade(wall, 0.72), rot);
+    mb.box(x, base, z, w - ins * 2 + 0.3, 0.7, d - ins * 2 + 0.3, shade(wall, 0.72), rot);
   }
   if (F.has('cornice') && !t.round) {
     wallMat();
@@ -688,7 +689,8 @@ function windows(
       const groundFloor = fl === 0 && firstFloor === 0;
       if (groundFloor && F.has('arcade') && front) continue;
       const wy = y + fl * fh + fh * 0.3;
-      const inset = insetAt(wy + winH / 2);
+      // on battered walls the opening must clear the slope at its top edge
+      const inset = insetAt(wy + winH + 0.3) + (F.has('battered') ? 0.02 : 0);
       if (groundFloor && front && F.has('storefront')) {
         // big shop windows either side of a door
         mb.material(TILE.CONCRETE, 0.3);
@@ -719,7 +721,8 @@ function windows(
           const dh = Math.min(2.2, fh * 0.75);
           if (F.has('frames')) mb.wallQuad(dx, y + 0.02, dz, 1.5, dh + 0.2, nx, nz, accent);
           const [dx2, dz2] = P(f, u, 0.08 - inset);
-          mb.wallQuad(dx2, y + 0.02, dz2, 1.2, dh, nx, nz, 0x2a1e14);
+          if (F.has('battered')) mb.box(dx2, y + 0.02, dz2, 1.2, dh, 0.6, 0x2a1e14, Math.atan2(nz, nx) - Math.PI / 2);
+          else mb.wallQuad(dx2, y + 0.02, dz2, 1.2, dh, nx, nz, 0x2a1e14);
           continue;
         }
         mb.material(TILE.CONCRETE, 0.3);
@@ -729,7 +732,10 @@ function windows(
           else mb.wallQuad(qx, wy - 0.12, qz, winW + 0.26, winH + 0.24, nx, nz, accent);
         }
         const [px, pz] = P(f, u, 0.07 - inset);
-        if (style === 'arch') mb.archQuad(px, wy, pz, winW, winH, nx, nz, glass);
+        if (F.has('battered')) {
+          // a sloped wall would swallow a flat quad; a shallow dark box always shows a recess
+          mb.box(px, wy, pz, f.alongX ? winW : 0.5, winH, f.alongX ? 0.5 : winW, glass, Math.atan2(nz, nx) - Math.PI / 2 + (f.alongX ? 0 : 0));
+        } else if (style === 'arch') mb.archQuad(px, wy, pz, winW, winH, nx, nz, glass);
         else mb.wallQuad(px, wy, pz, winW, winH, nx, nz, glass);
         if (style === 'shoji') {
           // dark crossbars

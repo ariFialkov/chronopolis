@@ -12,6 +12,8 @@ export interface StripOptions {
   minor: boolean;
   /** render as a canal instead of a road */
   canal?: boolean;
+  /** extra height so crossing roads do not z-fight (metres) */
+  lift?: number;
 }
 
 /**
@@ -33,7 +35,7 @@ export function buildRoadStrip(mb: MeshBuilder, pts: [number, number][], width: 
     const nx = -uz;
     const nz = ux;
     const hw = width / 2;
-    const lift = 0.07;
+    const lift = 0.07 + (opt.lift ?? 0);
     // sample the ground at every corner so the road hugs slopes in both directions
     const H = (px: number, pz: number): number => heightAt(px, pz) + lift;
     const yaL = H(ax + nx * hw, az + nz * hw);
@@ -89,30 +91,59 @@ export function buildRoadStrip(mb: MeshBuilder, pts: [number, number][], width: 
       const mx = (ax + bx) / 2;
       const mz = (az + bz) / 2;
       for (const s of [-1, 1]) {
-        if (opt.sidewalkOk && !opt.sidewalkOk(mx + nx * s * (hw + sw / 2), mz + nz * s * (hw + sw / 2))) continue;
+        if (opt.sidewalkOk) {
+          // the whole piece must be clear of crossing streets, not just its midpoint
+          const cx = nx * s * (hw + sw / 2);
+          const cz = nz * s * (hw + sw / 2);
+          if (!opt.sidewalkOk(mx + cx, mz + cz) || !opt.sidewalkOk(ax + cx, az + cz) || !opt.sidewalkOk(bx + cx, bz + cz)) continue;
+        }
         const h = 0.14;
         const i0 = hw;
         const i1 = hw + sw;
-        // corner heights of the sidewalk strip
-        const a0 = H(ax + nx * s * i0, az + nz * s * i0);
-        const a1 = H(ax + nx * s * i1, az + nz * s * i1);
-        const b0 = H(bx + nx * s * i0, bz + nz * s * i0);
-        const b1 = H(bx + nx * s * i1, bz + nz * s * i1);
+        // the slab's eight corners: inner/outer edge at both ends, ground and top
+        const ix0 = ax + nx * s * i0;
+        const iz0 = az + nz * s * i0;
+        const ix1 = bx + nx * s * i0;
+        const iz1 = bz + nz * s * i0;
+        const ox0 = ax + nx * s * i1;
+        const oz0 = az + nz * s * i1;
+        const ox1 = bx + nx * s * i1;
+        const oz1 = bz + nz * s * i1;
+        const gi0 = H(ix0, iz0);
+        const gi1 = H(ix1, iz1);
+        const go0 = H(ox0, oz0);
+        const go1 = H(ox1, oz1);
+        // slab top follows the road edge height; the outer bottom follows the ground outside
+        const ti0 = gi0 + h;
+        const ti1 = gi1 + h;
+        const to0 = Math.max(go0, gi0 - 0.3) + h;
+        const to1 = Math.max(go1, gi1 - 0.3) + h;
+        const bi0 = gi0 - 0.08;
+        const bi1 = gi1 - 0.08;
+        const bo0 = Math.min(go0, to0 - 0.05) - 0.08;
+        const bo1 = Math.min(go1, to1 - 0.05) - 0.08;
         mb.material(surf.sidewalk, 0.5);
         mb.setColor(surf.sidewalkColor);
-        // top (counter-clockwise from above for both sides)
-        if (s > 0) mb.quad(ax + nx * i0, a0 + h, az + nz * i0, bx + nx * i0, b0 + h, bz + nz * i0, bx + nx * i1, b1 + h, bz + nz * i1, ax + nx * i1, a1 + h, az + nz * i1);
-        else mb.quad(ax - nx * i1, a1 + h, az - nz * i1, bx - nx * i1, b1 + h, bz - nz * i1, bx - nx * i0, b0 + h, bz - nz * i0, ax - nx * i0, a0 + h, az - nz * i0);
-        // curb face toward the road
+        // top (counter-clockwise from above)
+        if (s > 0) mb.quad(ix0, ti0, iz0, ix1, ti1, iz1, ox1, to1, oz1, ox0, to0, oz0);
+        else mb.quad(ox0, to0, oz0, ox1, to1, oz1, ix1, ti1, iz1, ix0, ti0, iz0);
         mb.material(TILE.CONCRETE, 1);
         mb.setColor(surf.curbColor);
-        if (s > 0) mb.quad(ax + nx * i0, a0 - 0.05, az + nz * i0, ax + nx * i0, a0 + h, az + nz * i0, bx + nx * i0, b0 + h, bz + nz * i0, bx + nx * i0, b0 - 0.05, bz + nz * i0);
-        else mb.quad(bx - nx * i0, b0 - 0.05, bz - nz * i0, bx - nx * i0, b0 + h, bz - nz * i0, ax - nx * i0, a0 + h, az - nz * i0, ax - nx * i0, a0 - 0.05, az - nz * i0);
-        // outer edge face (sidewalk may stand above the ground on the downhill side)
-        mb.material(TILE.CONCRETE, 1);
+        // curb face toward the road
+        if (s > 0) mb.quad(ix0, bi0, iz0, ix0, ti0, iz0, ix1, ti1, iz1, ix1, bi1, iz1);
+        else mb.quad(ix1, bi1, iz1, ix1, ti1, iz1, ix0, ti0, iz0, ix0, bi0, iz0);
+        // outer face
         mb.setColor(shade(surf.curbColor, 0.9));
-        if (s > 0) mb.quad(bx + nx * i1, b1 - 0.4, bz + nz * i1, bx + nx * i1, b1 + h, bz + nz * i1, ax + nx * i1, a1 + h, az + nz * i1, ax + nx * i1, a1 - 0.4, az + nz * i1);
-        else mb.quad(ax - nx * i1, a1 - 0.4, az - nz * i1, ax - nx * i1, a1 + h, az - nz * i1, bx - nx * i1, b1 + h, bz - nz * i1, bx - nx * i1, b1 - 0.4, bz - nz * i1);
+        if (s > 0) mb.quad(ox1, bo1, oz1, ox1, to1, oz1, ox0, to0, oz0, ox0, bo0, oz0);
+        else mb.quad(ox0, bo0, oz0, ox0, to0, oz0, ox1, to1, oz1, ox1, bo1, oz1);
+        // end caps so a piece never shows as an open shell
+        if (s > 0) {
+          mb.quad(ox0, bo0, oz0, ox0, to0, oz0, ix0, ti0, iz0, ix0, bi0, iz0);
+          mb.quad(ix1, bi1, iz1, ix1, ti1, iz1, ox1, to1, oz1, ox1, bo1, oz1);
+        } else {
+          mb.quad(ix0, bi0, iz0, ix0, ti0, iz0, ox0, to0, oz0, ox0, bo0, oz0);
+          mb.quad(ox1, bo1, oz1, ox1, to1, oz1, ix1, ti1, iz1, ix1, bi1, iz1);
+        }
       }
     }
   }

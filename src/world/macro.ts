@@ -224,6 +224,28 @@ export function terrainHeight(x: number, z: number): number {
   return h;
 }
 
+/** Terrain mesh cell size: chunks are split into cells this big, with the grid anchored at the origin. */
+export const TERRAIN_CELL = 5;
+
+/**
+ * Height of the rendered terrain surface (the triangle pair of the 5 m cell), so roads, props and
+ * the player sit exactly on what is drawn rather than on the smooth function.
+ */
+export function meshHeight(x: number, z: number): number {
+  const g = TERRAIN_CELL;
+  const ax = Math.floor(x / g) * g;
+  const az = Math.floor(z / g) * g;
+  const u = (x - ax) / g;
+  const v = (z - az) / g;
+  const ya = terrainHeight(ax, az);
+  const yb = terrainHeight(ax, az + g);
+  const yc = terrainHeight(ax + g, az + g);
+  const yd = terrainHeight(ax + g, az);
+  // the cell is split along the (ax,az)-(bx,bz) diagonal: triangle a-b-c for v >= u, a-c-d otherwise
+  if (v >= u) return ya + (yc - yb) * u + (yb - ya) * v;
+  return ya + (yd - ya) * u + (yc - yd) * v;
+}
+
 export const WATER_LEVEL = -0.8;
 
 export function siteClearance(x: number, z: number): Site | null {

@@ -45,7 +45,7 @@ export interface CityPattern {
   isPark(x: number, z: number): boolean;
   lotsInRect(x0: number, z0: number, x1: number, z1: number): Lot[];
   /** Street strips to draw inside a rect: a polyline with a width. */
-  stripsInRect(x0: number, z0: number, x1: number, z1: number): { points: [number, number][]; width: number }[];
+  stripsInRect(x0: number, z0: number, x1: number, z1: number): { points: [number, number][]; width: number; layer: number }[];
   /** Navigation nodes (street intersections) for NPC wandering. */
   nodesInRect(x0: number, z0: number, x1: number, z1: number): StreetNode[];
   neighbors(node: StreetNode): StreetNode[];
@@ -71,7 +71,7 @@ function gridPattern(era: Era, seed: number, parkChance: number): CityPattern {
   const sw = L.streetWidth;
   const organic = L.pattern === 'organic' || L.pattern === 'spread' || L.pattern === 'castle';
   const skipStreet = L.pattern === 'spread' ? 0.45 : L.pattern === 'organic' ? 0.12 : 0;
-  const skipSegment = L.pattern === 'castle' ? 0.22 : L.pattern === 'spread' ? 0.3 : 0;
+  const skipSegment = L.pattern === 'castle' ? 0.08 : L.pattern === 'spread' ? 0.12 : 0;
 
   const vExists = (i: number): boolean => hash2(i, 77, seed) >= skipStreet;
   const hExists = (j: number): boolean => hash2(991, j, seed) >= skipStreet;
@@ -233,8 +233,8 @@ function gridPattern(era: Era, seed: number, parkChance: number): CityPattern {
     return out;
   }
 
-  function stripsInRect(x0: number, z0: number, x1: number, z1: number): { points: [number, number][]; width: number }[] {
-    const strips: { points: [number, number][]; width: number }[] = [];
+  function stripsInRect(x0: number, z0: number, x1: number, z1: number): { points: [number, number][]; width: number; layer: number }[] {
+    const strips: { points: [number, number][]; width: number; layer: number }[] = [];
     const step = 8;
     const i0 = Math.ceil((x0 - L.curve - sw) / bw);
     const i1 = Math.floor((x1 + L.curve + sw) / bw);
@@ -246,11 +246,11 @@ function gridPattern(era: Era, seed: number, parkChance: number): CityPattern {
         if (vSegExists(i, jj)) {
           cur.push([streetX(i, z), z]);
         } else if (cur.length) {
-          strips.push({ points: cur, width: widthV(i) });
+          strips.push({ points: cur, width: widthV(i), layer: 1 });
           cur = [];
         }
       }
-      if (cur.length > 1) strips.push({ points: cur, width: widthV(i) });
+      if (cur.length > 1) strips.push({ points: cur, width: widthV(i), layer: 1 });
     }
     const j0 = Math.ceil((z0 - L.curve - sw) / bd);
     const j1 = Math.floor((z1 + L.curve + sw) / bd);
@@ -262,11 +262,11 @@ function gridPattern(era: Era, seed: number, parkChance: number): CityPattern {
         if (hSegExists(ii, j)) {
           cur.push([x, streetZ(j, x)]);
         } else if (cur.length) {
-          strips.push({ points: cur, width: widthH(j) });
+          strips.push({ points: cur, width: widthH(j), layer: 0 });
           cur = [];
         }
       }
-      if (cur.length > 1) strips.push({ points: cur, width: widthH(j) });
+      if (cur.length > 1) strips.push({ points: cur, width: widthH(j), layer: 0 });
     }
     return strips;
   }
@@ -370,8 +370,8 @@ function radialPattern(era: Era, seed: number): CityPattern {
     return out;
   }
 
-  function stripsInRect(x0: number, z0: number, x1: number, z1: number): { points: [number, number][]; width: number }[] {
-    const strips: { points: [number, number][]; width: number }[] = [];
+  function stripsInRect(x0: number, z0: number, x1: number, z1: number): { points: [number, number][]; width: number; layer: number }[] {
+    const strips: { points: [number, number][]; width: number; layer: number }[] = [];
     const corners = [polar(x0, z0), polar(x1, z0), polar(x0, z1), polar(x1, z1)];
     let rMin = Math.min(...corners.map((c) => c[0]));
     const rMax = Math.max(...corners.map((c) => c[0]));
@@ -390,11 +390,11 @@ function radialPattern(era: Era, seed: number): CityPattern {
         const z = C.z + Math.sin(a) * r;
         if (inRect(x, z)) cur.push([x, z]);
         else if (cur.length) {
-          if (cur.length > 1) strips.push({ points: cur, width: sw });
+          if (cur.length > 1) strips.push({ points: cur, width: sw, layer: 0 });
           cur = [];
         }
       }
-      if (cur.length > 1) strips.push({ points: cur, width: sw });
+      if (cur.length > 1) strips.push({ points: cur, width: sw, layer: 0 });
     }
     // spokes
     const spokeBands: [number, number][] = [
@@ -415,7 +415,7 @@ function radialPattern(era: Era, seed: number): CityPattern {
           const z = C.z + Math.sin(a) * r;
           if (inRect(x, z)) pts.push([x, z]);
         }
-        if (pts.length > 1) strips.push({ points: pts, width: sw });
+        if (pts.length > 1) strips.push({ points: pts, width: sw, layer: 1 });
       }
     }
     return strips;

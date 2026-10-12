@@ -14,7 +14,7 @@ import type { Era, BuildingTemplate } from '../eras/types';
 import { hash2, Rng } from '../util/rng';
 import { shade, clamp, mixColor, smoothstep } from '../util/math';
 import {
-  CHUNK_SIZE, WORLD_HALF, ARTERIALS, ARTERIAL_WIDTH, SITES, terrainHeight, isWater, waterDepth, isArterial, arterialDistance,
+  CHUNK_SIZE, WORLD_HALF, ARTERIALS, ARTERIAL_WIDTH, SITES, terrainHeight, meshHeight, isWater, waterDepth, isArterial, arterialDistance,
   siteClearance, WATER_LEVEL, RING_ROAD, HILL, isBridge,
 } from './macro';
 import { makePattern, urbanity, type CityPattern, type Lot } from './pattern';
@@ -204,7 +204,7 @@ export class World {
     const e = this.era;
     const surf = this.surfaces;
     const w = ARTERIAL_WIDTH;
-    const heightAt = (x: number, z: number): number => terrainHeight(x, z);
+    const heightAt = (x: number, z: number): number => meshHeight(x, z);
     const sidewalkOk = (x: number, z: number): boolean => !this.pattern.isStreet(x, z) && !isWater(x, z) && urbanity(e, x, z) > 0.25;
     this.bridgeSpans = [];
     for (const line of ARTERIALS) {
@@ -221,7 +221,7 @@ export class World {
         const pts: [number, number][] = [];
         for (let s = 0; s <= steps; s++) pts.push([ax + (bx - ax) * (s / steps), az + (bz - az) * (s / steps)]);
         const wet = pts.map(([px, pz]) => isWater(px, pz));
-        const deck: number[] = pts.map(([px, pz]) => terrainHeight(px, pz));
+        const deck: number[] = pts.map(([px, pz]) => meshHeight(px, pz));
         for (let s = 0; s <= steps; s++) {
           if (!wet[s]) continue;
           let a = s;
@@ -455,22 +455,56 @@ export class World {
     // minor streets
     const surf = this.surfaces;
     const strips = this.pattern.stripsInRect(x0, z0, x1, z1);
-    const heightAt = (x: number, z: number): number => terrainHeight(x, z);
+    const heightAt = (x: number, z: number): number => meshHeight(x, z);
     const sidewalkOk = (x: number, z: number): boolean => !isArterial(x, z, ARTERIAL_WIDTH + surf.sidewalkWidth * 2 + 1) && !this.pattern.isStreet(x, z);
+    const roadEdge = ARTERIAL_WIDTH / 2 + 0.2;
     for (const strip of strips) {
       const canal = surf.canals && hash2(Math.round(strip.points[0][0]), Math.round(strip.points[0][1]), 88) < 0.45;
       for (let i = 0; i < strip.points.length - 1; i++) {
-        const [ax, az] = strip.points[i];
-        const [bx, bz] = strip.points[i + 1];
+        let [ax, az] = strip.points[i];
+        let [bx, bz] = strip.points[i + 1];
         const mx = (ax + bx) / 2;
         const mz = (az + bz) / 2;
+        // each piece belongs to exactly one chunk
+        if (mx < x0 || mx >= x1 || mz < z0 || mz >= z1) continue;
         if (waterDepth(mx, mz) > -4) continue;
         const site = siteClearance(mx, mz);
         if (site && site.id !== 'market') continue;
         const u = urbanity(e, mx, mz);
         if (u < (e.layout.pattern === 'spread' ? 0.02 : 0.15)) continue;
-        if (isArterial(mx, mz, ARTERIAL_WIDTH + 2)) continue;
-        buildRoadStrip(mb, [[ax, az], [bx, bz]], strip.width, surf, heightAt, { sidewalk: u > 0.45, lanes: false, sidewalkOk, minor: true, canal: canal && u > 0.4 });
+        // trim the piece so it meets the arterial's road edge exactly
+        const da = arterialDistance(ax, az);
+        const db = arterialDistance(bx, bz);
+        if (da < roadEdge && db < roadEdge) continue;
+        if (da < roadEdge || db < roadEdge) {
+          let lo = 0;
+          let hi = 1;
+          // bisect along the piece for the point where the arterial edge is crossed
+          const inside = (t: number): boolean => arterialDistance(ax + (bx - ax) * t, az + (bz - az) * t) < roadEdge;
+          const aInside = da < roadEdge;
+          for (let k = 0; k < 8; k++) {
+            const mid = (lo + hi) / 2;
+            if (inside(mid) === aInside) lo = mid;
+            else hi = mid;
+          }
+          const t = (lo + hi) / 2;
+          if (aInside) {
+            ax = ax + (bx - ax) * t;
+            az = az + (bz - az) * t;
+          } else {
+            bx = ax + (bx - ax) * t;
+            bz = az + (bz - az) * t;
+          }
+          if (Math.hypot(bx - ax, bz - az) < 0.5) continue;
+        }
+        buildRoadStrip(mb, [[ax, az], [bx, bz]], strip.width, surf, heightAt, {
+          sidewalk: u > 0.45 && da >= roadEdge && db >= roadEdge,
+          lanes: false,
+          sidewalkOk,
+          minor: true,
+          canal: canal && u > 0.4,
+          lift: strip.layer * 0.025,
+        });
       }
     }
 
@@ -487,12 +521,12 @@ export class World {
       const hw = lot.w * 0.5;
       const hd = lot.d * 0.5;
       if (!lotIsClear(lot, hw, hd, this.pattern)) continue;
-      const y = terrainHeight(lot.x, lot.z);
+      const y = meshHeight(lot.x, lot.z);
       const lrng = new Rng(lot.seed >>> 0);
       const u = urbanity(e, lot.x, lot.z);
       let tmpl: BuildingTemplate | undefined;
       if (u < 0.12) tmpl = e.buildings[Math.min(1, e.buildings.length - 1)];
-      const b = buildBuilding(mb, lot, e, y, lrng, tmpl, detail === 'near', terrainHeight);
+      const b = buildBuilding(mb, lot, e, y, lrng, tmpl, detail === 'near', meshHeight);
       if (!b) continue;
       colliders.push(b);
       buildings.push(b);
@@ -511,7 +545,7 @@ export class World {
         if (px < x0 || px >= x1 || pz < z0 || pz >= z1) continue;
         if (isArterial(px, pz, ARTERIAL_WIDTH + 2) || isWater(px, pz) || isReserved(px, pz, 1)) continue;
         if (colliders.some((c) => Math.abs(c.x - px) < c.hw + 1 && Math.abs(c.z - pz) < c.hd + 1 && c !== b)) continue;
-        const r = buildProp(mb, px, terrainHeight(px, pz), pz, kind, rng, rng.range(0, Math.PI * 2));
+        const r = buildProp(mb, px, meshHeight(px, pz), pz, kind, rng, rng.range(0, Math.PI * 2));
         if (r > 0.3) colliders.push({ x: px, z: pz, hw: r, hd: r, rot: 0, h: 2, tag: 'prop' });
       }
       // street furniture along arterials
@@ -526,7 +560,7 @@ export class World {
           if (urbanity(e, x, z) < 0.2) continue;
           if (colliders.some((c) => Math.abs(c.x - x) < c.hw + 1 && Math.abs(c.z - z) < c.hd + 1)) continue;
           const kind = e.props.includes('lamp') ? 'lamp' : e.props.includes('gaslamp') ? 'gaslamp' : e.props.includes('torch') ? 'torch' : e.props.includes('lantern') ? 'lantern' : rng.pick(e.props);
-          const r = buildProp(mb, x, terrainHeight(x, z), z, kind, rng, 0);
+          const r = buildProp(mb, x, meshHeight(x, z), z, kind, rng, 0);
           if (r > 0.3) colliders.push({ x, z, hw: r, hd: r, rot: 0, h: 2, tag: 'prop' });
         }
       }
@@ -546,7 +580,7 @@ export class World {
             if (site) continue;
             if (Math.hypot(px - HILL.x, pz - HILL.z) < HILL.plateau + 10 && u < 0.3) continue;
             if (colliders.some((c) => Math.abs(c.x - px) < c.hw + 2 && Math.abs(c.z - pz) < c.hd + 2)) continue;
-            const r = buildTree(mb, px, terrainHeight(px, pz), pz, e.trees, rng);
+            const r = buildTree(mb, px, meshHeight(px, pz), pz, e.trees, rng);
             if (r > 0) colliders.push({ x: px, z: pz, hw: r, hd: r, rot: 0, h: 5, tag: 'tree' });
           }
         }
@@ -573,7 +607,7 @@ export class World {
     const hd = park.d / 2 - 0.5;
     mb.material(surf.parkTile, 0.3);
     mb.setColor(shade(surf.parkColor, 0.9 + 0.2 * hash2(park.seed, 1, 3)));
-    terrainPatch(mb, park.x - hw, park.z - hd, park.x + hw, park.z + hd, 5, 0.03);
+    terrainPatch(mb, park.x - hw, park.z - hd, park.x + hw, park.z + hd, 2.5, 0.03);
     // low wall or hedge around gardens
     if (surf.park === 'garden') {
       mb.material(TILE.STONE, 0.6);
@@ -588,13 +622,13 @@ export class World {
     // paths: a cross through the middle
     mb.material(surf.pathTile, 0.4);
     mb.setColor(surf.pathColor);
-    terrainPatch(mb, park.x - hw, park.z - 1.4, park.x + hw, park.z + 1.4, 5, 0.05);
-    terrainPatch(mb, park.x - 1.4, park.z - hd, park.x + 1.4, park.z + hd, 5, 0.05);
+    terrainPatch(mb, park.x - hw, park.z - 1.4, park.x + hw, park.z + 1.4, 2.5, 0.05);
+    terrainPatch(mb, park.x - 1.4, park.z - hd, park.x + 1.4, park.z + hd, 2.5, 0.05);
     if (detail !== 'near') return;
     const prng = new Rng(park.seed >>> 0);
     // centrepiece
     const centre = e.props.includes('fountain') ? 'fountain' : e.props.includes('statue') ? 'statue' : e.props.includes('well') ? 'well' : e.props.includes('shrine') ? 'shrine' : 'altar';
-    const r = buildProp(mb, park.x, terrainHeight(park.x, park.z), park.z, centre, prng);
+    const r = buildProp(mb, park.x, meshHeight(park.x, park.z), park.z, centre, prng);
     if (r > 0.3) colliders.push({ x: park.x, z: park.z, hw: r, hd: r, rot: 0, h: 2 });
     // trees
     if (e.trees !== 'none') {
@@ -611,7 +645,7 @@ export class World {
           tz = park.z + prng.range(-hd + 2, hd - 2);
         }
         if (Math.abs(tx - park.x) < 2.5 || Math.abs(tz - park.z) < 2.5) continue; // keep paths clear
-        const tr = buildTree(mb, tx, terrainHeight(tx, tz), tz, e.trees, prng);
+        const tr = buildTree(mb, tx, meshHeight(tx, tz), tz, e.trees, prng);
         if (tr > 0) colliders.push({ x: tx, z: tz, hw: tr, hd: tr, rot: 0, h: 5, tag: 'tree' });
       }
     }
@@ -624,7 +658,7 @@ export class World {
         [-2.4, hd * 0.5, Math.PI / 2],
         [2.4, -hd * 0.5, -Math.PI / 2],
       ] as [number, number, number][]) {
-        const pr = buildProp(mb, park.x + ox, terrainHeight(park.x + ox, park.z + oz), park.z + oz, side, prng, rot);
+        const pr = buildProp(mb, park.x + ox, meshHeight(park.x + ox, park.z + oz), park.z + oz, side, prng, rot);
         if (pr > 0.3) colliders.push({ x: park.x + ox, z: park.z + oz, hw: pr, hd: pr, rot: 0, h: 1 });
       }
     }
@@ -727,7 +761,7 @@ export class World {
 
   /** Walkable ground height at a point (terrain, or the deck of a bridge span). */
   groundY(x: number, z: number): number {
-    const t = terrainHeight(x, z);
+    const t = meshHeight(x, z);
     if (!isBridge(x, z) && !isArterial(x, z, ARTERIAL_WIDTH + 1)) return t;
     for (const sp of this.bridgeSpans) {
       const vx = sp.bx - sp.ax;
@@ -765,7 +799,7 @@ function terrainPatch(mb: MeshBuilder, x0: number, z0: number, x1: number, z1: n
       const bx = x0 + ((x1 - x0) * (i + 1)) / nx;
       const az = z0 + ((z1 - z0) * j) / nz;
       const bz = z0 + ((z1 - z0) * (j + 1)) / nz;
-      mb.quad(ax, terrainHeight(ax, az) + lift, az, ax, terrainHeight(ax, bz) + lift, bz, bx, terrainHeight(bx, bz) + lift, bz, bx, terrainHeight(bx, az) + lift, az);
+      mb.quad(ax, meshHeight(ax, az) + lift, az, ax, meshHeight(ax, bz) + lift, bz, bx, meshHeight(bx, bz) + lift, bz, bx, meshHeight(bx, az) + lift, az);
     }
   }
 }
@@ -780,8 +814,8 @@ function wallAlong(mb: MeshBuilder, ax: number, az: number, bx: number, bz: numb
     const t1 = (i + 1) / n;
     const mx = ax + (bx - ax) * ((t0 + t1) / 2);
     const mz = az + (bz - az) * ((t0 + t1) / 2);
-    const y = Math.min(terrainHeight(ax + (bx - ax) * t0, az + (bz - az) * t0), terrainHeight(ax + (bx - ax) * t1, az + (bz - az) * t1));
-    const top = Math.max(terrainHeight(ax + (bx - ax) * t0, az + (bz - az) * t0), terrainHeight(ax + (bx - ax) * t1, az + (bz - az) * t1)) + h;
+    const y = Math.min(meshHeight(ax + (bx - ax) * t0, az + (bz - az) * t0), meshHeight(ax + (bx - ax) * t1, az + (bz - az) * t1));
+    const top = Math.max(meshHeight(ax + (bx - ax) * t0, az + (bz - az) * t0), meshHeight(ax + (bx - ax) * t1, az + (bz - az) * t1)) + h;
     mb.box(mx, y - 0.2, mz, len / n + 0.05, top - y + 0.2, thick, color, rot);
   }
 }
