@@ -1,4 +1,5 @@
 import { BufferAttribute, BufferGeometry } from 'three';
+import { TILE, type Tile } from './textures';
 
 /**
  * Accumulates flat-shaded, vertex-coloured triangles into a single BufferGeometry.
@@ -8,9 +9,21 @@ export class MeshBuilder {
   private pos: number[] = [];
   private nrm: number[] = [];
   private col: number[] = [];
+  private uvs: number[] = [];
+  private tiles: number[] = [];
   private r = 1;
   private g = 1;
   private b = 1;
+  private tile: number = TILE.PLASTER;
+  private uvScale = 0.5;
+  /** Per-vertex colour override used by gradient faces (bottom darkening). */
+  private vcol: number[] | null = null;
+
+  /** Choose the atlas tile and texture density (repeats per metre) for the geometry that follows. */
+  material(tile: Tile, repeatsPerMeter = 0.5): void {
+    this.tile = tile;
+    this.uvScale = repeatsPerMeter;
+  }
 
   get triangleCount(): number {
     return this.pos.length / 9;
@@ -38,10 +51,43 @@ export class MeshBuilder {
     nz /= len;
     this.pos.push(ax, ay, az, bx, by, bz, cx, cy, cz);
     this.nrm.push(nx, ny, nz, nx, ny, nz, nx, ny, nz);
+    if (this.vcol) this.col.push(...this.vcol);
+    else {
+      const r = this.r;
+      const g = this.g;
+      const b = this.b;
+      this.col.push(r, g, b, r, g, b, r, g, b);
+    }
+    // planar UV projection on the dominant axis of the face normal
+    const s = this.uvScale;
+    const anx = Math.abs(nx);
+    const any = Math.abs(ny);
+    const anz = Math.abs(nz);
+    if (any >= anx && any >= anz) this.uvs.push(ax * s, az * s, bx * s, bz * s, cx * s, cz * s);
+    else if (anx >= anz) this.uvs.push(az * s, ay * s, bz * s, by * s, cz * s, cy * s);
+    else this.uvs.push(ax * s, ay * s, bx * s, by * s, cx * s, cy * s);
+    const t = this.tile;
+    this.tiles.push(t, t, t);
+  }
+
+  /** Quad whose bottom two vertices are darkened (cheap ambient occlusion at the ground). */
+  private shadedSide(
+    ax: number, ay: number, az: number,
+    bx: number, by: number, bz: number,
+    cx: number, cy: number, cz: number,
+    dx: number, dy: number, dz: number,
+    bottomShade: number,
+  ): void {
     const r = this.r;
     const g = this.g;
     const b = this.b;
-    this.col.push(r, g, b, r, g, b, r, g, b);
+    const k = bottomShade;
+    // vertices: a (bottom), b (top), c (top), d (bottom)
+    this.vcol = [r * k, g * k, b * k, r, g, b, r, g, b];
+    this.tri(ax, ay, az, bx, by, bz, cx, cy, cz);
+    this.vcol = [r * k, g * k, b * k, r, g, b, r * k, g * k, b * k];
+    this.tri(ax, ay, az, cx, cy, cz, dx, dy, dz);
+    this.vcol = null;
   }
 
   quad(
@@ -55,7 +101,7 @@ export class MeshBuilder {
   }
 
   /** Axis box, optionally rotated about Y around its own centre. y is the bottom. */
-  box(cx: number, y: number, cz: number, w: number, h: number, d: number, color: number, rot = 0): void {
+  box(cx: number, y: number, cz: number, w: number, h: number, d: number, color: number, rot = 0, bottomShade = 1): void {
     this.setColor(color);
     const hw = w / 2;
     const hd = d / 2;
@@ -71,10 +117,17 @@ export class MeshBuilder {
     this.quad(x0, y1, z0, x3, y1, z3, x2, y1, z2, x1, y1, z1);
     // bottom (skipped for performance: nobody looks under buildings)
     // sides (counter-clockwise seen from outside, so normals point outward)
-    this.quad(x0, y, z0, x0, y1, z0, x1, y1, z1, x1, y, z1);
-    this.quad(x1, y, z1, x1, y1, z1, x2, y1, z2, x2, y, z2);
-    this.quad(x2, y, z2, x2, y1, z2, x3, y1, z3, x3, y, z3);
-    this.quad(x3, y, z3, x3, y1, z3, x0, y1, z0, x0, y, z0);
+    if (bottomShade < 1) {
+      this.shadedSide(x0, y, z0, x0, y1, z0, x1, y1, z1, x1, y, z1, bottomShade);
+      this.shadedSide(x1, y, z1, x1, y1, z1, x2, y1, z2, x2, y, z2, bottomShade);
+      this.shadedSide(x2, y, z2, x2, y1, z2, x3, y1, z3, x3, y, z3, bottomShade);
+      this.shadedSide(x3, y, z3, x3, y1, z3, x0, y1, z0, x0, y, z0, bottomShade);
+    } else {
+      this.quad(x0, y, z0, x0, y1, z0, x1, y1, z1, x1, y, z1);
+      this.quad(x1, y, z1, x1, y1, z1, x2, y1, z2, x2, y, z2);
+      this.quad(x2, y, z2, x2, y1, z2, x3, y1, z3, x3, y, z3);
+      this.quad(x3, y, z3, x3, y1, z3, x0, y1, z0, x0, y, z0);
+    }
   }
 
   /** Vertical rectangle centred at (cx, y+h/2, cz), width w, facing the horizontal direction (nx, nz). */
@@ -85,6 +138,38 @@ export class MeshBuilder {
     const tz = (nx / len) * (w / 2);
     // bottom-left, top-left, top-right, bottom-right: counter-clockwise seen from the (nx, nz) side
     this.quad(cx - tx, y, cz - tz, cx - tx, y + h, cz - tz, cx + tx, y + h, cz + tz, cx + tx, y, cz + tz);
+  }
+
+  /** Arched opening: a rectangle with a semicircular top, facing (nx, nz). */
+  archQuad(cx: number, y: number, cz: number, w: number, h: number, nx: number, nz: number, color: number): void {
+    const r = w / 2;
+    const rectH = Math.max(0.1, h - r);
+    this.wallQuad(cx, y, cz, w, rectH, nx, nz, color);
+    this.setColor(color);
+    const len = Math.hypot(nx, nz) || 1;
+    const tx = -nz / len;
+    const tz = nx / len;
+    const yc = y + rectH;
+    const n = 6;
+    for (let i = 0; i < n; i++) {
+      const a0 = (i / n) * Math.PI;
+      const a1 = ((i + 1) / n) * Math.PI;
+      const p0x = cx + tx * Math.cos(a0) * r;
+      const p0z = cz + tz * Math.cos(a0) * r;
+      const p0y = yc + Math.sin(a0) * r;
+      const p1x = cx + tx * Math.cos(a1) * r;
+      const p1z = cz + tz * Math.cos(a1) * r;
+      const p1y = yc + Math.sin(a1) * r;
+      // fan from centre; winding so the normal points along (nx, nz)
+      this.tri(cx, yc, cz, p0x, p0y, p0z, p1x, p1y, p1z);
+    }
+  }
+
+  /** Double-sided quad from four explicit corners (for awnings and sloped panels). */
+  panel(ax: number, ay: number, az: number, bx: number, by: number, bz: number, cx: number, cy: number, cz: number, dx: number, dy: number, dz: number, color: number): void {
+    this.setColor(color);
+    this.quad(ax, ay, az, bx, by, bz, cx, cy, cz, dx, dy, dz);
+    this.quad(dx, dy, dz, cx, cy, cz, bx, by, bz, ax, ay, az);
   }
 
   /** Flat quad on the ground (y up), with slight y offset. */
@@ -207,6 +292,8 @@ export class MeshBuilder {
     for (let i = 0; i < other.pos.length; i++) this.pos.push(other.pos[i]);
     for (let i = 0; i < other.nrm.length; i++) this.nrm.push(other.nrm[i]);
     for (let i = 0; i < other.col.length; i++) this.col.push(other.col[i]);
+    for (let i = 0; i < other.uvs.length; i++) this.uvs.push(other.uvs[i]);
+    for (let i = 0; i < other.tiles.length; i++) this.tiles.push(other.tiles[i]);
   }
 
   isEmpty(): boolean {
@@ -218,6 +305,8 @@ export class MeshBuilder {
     g.setAttribute('position', new BufferAttribute(new Float32Array(this.pos), 3));
     g.setAttribute('normal', new BufferAttribute(new Float32Array(this.nrm), 3));
     g.setAttribute('color', new BufferAttribute(new Float32Array(this.col), 3));
+    g.setAttribute('uv', new BufferAttribute(new Float32Array(this.uvs), 2));
+    g.setAttribute('tile', new BufferAttribute(new Float32Array(this.tiles), 1));
     g.computeBoundingSphere();
     return g;
   }

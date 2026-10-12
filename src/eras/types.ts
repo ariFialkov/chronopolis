@@ -63,8 +63,24 @@ export type HatKind =
   | 'nemes'
   | 'plume';
 
+export type Feature =
+  | 'plinth' | 'cornice' | 'ledges' | 'sills' | 'frames' | 'shutters' | 'arcade' | 'porch' | 'awning' | 'bay'
+  | 'fireEscape' | 'balcony' | 'lattice' | 'battered' | 'bands' | 'rooftank' | 'sign' | 'crenellation' | 'pilasters'
+  | 'eaves' | 'falsefront' | 'chimneypots' | 'corners' | 'storefront' | 'ridge' | 'buttress' | 'veranda' | 'turret' | 'horns' | 'ladder';
+
+export type WindowStyle = 'tall' | 'square' | 'slit' | 'arch' | 'wide' | 'shoji' | 'none';
+
 export interface BuildingTemplate {
   weight: number;
+  /** atlas tile for the walls (see world/textures) */
+  tex?: number;
+  texRepeat?: number;
+  roofTex?: number;
+  features?: Feature[];
+  windows?: WindowStyle;
+  windowColor?: number;
+  /** accent colour for shutters, awnings, signs, bands */
+  accent?: number;
   floors: [number, number];
   floorHeight: number;
   /** fraction of the lot used, min and max */

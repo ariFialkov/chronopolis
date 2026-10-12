@@ -53,6 +53,7 @@ export class Humanoid {
     this.armL = this.limb(look.body, -0.4, 1.5, 0.16, 0.68, 0.18);
     this.armR = this.limb(look.body, 0.4, 1.5, 0.16, 0.68, 0.18);
     this.addHat(look.hat, look.hatColor);
+    this.enableShadows();
   }
 
   private limb(color: number, x: number, y: number, w: number, h: number, d: number): Mesh {
@@ -172,6 +173,12 @@ export class Humanoid {
   }
 
   /** speed in m/s drives the walk cycle. */
+  enableShadows(): void {
+    this.group.traverse((o) => {
+      if ((o as Mesh).isMesh) (o as Mesh).castShadow = true;
+    });
+  }
+
   animate(dt: number, speed: number): void {
     this.phase += dt * Math.min(14, speed * 2.4);
     const amp = Math.min(0.9, speed * 0.16);

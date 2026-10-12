@@ -9,6 +9,17 @@ import type { MeshBuilder } from './meshBuilder';
 import type { Collider } from './collision';
 import type { Site } from './macro';
 import { buildProp, buildTree } from './props';
+import { TILE, type Tile } from './textures';
+
+const LANDMARK_TILE: Record<string, Tile> = {
+  ziggurat: TILE.MUDBRICK, ziggurat_small: TILE.MUDBRICK, temple_sumer: TILE.MUDBRICK, palace_assyria: TILE.MUDBRICK, lamassu_gate: TILE.MUDBRICK,
+  great_hall: TILE.WOOD, hof: TILE.WOOD, trading_post: TILE.WOOD, fort_timber: TILE.WOOD, longship_harbor: TILE.WOOD, water_tower: TILE.WOOD,
+  general_store: TILE.WOOD, corral: TILE.WOOD, town_square: TILE.WOOD, thermae: TILE.BRICK, railroad_depot: TILE.WOOD, tavern_square: TILE.WOOD, gallows_green: TILE.WOOD, thing_mound: TILE.GRASS,
+  khan_ordu: TILE.PLASTER, ferry_camp: TILE.THATCH, standard_pole: TILE.WOOD, caravan: TILE.THATCH, ovoo: TILE.STONE,
+  city_hall: TILE.CONCRETE, stadium: TILE.CONCRETE, steam_docks: TILE.BRICK, parliament: TILE.STONE, crystal_palace: TILE.CONCRETE, covered_market: TILE.BRICK,
+  pyramid: TILE.SLAB, sphinx: TILE.SAND, temple_egypt: TILE.SLAB, palace_minoan: TILE.PLASTER, court_minoan: TILE.PLASTER, castle_japan: TILE.PLASTER,
+  pagoda_tower: TILE.PLASTER, torii: TILE.WOOD, chinampas: TILE.GRASS, church_white: TILE.WOOD, fishing_harbor: TILE.WOOD, pirate_harbor: TILE.WOOD, canoe_landing: TILE.WOOD,
+};
 
 type Ctx = {
   mb: MeshBuilder;
@@ -194,6 +205,7 @@ function pagodaTower(c: Ctx, x: number, z: number, w: number, tiers: number, wal
 
 export function buildShip(mb: MeshBuilder, x: number, y: number, z: number, kind: Era['ships'], rot: number, rng: Rng): void {
   const hull = shade(0x6a4a30, rng.range(0.85, 1.1));
+  mb.material(kind === 'steamer' ? TILE.CONCRETE : kind === 'reed' ? TILE.THATCH : TILE.WOOD, 0.6);
   switch (kind) {
     case 'reed':
       mb.hip(x, y - 0.4, z, 7, 1.0, 1.8, 5, 1.2, 0xc9b06a, rot);
@@ -637,10 +649,20 @@ const GENERATORS: Record<string, (c: Ctx) => void> = {
       solid(c, x + ox, z - 40, 30, 18, 13, 0, 'warehouse');
     }
     for (const ox of [-20, 20]) {
+      mb.material(TILE.CONCRETE, 0.5);
       mb.box(x + ox, c.y, z - 8, 2.5, 22, 2.5, 0x3a3a3a);
       mb.box(x + ox + 8, c.y + 20, z - 8, 20, 1.2, 1.2, 0x3a3a3a);
       solid(c, x + ox, z - 8, 2.5, 2.5, 22);
     }
+    // gasometer
+    mb.material(TILE.CONCRETE, 0.4);
+    mb.cylinder(x - 90, c.y, z - 60, 14, 14, 16, 0x5a5a58, 16);
+    for (let i = 0; i < 12; i++) {
+      const a = (i / 12) * Math.PI * 2;
+      mb.box(x - 90 + Math.cos(a) * 15, c.y, z - 60 + Math.sin(a) * 15, 0.6, 24, 0.6, 0x3a3a3a, a);
+    }
+    mb.ringWall(x - 90, c.y + 23.4, z - 60, 15, 0.5, 0.6, 0x3a3a3a, 12);
+    solid(c, x - 90, z - 60, 30, 30, 24, 0, 'gasometer');
   },
   railroad_depot: (c) => {
     const { mb, x, z } = c;
@@ -1158,6 +1180,77 @@ const GENERATORS: Record<string, (c: Ctx) => void> = {
     solid(c, c.x, c.z + 30, 14, 14, 60);
   },
 
+  // ---------- era specials ----------
+  thermae: (c) => {
+    // Roman baths: big vaulted hall, domed caldarium, colonnaded palaestra, with the market stalls beside
+    const { mb, x, z, rng } = c;
+    const stone = 0xe6dcc4;
+    mb.material(TILE.BRICK, 0.7);
+    mb.box(x, c.y - 1, z - 8, 56, 12, 26, 0xc9a56c, 0, 0.78);
+    solid(c, x, z - 8, 56, 26, 12, 0, 'baths');
+    mb.material(TILE.ROOFTILE, 0.7);
+    mb.prism(x, c.y + 11, z - 8, 58, 6, 28, 0xb04f36);
+    mb.material(TILE.BRICK, 0.7);
+    mb.cylinder(x + 36, c.y - 1, z - 8, 11, 11, 10, 0xc9a56c, 14);
+    mb.material(TILE.CONCRETE, 0.4);
+    mb.dome(x + 36, c.y + 9, z - 8, 11, stone, 14, 4);
+    solid(c, x + 36, z - 8, 22, 22, 18, 0, 'baths');
+    // arched openings along the front
+    mb.material(TILE.CONCRETE, 0.3);
+    for (let i = 0; i < 6; i++) mb.archQuad(x - 22 + i * 8.8, c.y, z + 5.05, 3.2, 6.5, 0, 1, 0x1e2228);
+    // palaestra: colonnaded courtyard in front
+    mb.material(TILE.STONE, 0.35);
+    for (let i = 0; i < 9; i++) {
+      mb.cylinder(x - 28 + i * 7, c.y, z + 30, 0.6, 0.5, 5, stone, 8);
+      if (i === 0 || i === 8) for (let j = 1; j < 3; j++) mb.cylinder(x - 28 + i * 7, c.y, z + 30 - j * 7, 0.6, 0.5, 5, stone, 8);
+    }
+    mb.material(TILE.SLAB, 0.35);
+    mb.box(x, c.y + 5, z + 30, 58, 0.6, 2.2, stone);
+    mb.groundQuad(x - 28, z + 8, x + 28, z + 8, x + 28, z + 30, x - 28, z + 30, c.y + 0.08, 0xd9d0bd);
+    buildProp(mb, x, c.y, z + 19, 'fountain', rng);
+    c.col.push({ x, z: z + 19, hw: 2.5, hd: 2.5, rot: 0, h: 2 });
+    for (let i = 0; i < 5; i++) buildProp(mb, x - 20 + i * 10, c.y, z + 40, 'stall', rng, 0);
+  },
+  town_square: (c) => {
+    // Wild West: water tower, gallows, flagpole, hitching rails, notice board, wagons
+    const { mb, x, z, rng } = c;
+    mb.material(TILE.WOOD, 0.6);
+    for (const [ox, oz] of [
+      [-3, -3],
+      [3, -3],
+      [3, 3],
+      [-3, 3],
+    ]) mb.box(x + 22 + ox, c.y, z - 18 + oz, 0.5, 12, 0.5, 0x5a4a3a);
+    mb.cylinder(x + 22, c.y + 12, z - 18, 4, 4, 5, 0x7a5a3a, 10);
+    mb.cylinder(x + 22, c.y + 17, z - 18, 4.4, 0, 2, 0x4a3a2a, 10);
+    solid(c, x + 22, z - 18, 7, 7, 19);
+    // gallows
+    mb.box(x - 18, c.y, z - 12, 8, 1.2, 6, 0x6a5a40);
+    mb.box(x - 21, c.y + 1.2, z - 12, 0.4, 5, 0.4, 0x5a4a3a);
+    mb.box(x - 18.5, c.y + 6, z - 12, 5.5, 0.4, 0.4, 0x5a4a3a);
+    mb.box(x - 16, c.y + 4.2, z - 12, 0.08, 1.8, 0.08, 0x3a2a1a);
+    stair(c, x - 14, c.y, z - 12, 3, 4, 1.2, 1, 0, 0x6a5a40);
+    solid(c, x - 18, z - 12, 8, 6, 2);
+    // flagpole
+    mb.material(TILE.CONCRETE, 0.5);
+    mb.cylinder(x, c.y, z, 0.15, 0.1, 12, 0xe8e0d0, 6);
+    mb.box(x + 1.8, c.y + 10.2, z, 3.4, 2.2, 0.1, 0x3a4a8a);
+    // hitching rails
+    mb.material(TILE.WOOD, 0.6);
+    for (const oz of [-28, 28]) {
+      for (let i = 0; i < 5; i++) {
+        mb.box(x - 16 + i * 8, c.y, z + oz, 0.25, 1.2, 0.25, 0x5a4a3a);
+      }
+      mb.box(x, c.y + 1.1, z + oz, 32, 0.15, 0.15, 0x5a4a3a);
+    }
+    // water trough and notice board
+    mb.box(x + 8, c.y, z + 22, 3, 0.8, 1.0, 0x6a5a40);
+    mb.box(x + 8, c.y + 0.7, z + 22, 2.8, 0.1, 0.8, 0x3a5a6a);
+    mb.box(x - 8, c.y, z + 22, 0.2, 2.6, 0.2, 0x5a4a3a);
+    mb.box(x - 8, c.y + 1.4, z + 22, 1.8, 1.1, 0.1, 0xd9c08a);
+    for (let i = 0; i < 2; i++) buildProp(mb, x - 24 + i * 48, c.y, z + 8, 'wagon', rng, 0.3 + i);
+    buildProp(mb, x + 24, c.y, z + 20, 'cactus', rng);
+  },
   // ---------- markets ----------
   bazaar: (c) => {
     for (let i = 0; i < 4; i++) {
@@ -1252,6 +1345,7 @@ export function buildLandmark(mb: MeshBuilder, key: string, site: Site, era: Era
   const gen = GENERATORS[key];
   const col: Collider[] = [];
   if (!gen) return col;
+  mb.material(LANDMARK_TILE[key] ?? TILE.STONE, 0.3);
   gen({ mb, x: site.x, z: site.z, y: groundY, rng, era, col });
   return col.filter((k) => k.hw > 0 && k.hd > 0);
 }

@@ -1,4 +1,4 @@
-import { Scene, WebGLRenderer } from 'three';
+import { PCFShadowMap, Scene, WebGLRenderer } from 'three';
 import { ERAS, getEra, HOME_ERA_ID, CHRONOPORT_ERAS } from './eras';
 import type { Era } from './eras/types';
 import { World, type WorldQuality } from './world/world';
@@ -15,9 +15,9 @@ import type { Collider } from './world/collision';
 
 type Quality = 'low' | 'medium' | 'high';
 const QUALITY: Record<Quality, WorldQuality & { pixelRatio: number }> = {
-  low: { nearRadius: 1, farRadius: 3, pixelRatio: 1 },
-  medium: { nearRadius: 2, farRadius: 4, pixelRatio: 1.5 },
-  high: { nearRadius: 3, farRadius: 5, pixelRatio: 2 },
+  low: { nearRadius: 1, farRadius: 3, pixelRatio: 1, shadowMap: 0, shadowRange: 60 },
+  medium: { nearRadius: 2, farRadius: 4, pixelRatio: 1.5, shadowMap: 1024, shadowRange: 70 },
+  high: { nearRadius: 3, farRadius: 5, pixelRatio: 2, shadowMap: 2048, shadowRange: 110 },
 };
 
 const START = { x: 160, z: 438 }; // the Docks waterfront, 1938
@@ -101,6 +101,9 @@ export class Game {
   private applyRendererQuality(): void {
     const q = QUALITY[this.quality];
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, q.pixelRatio));
+    this.renderer.shadowMap.enabled = q.shadowMap > 0;
+    this.renderer.shadowMap.type = PCFShadowMap;
+    this.renderer.shadowMap.needsUpdate = true;
   }
 
   private cycleQuality(): void {
@@ -109,6 +112,7 @@ export class Game {
     saveQuality(this.quality);
     this.applyRendererQuality();
     this.world.quality = QUALITY[this.quality];
+    this.world.applyQuality();
     this.ui.setQualityLabel(this.quality);
     this.resize();
   }

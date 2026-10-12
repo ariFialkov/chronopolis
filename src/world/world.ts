@@ -3,7 +3,13 @@
  * player and disposed when far away. Near chunks get full detail (windows, props, trees), far
  * chunks get buildings only, and everything beyond the far radius is hidden by fog.
  */
-import { Color, FogExp2, Group, HemisphereLight, DirectionalLight, Mesh, MeshLambertMaterial, PlaneGeometry, Scene, BufferGeometry } from 'three';
+import { FogExp2, Group, HemisphereLight, DirectionalLight, Mesh, MeshLambertMaterial, PlaneGeometry, Scene, BufferGeometry, OrthographicCamera } from 'three';
+import { buildAtlas } from './textures';
+import { makeCityMaterial } from './material';
+import { SkyDome } from '../engine/sky';
+import { surfacesFor, type Surfaces } from './surfaces';
+import { buildRoadStrip } from './roads';
+import { TILE, type Tile } from './textures';
 import type { Era, BuildingTemplate } from '../eras/types';
 import { hash2, Rng } from '../util/rng';
 import { shade, clamp, mixColor, smoothstep } from '../util/math';
@@ -49,6 +55,10 @@ interface Chunk {
 export interface WorldQuality {
   nearRadius: number;
   farRadius: number;
+  /** shadow map size, 0 = no shadows */
+  shadowMap: number;
+  /** half-size of the shadowed area around the player, metres */
+  shadowRange: number;
 }
 
 function key(cx: number, cz: number): string {
@@ -92,11 +102,14 @@ export class World {
   pattern: CityPattern;
   quality: WorldQuality;
   private chunks = new Map<string, Chunk>();
-  private material = new MeshLambertMaterial({ vertexColors: true });
+  private material = makeCityMaterial(buildAtlas());
   private staticGroup = new Group();
   private water: Mesh;
   private hemi: HemisphereLight;
-  private sun: DirectionalLight;
+  readonly sun: DirectionalLight;
+  readonly sky = new SkyDome();
+  surfaces: Surfaces;
+  private sunDir = { x: 0.45, y: 0.8, z: 0.3 };
   landmarkColliders: Collider[] = [];
   private pending: { cx: number; cz: number; detail: Detail }[] = [];
 
@@ -104,21 +117,53 @@ export class World {
     this.scene = scene;
     this.era = era;
     this.quality = quality;
-    this.pattern = makePattern(era);
-    this.hemi = new HemisphereLight(0xffffff, 0x888866, 1.2);
-    this.sun = new DirectionalLight(0xffffff, 2.2);
-    this.sun.position.set(0.5, 1, 0.35).multiplyScalar(300);
-    scene.add(this.hemi, this.sun, this.staticGroup);
+    this.surfaces = surfacesFor(era.id);
+    this.pattern = makePattern(era, this.surfaces.parkChance);
+    this.hemi = new HemisphereLight(0xffffff, 0x888866, 1.0);
+    this.sun = new DirectionalLight(0xffffff, 2.4);
+    this.sun.position.set(this.sunDir.x, this.sunDir.y, this.sunDir.z).multiplyScalar(300);
+    this.sun.shadow.camera = new OrthographicCamera(-100, 100, 100, -100, 1, 700);
+    this.sun.shadow.bias = -0.0006;
+    this.sun.shadow.normalBias = 0.6;
+    scene.add(this.hemi, this.sun, this.sun.target, this.staticGroup, this.sky.mesh);
     this.water = new Mesh(new PlaneGeometry(WORLD_HALF * 4, WORLD_HALF * 4), new MeshLambertMaterial({ color: 0x3366aa, transparent: true, opacity: 0.86 }));
     this.water.rotation.x = -Math.PI / 2;
     this.water.position.y = WATER_LEVEL;
+    this.water.receiveShadow = true;
     scene.add(this.water);
+    this.applyQuality();
     this.applyEra();
+  }
+
+  applyQuality(): void {
+    const q = this.quality;
+    this.sun.castShadow = q.shadowMap > 0;
+    if (q.shadowMap > 0) {
+      this.sun.shadow.mapSize.set(q.shadowMap, q.shadowMap);
+      const cam = this.sun.shadow.camera as OrthographicCamera;
+      cam.left = cam.bottom = -q.shadowRange;
+      cam.right = cam.top = q.shadowRange;
+      cam.updateProjectionMatrix();
+      this.sun.shadow.map?.dispose();
+      this.sun.shadow.map = null;
+    }
+  }
+
+  /** Keep the sun's shadow box centred on the player, snapped to shadow texels to avoid shimmer. */
+  private updateSun(px: number, pz: number): void {
+    const q = this.quality;
+    const texel = (q.shadowRange * 2) / Math.max(1, q.shadowMap);
+    const sx = Math.round(px / texel) * texel;
+    const sz = Math.round(pz / texel) * texel;
+    this.sun.target.position.set(sx, 0, sz);
+    this.sun.position.set(sx + this.sunDir.x * 300, this.sunDir.y * 300, sz + this.sunDir.z * 300);
+    this.sun.target.updateMatrixWorld();
   }
 
   setEra(era: Era): void {
     this.era = era;
-    this.pattern = makePattern(era);
+    this.surfaces = surfacesFor(era.id);
+    this.pattern = makePattern(era, this.surfaces.parkChance);
     for (const k of [...this.chunks.keys()]) this.unload(k);
     this.pending.length = 0;
     this.applyEra();
@@ -126,10 +171,12 @@ export class World {
 
   private applyEra(): void {
     const e = this.era;
-    this.scene.background = new Color(e.sky);
+    this.scene.background = null;
+    this.sky.setEra(e);
     this.scene.fog = new FogExp2(e.fog, e.fogDensity);
-    this.hemi.color.set(e.sky);
-    this.hemi.groundColor.set(e.ground);
+    this.hemi.color.set(mixColor(e.sky, 0xffffff, 0.55));
+    this.hemi.groundColor.set(mixColor(e.ground, 0x8a8a8a, 0.4));
+    this.hemi.intensity = 0.95;
     this.sun.color.set(e.sun);
     this.sun.intensity = e.sunIntensity;
     (this.water.material as MeshLambertMaterial).color.set(e.water);
@@ -146,9 +193,10 @@ export class World {
   private buildArterials(): void {
     const mb = new MeshBuilder();
     const e = this.era;
-    const paved = e.layout.pavedArterials;
-    const roadColor = paved ? e.road : e.dirt;
+    const surf = this.surfaces;
     const w = ARTERIAL_WIDTH;
+    const heightAt = (x: number, z: number): number => terrainHeight(x, z);
+    const sidewalkOk = (x: number, z: number): boolean => !this.pattern.isStreet(x, z) && !isWater(x, z) && urbanity(e, x, z) > 0.25;
     for (const line of ARTERIALS) {
       for (let i = 0; i < line.length - 1; i++) {
         const [ax, az] = line[i];
@@ -166,22 +214,37 @@ export class World {
           const z0 = az + (bz - az) * t0;
           const x1 = ax + (bx - ax) * t1;
           const z1 = az + (bz - az) * t1;
-          const water0 = isWater(x0, z0);
-          const water1 = isWater(x1, z1);
-          const y0 = water0 || water1 ? Math.max(terrainHeight(x0, z0), BRIDGE_DECK) + 0.05 : terrainHeight(x0, z0) + 0.05;
-          const y1 = water0 || water1 ? Math.max(terrainHeight(x1, z1), BRIDGE_DECK) + 0.05 : terrainHeight(x1, z1) + 0.05;
-          const bridge = water0 || water1;
-          mb.setColor(bridge ? shade(e.road, 0.9) : roadColor);
+          const bridge = isWater(x0, z0) || isWater(x1, z1);
+          if (!bridge) {
+            buildRoadStrip(mb, [[x0, z0], [x1, z1]], w, surf, heightAt, { sidewalk: true, lanes: true, sidewalkOk, minor: false });
+            continue;
+          }
+          const y0 = Math.max(terrainHeight(x0, z0), BRIDGE_DECK) + 0.05;
+          const y1 = Math.max(terrainHeight(x1, z1), BRIDGE_DECK) + 0.05;
+          const stone = shade(e.road, 0.75);
+          mb.material(surf.road, 0.4);
+          mb.setColor(shade(surf.roadColor, 0.95));
           mb.quad(x0 + nx, y0, z0 + nz, x1 + nx, y1, z1 + nz, x1 - nx, y1, z1 - nz, x0 - nx, y0, z0 - nz);
-          if (bridge) {
-            // deck sides, railings and piers
-            const stone = shade(e.road, 0.75);
-            mb.setColor(stone);
-            mb.quad(x0 + nx, y0 - 1.2, z0 + nz, x1 + nx, y1 - 1.2, z1 + nz, x1 + nx, y1, z1 + nz, x0 + nx, y0, z0 + nz);
-            mb.quad(x0 - nx, y0, z0 - nz, x1 - nx, y1, z1 - nz, x1 - nx, y1 - 1.2, z1 - nz, x0 - nx, y0 - 1.2, z0 - nz);
-            mb.box((x0 + x1) / 2 + nx * 0.95, y0, (z0 + z1) / 2 + nz * 0.95, len / steps, 1.0, 0.4, stone, Math.atan2(dz, dx));
-            mb.box((x0 + x1) / 2 - nx * 0.95, y0, (z0 + z1) / 2 - nz * 0.95, len / steps, 1.0, 0.4, stone, Math.atan2(dz, dx));
-            if (s % 2 === 0 && water0) mb.box(x0, -5, z0, 3, y0 + 4, w * 0.8, stone, Math.atan2(dz, dx));
+          // deck sides, railings and piers
+          mb.material(TILE.STONE, 0.35);
+          mb.setColor(stone);
+          mb.quad(x0 + nx, y0 - 1.6, z0 + nz, x1 + nx, y1 - 1.6, z1 + nz, x1 + nx, y1, z1 + nz, x0 + nx, y0, z0 + nz);
+          mb.quad(x0 - nx, y0, z0 - nz, x1 - nx, y1, z1 - nz, x1 - nx, y1 - 1.6, z1 - nz, x0 - nx, y0 - 1.6, z0 - nz);
+          const rot = Math.atan2(dz, dx);
+          mb.box((x0 + x1) / 2 + nx * 0.95, y0, (z0 + z1) / 2 + nz * 0.95, len / steps, 1.1, 0.45, shade(stone, 1.1), rot);
+          mb.box((x0 + x1) / 2 - nx * 0.95, y0, (z0 + z1) / 2 - nz * 0.95, len / steps, 1.1, 0.45, shade(stone, 1.1), rot);
+          if (s % 2 === 0 && isWater(x0, z0)) {
+            mb.box(x0, -5, z0, 3.2, y0 + 3.6, w * 0.9, stone, rot);
+            // cutwater
+            mb.box(x0, -5, z0, 3.2, y0 + 3.6, 3.2, stone, rot + Math.PI / 4);
+          }
+          if (s % 3 === 0) {
+            // lamp or torch posts on the parapets
+            for (const side of [-1, 1]) {
+              mb.material(TILE.CONCRETE, 1);
+              mb.box(x0 + nx * 0.95 * side, y0 + 1.1, z0 + nz * 0.95 * side, 0.3, 2.6, 0.3, 0x3a3a3a, rot);
+              mb.box(x0 + nx * 0.95 * side, y0 + 3.7, z0 + nz * 0.95 * side, 0.6, 0.5, 0.6, 0xffe8a0, rot);
+            }
           }
         }
       }
@@ -199,6 +262,7 @@ export class World {
       for (const [ax, az, bx, bz] of sides) {
         const len = Math.hypot(bx - ax, bz - az);
         const n = Math.ceil(len / 20);
+        mb.material(e.layout.pattern === 'spread' ? TILE.WOOD : TILE.STONE, 0.35);
         for (let i = 0; i < n; i++) {
           const t = (i + 0.5) / n;
           const x = ax + (bx - ax) * t;
@@ -206,19 +270,50 @@ export class World {
           if (isWater(x, z)) continue;
           if (isArterial(x, z, ARTERIAL_WIDTH + 8)) continue; // gates
           const y = terrainHeight(x, z);
-          mb.box(x, y - 1, z, 20.4, 7, 2.5, wallColor, Math.atan2(bz - az, bx - ax));
-          if (i % 4 === 0) mb.box(x, y - 1, z, 5, 10, 5, shade(wallColor, 0.95), Math.atan2(bz - az, bx - ax));
+          const rot = Math.atan2(bz - az, bx - ax);
+          mb.box(x, y - 1, z, 20.4, 7, 2.5, wallColor, rot, 0.75);
+          // walkway crenellations
+          for (let k = -4; k <= 4; k++) mb.box(x + Math.cos(rot) * k * 2.4, y + 6, z + Math.sin(rot) * k * 2.4, 1.1, 1.0, 2.7, shade(wallColor, 0.95), rot);
+          if (i % 4 === 0) mb.box(x, y - 1, z, 5, 10, 5, shade(wallColor, 0.95), rot, 0.75);
           this.landmarkColliders.push({ x, z, hw: 10.2, hd: 1.3, rot: Math.atan2(bz - az, bx - ax), h: 7, tag: 'wall' });
         }
       }
     }
     const mesh = new Mesh(mb.build(), this.material);
     mesh.frustumCulled = false;
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
     this.staticGroup.add(mesh);
+  }
+
+  /** Era one-offs that are not tied to a site: the Roman aqueduct marching across the east bank. */
+  private buildEraSpecials(mb: MeshBuilder): void {
+    const e = this.era;
+    if (e.id === 'roman') {
+      // from the hills north-east down to the baths: along z = -100 (just north of Meridian Way), x 240..600
+      const stone = 0xd9cfbc;
+      mb.material(TILE.STONE, 0.35);
+      const z = -100 - ARTERIAL_WIDTH / 2 - 9;
+      for (let x = 230; x <= 610; x += 8) {
+        if (isWater(x, z)) continue;
+        const y = terrainHeight(x, z);
+        const top = 11 + Math.max(0, (x - 230) * 0.004);
+        mb.box(x, y - 1, z, 2.2, top + 1, 2.6, stone, 0, 0.75);
+        this.landmarkColliders.push({ x, z, hw: 1.1, hd: 1.3, rot: 0, h: top, tag: 'aqueduct' });
+        // arch between this pier and the next
+        mb.material(TILE.CONCRETE, 0.3);
+        mb.archQuad(x + 4, y + 2, z + 1.31, 5.6, top - 3.5, 0, 1, 0x1e2228);
+        mb.archQuad(x + 4, y + 2, z - 1.31, 5.6, top - 3.5, 0, -1, 0x1e2228);
+        mb.material(TILE.STONE, 0.35);
+        mb.box(x + 4, y + top - 2.6, z, 8.2, 2.6, 2.6, stone);
+        mb.box(x + 4, y + top, z, 8.2, 1.3, 3.2, shade(stone, 0.92));
+      }
+    }
   }
 
   private buildLandmarks(): void {
     const mb = new MeshBuilder();
+    this.buildEraSpecials(mb);
     for (const id in SITES) {
       const site = SITES[id];
       const k = landmarkKeyForSite(this.era, id);
@@ -230,11 +325,15 @@ export class World {
     }
     const mesh = new Mesh(mb.build(), this.material);
     mesh.frustumCulled = false;
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
     this.staticGroup.add(mesh);
   }
 
   /** Called each frame with the player position. Builds at most one chunk per call. */
   update(px: number, pz: number, budgetMs = 6): void {
+    this.updateSun(px, pz);
+    this.sky.follow(px, 0, pz);
     const ccx = Math.floor(px / CHUNK_SIZE);
     const ccz = Math.floor(pz / CHUNK_SIZE);
     const { nearRadius, farRadius } = this.quality;
@@ -329,9 +428,12 @@ export class World {
     const terrain = this.buildTerrain(x0, z0);
 
     // minor streets
+    const surf = this.surfaces;
     const strips = this.pattern.stripsInRect(x0, z0, x1, z1);
-    const roadColor = e.layout.pattern === 'spread' || !e.layout.pavedArterials ? e.dirt : shade(e.road, 1.05);
+    const heightAt = (x: number, z: number): number => terrainHeight(x, z);
+    const sidewalkOk = (x: number, z: number): boolean => !isArterial(x, z, ARTERIAL_WIDTH + surf.sidewalkWidth * 2 + 1) && !this.pattern.isStreet(x, z);
     for (const strip of strips) {
+      const canal = surf.canals && hash2(Math.round(strip.points[0][0]), Math.round(strip.points[0][1]), 88) < 0.45;
       for (let i = 0; i < strip.points.length - 1; i++) {
         const [ax, az] = strip.points[i];
         const [bx, bz] = strip.points[i + 1];
@@ -342,16 +444,14 @@ export class World {
         if (site && site.id !== 'market') continue;
         const u = urbanity(e, mx, mz);
         if (u < (e.layout.pattern === 'spread' ? 0.02 : 0.15)) continue;
-        const dx = bx - ax;
-        const dz = bz - az;
-        const len = Math.hypot(dx, dz) || 1;
-        const nx = (-dz / len) * (strip.width / 2);
-        const nz = (dx / len) * (strip.width / 2);
-        const ya = terrainHeight(ax, az) + 0.04;
-        const yb = terrainHeight(bx, bz) + 0.04;
-        mb.setColor(roadColor);
-        mb.quad(ax + nx, ya, az + nz, bx + nx, yb, bz + nz, bx - nx, yb, bz - nz, ax - nx, ya, az - nz);
+        if (isArterial(mx, mz, ARTERIAL_WIDTH + 2)) continue;
+        buildRoadStrip(mb, [[ax, az], [bx, bz]], strip.width, surf, heightAt, { sidewalk: u > 0.45, lanes: false, sidewalkOk, minor: true, canal: canal && u > 0.4 });
       }
+    }
+
+    // parks and gardens
+    for (const park of this.pattern.parksInRect(x0, z0, x1, z1)) {
+      this.buildPark(mb, park, detail, colliders, rng);
     }
 
     // buildings
@@ -431,14 +531,80 @@ export class World {
     let mesh: Mesh | null = null;
     if (!mb.isEmpty()) {
       mesh = new Mesh(mb.build(), this.material);
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
       this.scene.add(mesh);
     }
+    terrain.receiveShadow = true;
     this.scene.add(terrain);
     return { cx, cz, detail, mesh, terrain, colliders, buildings };
   }
 
-  private buildTerrain(x0: number, z0: number): Mesh {
+  private buildPark(mb: MeshBuilder, park: { x: number; z: number; w: number; d: number; seed: number }, detail: Detail, colliders: Collider[], rng: Rng): void {
     const e = this.era;
+    const surf = this.surfaces;
+    if (surf.park === 'none') return;
+    const y = terrainHeight(park.x, park.z) + 0.03;
+    const hw = park.w / 2 - 0.5;
+    const hd = park.d / 2 - 0.5;
+    mb.material(surf.parkTile, 0.3);
+    mb.groundQuad(park.x - hw, park.z - hd, park.x + hw, park.z - hd, park.x + hw, park.z + hd, park.x - hw, park.z + hd, y, shade(surf.parkColor, 0.9 + 0.2 * hash2(park.seed, 1, 3)));
+    // low wall or hedge around gardens
+    if (surf.park === 'garden') {
+      mb.material(TILE.STONE, 0.6);
+      const wc = shade(surf.plazaColor, 0.85);
+      mb.box(park.x, y, park.z - hd, park.w - 1, 0.7, 0.4, wc);
+      mb.box(park.x, y, park.z + hd, park.w - 1, 0.7, 0.4, wc);
+      mb.box(park.x - hw, y, park.z, 0.4, 0.7, park.d - 1, wc);
+      mb.box(park.x + hw, y, park.z, 0.4, 0.7, park.d - 1, wc);
+      colliders.push({ x: park.x, z: park.z - hd, hw: hw - 3, hd: 0.2, rot: 0, h: 0.7 }, { x: park.x, z: park.z + hd, hw: hw - 3, hd: 0.2, rot: 0, h: 0.7 });
+      colliders.push({ x: park.x - hw, z: park.z, hw: 0.2, hd: hd - 3, rot: 0, h: 0.7 }, { x: park.x + hw, z: park.z, hw: 0.2, hd: hd - 3, rot: 0, h: 0.7 });
+    }
+    // paths: a cross through the middle
+    mb.material(surf.pathTile, 0.4);
+    mb.groundQuad(park.x - hw, park.z - 1.4, park.x + hw, park.z - 1.4, park.x + hw, park.z + 1.4, park.x - hw, park.z + 1.4, y + 0.02, surf.pathColor);
+    mb.groundQuad(park.x - 1.4, park.z - hd, park.x + 1.4, park.z - hd, park.x + 1.4, park.z + hd, park.x - 1.4, park.z + hd, y + 0.02, surf.pathColor);
+    if (detail !== 'near') return;
+    const prng = new Rng(park.seed >>> 0);
+    // centrepiece
+    const centre = e.props.includes('fountain') ? 'fountain' : e.props.includes('statue') ? 'statue' : e.props.includes('well') ? 'well' : e.props.includes('shrine') ? 'shrine' : 'altar';
+    const r = buildProp(mb, park.x, y, park.z, centre, prng);
+    if (r > 0.3) colliders.push({ x: park.x, z: park.z, hw: r, hd: r, rot: 0, h: 2 });
+    // trees
+    if (e.trees !== 'none') {
+      const n = surf.park === 'orchard' ? 12 : 8;
+      for (let i = 0; i < n; i++) {
+        let tx: number;
+        let tz: number;
+        if (surf.park === 'orchard') {
+          const cols = 4;
+          tx = park.x - hw + 3 + ((i % cols) + 0.5) * ((park.w - 6) / cols);
+          tz = park.z - hd + 3 + (Math.floor(i / cols) + 0.5) * ((park.d - 6) / 3);
+        } else {
+          tx = park.x + prng.range(-hw + 2, hw - 2);
+          tz = park.z + prng.range(-hd + 2, hd - 2);
+        }
+        if (Math.abs(tx - park.x) < 2.5 || Math.abs(tz - park.z) < 2.5) continue; // keep paths clear
+        const tr = buildTree(mb, tx, y, tz, e.trees, prng);
+        if (tr > 0) colliders.push({ x: tx, z: tz, hw: tr, hd: tr, rot: 0, h: 5, tag: 'tree' });
+      }
+    }
+    // benches / lanterns along the path
+    const side = e.props.includes('bench') ? 'bench' : e.props.includes('lantern') ? 'lantern' : e.props.includes('torch') ? 'torch' : null;
+    if (side) {
+      for (const [ox, oz, rot] of [
+        [-hw * 0.5, -2.4, 0],
+        [hw * 0.5, 2.4, Math.PI],
+        [-2.4, hd * 0.5, Math.PI / 2],
+        [2.4, -hd * 0.5, -Math.PI / 2],
+      ] as [number, number, number][]) {
+        const pr = buildProp(mb, park.x + ox, y, park.z + oz, side, prng, rot);
+        if (pr > 0.3) colliders.push({ x: park.x + ox, z: park.z + oz, hw: pr, hd: pr, rot: 0, h: 1 });
+      }
+    }
+  }
+
+  private buildTerrain(x0: number, z0: number): Mesh {
     const n = 8;
     const s = CHUNK_SIZE / n;
     const mb = new MeshBuilder();
@@ -450,7 +616,8 @@ export class World {
         const bz = az + s;
         const cx = ax + s / 2;
         const cz = az + s / 2;
-        const color = this.groundColor(cx, cz);
+        const [color, tile] = this.groundColor(cx, cz);
+        mb.material(tile, 0.25);
         mb.setColor(color);
         const y00 = terrainHeight(ax, az);
         const y10 = terrainHeight(bx, az);
@@ -460,7 +627,8 @@ export class World {
         // paved plaza discs around sites
         const site = siteClearance(cx, cz);
         if (site && !isWater(cx, cz)) {
-          mb.setColor(shade(e.road, 1.15));
+          mb.material(this.surfaces.plaza, 0.35);
+          mb.setColor(this.surfaces.plazaColor);
           mb.quad(ax, y00 + 0.03, az, ax, y01 + 0.03, bz, bx, y11 + 0.03, bz, bx, y10 + 0.03, az);
         }
       }
@@ -469,31 +637,35 @@ export class World {
     return mesh;
   }
 
-  private groundColor(x: number, z: number): number {
+  private groundColor(x: number, z: number): [number, Tile] {
     const e = this.era;
+    const surf = this.surfaces;
     const wd = waterDepth(x, z);
-    if (wd > -10) return shade(0xc9b68a, 0.95 + 0.1 * hash2(x, z, 1)); // shore sand
+    if (wd > -10) return [shade(0xc9b68a, 0.95 + 0.1 * hash2(x, z, 1)), TILE.SAND]; // shore sand
     const h = terrainHeight(x, z);
     const u = urbanity(e, x, z);
-    let c = e.ground;
+    let c: number;
+    let tile: Tile;
     if (e.layout.fields && u < 0.25) {
       // patchwork fields
       const fx = Math.floor(x / 42);
       const fz = Math.floor(z / 34);
       const hh = hash2(fx, fz, 12);
-      const crops = [shade(e.ground, 1.1), 0xb8a85a, 0x8fa860, 0xc9b06a, shade(e.ground, 0.9), 0x7f9a4a];
+      const crops = [shade(surf.outskirtsColor, 1.1), 0xb8a85a, 0x8fa860, 0xc9b06a, shade(surf.outskirtsColor, 0.9), 0x7f9a4a];
       c = crops[Math.floor(hh * crops.length)];
-      c = shade(c, 1 - 0.25 * (1 - clamp(u * 4, 0, 1)) * 0 + (hash2(x, z, 2) - 0.5) * 0.08);
+      c = shade(c, 1 + (hash2(x, z, 2) - 0.5) * 0.08);
+      tile = hh < 0.5 ? TILE.GRASS : TILE.DIRT;
+    } else if (u < 0.3) {
+      c = shade(surf.outskirtsColor, 1 + (hash2(x, z, 3) - 0.5) * 0.08);
+      tile = surf.outskirts;
     } else {
+      const t = smoothstep(0.3, 0.7, u);
+      c = mixColor(surf.outskirtsColor, surf.coreColor, t);
       c = shade(c, 1 + (hash2(x, z, 3) - 0.5) * 0.05);
-      // paved or packed-earth city core
-      if (e.layout.pattern !== 'spread') {
-        const pave = e.layout.pavedArterials ? shade(e.road, 1.22) : shade(e.dirt, 1.08);
-        c = mixColor(c, pave, 0.85 * smoothstep(0.3, 0.7, u));
-      }
+      tile = t > 0.5 ? surf.core : surf.outskirts;
     }
     if (h > 6) c = shade(c, 1 - clamp((h - 6) / 40, 0, 0.3));
-    return c;
+    return [c, tile];
   }
 
   /** Colliders near a point (3x3 chunk neighbourhood plus landmarks). */

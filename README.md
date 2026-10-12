@@ -50,6 +50,12 @@ loaded chunks, and has one-click chronoport buttons for every era. It is created
 * `src/world/world.ts` streams 80 m chunks around the player. Near chunks have full detail, far
   chunks have buildings only, everything beyond is culled and hidden by fog. Each chunk is one
   merged, vertex-coloured mesh (one draw call).
+* `src/world/textures.ts` draws a 16-tile texture atlas at startup (brick, stone, plaster, wood, roof
+  tile, thatch, slate, cobbles, asphalt, dirt, grass, sand, paving, mudbrick, timber frame, concrete).
+  `src/world/material.ts` patches the Lambert shader so each face picks a tile while every chunk stays
+  one draw call. `src/eras/styles.ts` holds each era's building recipes (textures, window styles and
+  features such as arcades, porches, bay windows, fire escapes, lattices, false fronts).
+  `src/world/surfaces.ts` defines each era's roads, sidewalks, plazas and parks.
 * `src/world/landmarks.ts` has every era's monument for every site: ziggurat, pyramid, Parthenon,
   Colosseum, Angkor, castle, Crystal Palace, city hall, and the harbors, arenas, plazas and markets.
 * `src/quests/campaign.ts` is the placeholder campaign (prologue, Rome, Hale, one investigation

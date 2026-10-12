@@ -2,16 +2,19 @@ import type { PropKind, TreeKind } from '../eras/types';
 import { Rng } from '../util/rng';
 import { shade } from '../util/math';
 import type { MeshBuilder } from './meshBuilder';
+import { TILE } from './textures';
 
 const TRUNK = 0x5a4330;
 
 /** Returns collision radius (0 = walk-through). */
 export function buildTree(mb: MeshBuilder, x: number, y: number, z: number, kind: TreeKind, rng: Rng): number {
   const s = rng.range(0.8, 1.3);
+  mb.material(TILE.WOOD, 0.8);
   switch (kind) {
     case 'oak': {
       const g = shade(0x4f7f3a, rng.range(0.85, 1.15));
       mb.cylinder(x, y - 0.3, z, 0.35 * s, 0.25 * s, 2.6 * s, TRUNK, 6);
+      mb.material(TILE.GRASS, 0.35);
       mb.dome(x, y + 1.8 * s, z, 2.4 * s, g, 8, 3);
       mb.dome(x + 0.8 * s, y + 2.6 * s, z - 0.4 * s, 1.6 * s, shade(g, 1.1), 7, 3);
       return 0.45;
@@ -19,6 +22,7 @@ export function buildTree(mb: MeshBuilder, x: number, y: number, z: number, kind
     case 'pine': {
       const g = shade(0x2f5f36, rng.range(0.85, 1.15));
       mb.cylinder(x, y - 0.3, z, 0.3 * s, 0.2 * s, 2 * s, TRUNK, 5);
+      mb.material(TILE.GRASS, 0.35);
       mb.cylinder(x, y + 1.2 * s, z, 2.2 * s, 0.0, 3.2 * s, g, 7);
       mb.cylinder(x, y + 3.2 * s, z, 1.6 * s, 0.0, 2.8 * s, shade(g, 1.08), 7);
       mb.cylinder(x, y + 5.0 * s, z, 1.0 * s, 0.0, 2.2 * s, shade(g, 1.15), 7);
@@ -27,6 +31,7 @@ export function buildTree(mb: MeshBuilder, x: number, y: number, z: number, kind
     case 'cedar': {
       const g = shade(0x3b6a3f, rng.range(0.85, 1.15));
       mb.cylinder(x, y - 0.3, z, 0.45 * s, 0.3 * s, 3 * s, TRUNK, 6);
+      mb.material(TILE.GRASS, 0.35);
       mb.cylinder(x, y + 1.5 * s, z, 3.2 * s, 1.5 * s, 2.5 * s, g, 8);
       mb.cylinder(x, y + 3.8 * s, z, 2.4 * s, 0.0, 2.6 * s, shade(g, 1.1), 8);
       return 0.5;
@@ -34,6 +39,7 @@ export function buildTree(mb: MeshBuilder, x: number, y: number, z: number, kind
     case 'cypress': {
       const g = shade(0x2d5a33, rng.range(0.85, 1.15));
       mb.cylinder(x, y - 0.3, z, 0.25 * s, 0.2 * s, 1.2 * s, TRUNK, 5);
+      mb.material(TILE.GRASS, 0.35);
       mb.cylinder(x, y + 0.8 * s, z, 0.9 * s, 0.0, 6.5 * s, g, 6);
       return 0.35;
     }
@@ -42,6 +48,7 @@ export function buildTree(mb: MeshBuilder, x: number, y: number, z: number, kind
       const h = 6 * s;
       const tx = x + lean * h;
       mb.cylinder(x, y - 0.3, z, 0.3 * s, 0.22 * s, h, 0x8a6a45, 5);
+      mb.material(TILE.GRASS, 0.35);
       const g = shade(0x4f8f3a, rng.range(0.85, 1.15));
       for (let i = 0; i < 6; i++) {
         const a = (i / 6) * Math.PI * 2 + rng.range(0, 0.5);
@@ -54,6 +61,7 @@ export function buildTree(mb: MeshBuilder, x: number, y: number, z: number, kind
       const g = shade(0x2f7a3a, rng.range(0.8, 1.2));
       const h = 7 * s;
       mb.cylinder(x, y - 0.3, z, 0.5 * s, 0.35 * s, h, 0x6a5038, 6);
+      mb.material(TILE.GRASS, 0.35);
       mb.dome(x, y + h - 1, z, 3.4 * s, g, 9, 3);
       mb.dome(x + 1.5 * s, y + h - 2.2, z + 1 * s, 2.2 * s, shade(g, 0.9), 7, 2);
       mb.dome(x - 1.4 * s, y + h - 2.4, z - 1.2 * s, 2.0 * s, shade(g, 1.1), 7, 2);
@@ -61,6 +69,7 @@ export function buildTree(mb: MeshBuilder, x: number, y: number, z: number, kind
     }
     case 'dead': {
       mb.cylinder(x, y - 0.3, z, 0.3 * s, 0.15 * s, 3.5 * s, 0x6a5a4a, 5);
+      mb.material(TILE.GRASS, 0.35);
       mb.box(x + 0.6 * s, y + 2.4 * s, z, 1.8 * s, 0.25, 0.25, 0x6a5a4a, 0.6);
       mb.box(x - 0.5 * s, y + 2.9 * s, z + 0.2, 1.4 * s, 0.22, 0.22, 0x6a5a4a, -0.9);
       return 0.3;
@@ -71,7 +80,15 @@ export function buildTree(mb: MeshBuilder, x: number, y: number, z: number, kind
 }
 
 /** Builds a prop and returns its collision radius (0 = walk-through). */
+const PROP_TILE: Partial<Record<PropKind, number>> = {
+  statue: TILE.STONE, obelisk: TILE.STONE, pillar: TILE.STONE, stele: TILE.STONE, runestone: TILE.STONE, well: TILE.STONE,
+  fountain: TILE.STONE, altar: TILE.STONE, shrine: TILE.STONE, boulder: TILE.STONE, lamp: TILE.CONCRETE, gaslamp: TILE.CONCRETE,
+  hydrant: TILE.CONCRETE, automobile: TILE.CONCRETE, cannon: TILE.CONCRETE, amphora: TILE.MUDBRICK, haystack: TILE.THATCH,
+  tent: TILE.THATCH, cactus: TILE.GRASS, campfire: TILE.STONE,
+};
+
 export function buildProp(mb: MeshBuilder, x: number, y: number, z: number, kind: PropKind, rng: Rng, rot = 0): number {
+  mb.material((PROP_TILE[kind] ?? TILE.WOOD) as 0, 0.6);
   switch (kind) {
     case 'lamp':
       mb.cylinder(x, y, z, 0.12, 0.1, 4.2, 0x3a3a3a, 5);

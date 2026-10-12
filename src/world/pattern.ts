@@ -29,8 +29,20 @@ export interface StreetNode {
   key: string;
 }
 
+export interface Park {
+  x: number;
+  z: number;
+  w: number;
+  d: number;
+  seed: number;
+}
+
 export interface CityPattern {
   isStreet(x: number, z: number): boolean;
+  /** Blocks given over to parks or gardens inside the rect. */
+  parksInRect(x0: number, z0: number, x1: number, z1: number): Park[];
+  /** True if the point lies inside a park block. */
+  isPark(x: number, z: number): boolean;
   lotsInRect(x0: number, z0: number, x1: number, z1: number): Lot[];
   /** Street strips to draw inside a rect: a polyline with a width. */
   stripsInRect(x0: number, z0: number, x1: number, z1: number): { points: [number, number][]; width: number }[];
@@ -50,8 +62,10 @@ export function urbanity(era: Era, x: number, z: number): number {
   return u;
 }
 
-function gridPattern(era: Era, seed: number): CityPattern {
+function gridPattern(era: Era, seed: number, parkChance: number): CityPattern {
   const L = era.layout;
+  const isParkBlock = (i: number, j: number): boolean =>
+    parkChance > 0 && hash2(i * 7 + 3, j * 11 + 5, seed + 777) < parkChance && urbanity(era, (i + 0.5) * bw, (j + 0.5) * bd) > 0.55;
   const bw = L.blockW;
   const bd = L.blockD;
   const sw = L.streetWidth;
@@ -84,8 +98,42 @@ function gridPattern(era: Era, seed: number): CityPattern {
     return false;
   }
 
+  function blockInner(i: number, j: number): [number, number, number, number] {
+    const zc = (j + 0.5) * bd;
+    const xc = (i + 0.5) * bw;
+    const xl = streetX(i, zc) + widthV(i) / 2;
+    const xr = streetX(i + 1, zc) - widthV(i + 1) / 2;
+    const zt = streetZ(j, xc) + widthH(j) / 2;
+    const zb = streetZ(j + 1, xc) - widthH(j + 1) / 2;
+    return [xl, zt, xr, zb];
+  }
+
+  function parksInRect(x0: number, z0: number, x1: number, z1: number): Park[] {
+    const out: Park[] = [];
+    for (let i = Math.floor(x0 / bw) - 1; i <= Math.floor(x1 / bw) + 1; i++) {
+      for (let j = Math.floor(z0 / bd) - 1; j <= Math.floor(z1 / bd) + 1; j++) {
+        if (!isParkBlock(i, j)) continue;
+        const [xl, zt, xr, zb] = blockInner(i, j);
+        const x = (xl + xr) / 2;
+        const z = (zt + zb) / 2;
+        if (x < x0 || x >= x1 || z < z0 || z >= z1) continue;
+        out.push({ x, z, w: xr - xl, d: zb - zt, seed: hash2(i, j, seed + 55) * 1e6 });
+      }
+    }
+    return out;
+  }
+
+  function isPark(x: number, z: number): boolean {
+    const i = Math.floor(x / bw);
+    const j = Math.floor(z / bd);
+    if (!isParkBlock(i, j)) return false;
+    const [xl, zt, xr, zb] = blockInner(i, j);
+    return x >= xl && x <= xr && z >= zt && z <= zb;
+  }
+
   function lotsInBlock(i: number, j: number, out: Lot[]): void {
     // block spans street i..i+1 and j..j+1
+    if (isParkBlock(i, j)) return;
     const blockSeed = hash2(i, j, seed + 101) * 1e6;
     const zc = (j + 0.5) * bd;
     const xc = (i + 0.5) * bw;
@@ -225,7 +273,7 @@ function gridPattern(era: Era, seed: number): CityPattern {
     return out;
   }
 
-  return { isStreet, lotsInRect, stripsInRect, nodesInRect, neighbors };
+  return { isStreet, lotsInRect, stripsInRect, nodesInRect, neighbors, parksInRect, isPark };
 }
 
 function radialPattern(era: Era, seed: number): CityPattern {
@@ -377,13 +425,13 @@ function radialPattern(era: Era, seed: number): CityPattern {
     return out;
   }
 
-  return { isStreet, lotsInRect, stripsInRect, nodesInRect, neighbors };
+  return { isStreet, lotsInRect, stripsInRect, nodesInRect, neighbors, parksInRect: () => [], isPark: () => false };
 }
 
-export function makePattern(era: Era): CityPattern {
+export function makePattern(era: Era, parkChance = 0): CityPattern {
   const seed = 1000 + ERA_SEEDS[era.id];
   if (era.layout.pattern === 'radial') return radialPattern(era, seed);
-  return gridPattern(era, seed);
+  return gridPattern(era, seed, parkChance);
 }
 
 const ERA_SEEDS: Record<string, number> = {
