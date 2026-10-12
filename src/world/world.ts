@@ -6,7 +6,7 @@
 import { Color, FogExp2, Group, HemisphereLight, DirectionalLight, Mesh, MeshLambertMaterial, PlaneGeometry, Scene, BufferGeometry } from 'three';
 import type { Era, BuildingTemplate } from '../eras/types';
 import { hash2, Rng } from '../util/rng';
-import { shade, clamp } from '../util/math';
+import { shade, clamp, mixColor, smoothstep } from '../util/math';
 import {
   CHUNK_SIZE, WORLD_HALF, ARTERIALS, ARTERIAL_WIDTH, SITES, terrainHeight, isWater, waterDepth, isArterial, arterialDistance,
   siteClearance, WATER_LEVEL, RING_ROAD, HILL, isBridge,
@@ -367,7 +367,7 @@ export class World {
       const u = urbanity(e, lot.x, lot.z);
       let tmpl: BuildingTemplate | undefined;
       if (u < 0.12) tmpl = e.buildings[Math.min(1, e.buildings.length - 1)];
-      const b = buildBuilding(mb, lot, e, y, lrng, tmpl);
+      const b = buildBuilding(mb, lot, e, y, lrng, tmpl, detail === 'near');
       if (!b) continue;
       colliders.push(b);
       buildings.push(b);
@@ -485,7 +485,12 @@ export class World {
       c = crops[Math.floor(hh * crops.length)];
       c = shade(c, 1 - 0.25 * (1 - clamp(u * 4, 0, 1)) * 0 + (hash2(x, z, 2) - 0.5) * 0.08);
     } else {
-      c = shade(c, 1 + (hash2(x, z, 3) - 0.5) * 0.12);
+      c = shade(c, 1 + (hash2(x, z, 3) - 0.5) * 0.05);
+      // paved or packed-earth city core
+      if (e.layout.pattern !== 'spread') {
+        const pave = e.layout.pavedArterials ? shade(e.road, 1.22) : shade(e.dirt, 1.08);
+        c = mixColor(c, pave, 0.85 * smoothstep(0.3, 0.7, u));
+      }
     }
     if (h > 6) c = shade(c, 1 - clamp((h - 6) / 40, 0, 0.3));
     return c;

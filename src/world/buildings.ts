@@ -17,7 +17,7 @@ export interface BuiltBuilding extends Collider {
  * Builds one building from an era template on a lot. Returns its collider, or null if the
  * lot was skipped.
  */
-export function buildBuilding(mb: MeshBuilder, lot: Lot, era: Era, groundY: number, rng: Rng, tmpl?: BuildingTemplate): BuiltBuilding | null {
+export function buildBuilding(mb: MeshBuilder, lot: Lot, era: Era, groundY: number, rng: Rng, tmpl?: BuildingTemplate, detail = true): BuiltBuilding | null {
   const t = tmpl ?? rng.weighted(era.buildings);
   const fp = rng.range(t.footprint[0], t.footprint[1]);
   let w = Math.max(3.2, lot.w * fp);
@@ -99,15 +99,16 @@ export function buildBuilding(mb: MeshBuilder, lot: Lot, era: Era, groundY: numb
     mb.box(x, base - 1, z, w, h1 + 1, d, wall, rot);
     mb.box(x, base + h1, z, w * 0.78, h2, d * 0.78, wall, rot);
     mb.box(x, base + h1 + h2, z, w * 0.55, h3, d * 0.55, wall, rot);
-    windows(mb, x, base, z, w, d, Math.floor(floors * 0.45), t.floorHeight, rot, frontIsZ);
-    windows(mb, x, base + h1, z, w * 0.78, d * 0.78, Math.floor(floors * 0.3), t.floorHeight, rot, frontIsZ);
-    windows(mb, x, base + h1 + h2, z, w * 0.55, d * 0.55, Math.floor(floors * 0.25), t.floorHeight, rot, frontIsZ);
+    if (detail) {
+      windows(mb, x, base, z, w, d, Math.floor(floors * 0.45), t.floorHeight, rot, frontIsZ, frontSign, 0);
+      windows(mb, x, base + h1, z, w * 0.78, d * 0.78, Math.floor(floors * 0.3), t.floorHeight, rot, frontIsZ, frontSign, 1);
+      windows(mb, x, base + h1 + h2, z, w * 0.55, d * 0.55, Math.floor(floors * 0.25), t.floorHeight, rot, frontIsZ, frontSign, 1);
+    }
     mb.box(x, base + h, z, w * 0.2, 2, d * 0.2, shade(wall, 0.9), rot);
     mb.cylinder(x, base + h + 2, z, 0.3, 0.05, 6, 0x9a9aa0, 6);
   } else {
     mb.box(x, base - 1, z, w, h + 1, d, wall, rot);
-    if (floors >= 2) windows(mb, x, base, z, w, d, floors, t.floorHeight, rot, frontIsZ);
-    else doorFront(mb, x, base, z, w, d, rot, frontIsZ, frontSign);
+    if (detail) windows(mb, x, base, z, w, d, floors, t.floorHeight, rot, frontIsZ, frontSign, 0);
     if (t.trim) mb.box(x, base, z, w + 0.2, 0.7, d + 0.2, t.trim, rot);
     addRoof(mb, t, x, base + h, z, w, d, rot, roofColor, wall, floors, false);
   }
@@ -148,33 +149,39 @@ export function buildBuilding(mb: MeshBuilder, lot: Lot, era: Era, groundY: numb
   return { x, z, hw: w / 2 + 0.15, hd: d / 2 + 0.15, rot, h, tag: t.tag, template: t, doorX, doorZ };
 }
 
-function windows(mb: MeshBuilder, x: number, y: number, z: number, w: number, d: number, floors: number, fh: number, rot: number, frontIsZ: boolean): void {
+/**
+ * Individual windows on every face, plus a door on the ground floor of the front face.
+ * Flat quads offset 4 cm from the wall: cheap, and they read as real openings from any angle.
+ */
+function windows(mb: MeshBuilder, x: number, y: number, z: number, w: number, d: number, floors: number, fh: number, rot: number, frontIsZ: boolean, frontSign: number, firstFloor: number): void {
   const cs = Math.cos(rot);
   const sn = Math.sin(rot);
-  for (let f = 0; f < floors; f++) {
-    const wy = y + f * fh + fh * 0.4;
-    const wh = fh * 0.32;
-    for (const s of [-1, 1]) {
-      if (frontIsZ) {
-        const lz = s * (d / 2 + 0.04);
-        mb.box(x - lz * sn, wy, z + lz * cs, w * 0.72, wh, 0.1, DARK_WINDOW, rot);
-      } else {
-        const lx = s * (w / 2 + 0.04);
-        mb.box(x + lx * cs, wy, z + lx * sn, 0.1, wh, d * 0.72, DARK_WINDOW, rot);
+  const W = (lx: number, lz: number): [number, number] => [x + lx * cs - lz * sn, z + lx * sn + lz * cs];
+  const winW = 1.0;
+  const winH = Math.min(1.6, fh * 0.5);
+  const spacing = 2.3;
+  const faces: { len: number; off: number; alongX: boolean; sign: number }[] = [
+    { len: w, off: d / 2 + 0.04, alongX: true, sign: 1 },
+    { len: w, off: d / 2 + 0.04, alongX: true, sign: -1 },
+    { len: d, off: w / 2 + 0.04, alongX: false, sign: 1 },
+    { len: d, off: w / 2 + 0.04, alongX: false, sign: -1 },
+  ];
+  for (const f of faces) {
+    const n = Math.max(1, Math.floor((f.len - 0.8) / spacing));
+    const step = f.len / n;
+    const isFront = f.alongX === frontIsZ && f.sign === frontSign;
+    // outward normal in world space
+    const [nxw, nzw] = f.alongX ? [-f.sign * sn, f.sign * cs] : [f.sign * cs, f.sign * sn];
+    for (let fl = 0; fl < floors; fl++) {
+      const wy = y + fl * fh + fh * 0.3;
+      for (let i = 0; i < n; i++) {
+        const u = -f.len / 2 + (i + 0.5) * step;
+        const [px, pz] = f.alongX ? W(u, f.sign * f.off) : W(f.sign * f.off, u);
+        const isDoor = isFront && fl === 0 && firstFloor === 0 && i === Math.floor(n / 2);
+        if (isDoor) mb.wallQuad(px, y + 0.02, pz, 1.2, Math.min(2.2, fh * 0.75), nxw, nzw, DARK_WINDOW);
+        else mb.wallQuad(px, wy, pz, winW, winH, nxw, nzw, DARK_WINDOW);
       }
     }
-  }
-}
-
-function doorFront(mb: MeshBuilder, x: number, y: number, z: number, w: number, d: number, rot: number, frontIsZ: boolean, sign: number): void {
-  const cs = Math.cos(rot);
-  const sn = Math.sin(rot);
-  if (frontIsZ) {
-    const lz = sign * (d / 2 + 0.04);
-    mb.box(x - lz * sn, y, z + lz * cs, 1.1, 2.0, 0.1, DARK_WINDOW, rot);
-  } else {
-    const lx = sign * (w / 2 + 0.04);
-    mb.box(x + lx * cs, y, z + lx * sn, 0.1, 2.0, 1.1, DARK_WINDOW, rot);
   }
 }
 

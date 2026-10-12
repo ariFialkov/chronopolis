@@ -31,6 +31,12 @@ a service worker, ships a web manifest and offers "Install" on supported browser
 | M or Tab: journal (map, objectives, chronoports, insights) | Map button |
 | Esc: pause (save, quality, controls) | Pause button |
 
+## Developer widget
+
+A small panel on the left (toggle with the backquote key) shows fps, triangles, draw calls and
+loaded chunks, and has one-click chronoport buttons for every era. It is created by one line in
+`src/main.ts` (`new DevTools(game)`); delete that line before release.
+
 ## How the city works
 
 * `src/world/macro.ts` is the geography that never changes: the river, the bay, Citadel Hill, the

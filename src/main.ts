@@ -1,10 +1,14 @@
 import './style.css';
 import { Game } from './game';
+import { DevTools } from './ui/devtools';
 import { registerSW } from 'virtual:pwa-register';
 
 const canvas = document.getElementById('game') as HTMLCanvasElement;
 const game = new Game(canvas);
 (window as unknown as { chronopolis: Game }).chronopolis = game;
+
+// Developer widget (chronoport to any era, fps/triangle counter). Delete this line before release.
+new DevTools(game);
 
 // PWA: register the service worker and offer install.
 registerSW({ immediate: true });

@@ -70,11 +70,21 @@ export class MeshBuilder {
     // top
     this.quad(x0, y1, z0, x3, y1, z3, x2, y1, z2, x1, y1, z1);
     // bottom (skipped for performance: nobody looks under buildings)
-    // sides
-    this.quad(x0, y, z0, x1, y, z1, x1, y1, z1, x0, y1, z0);
-    this.quad(x1, y, z1, x2, y, z2, x2, y1, z2, x1, y1, z1);
-    this.quad(x2, y, z2, x3, y, z3, x3, y1, z3, x2, y1, z2);
-    this.quad(x3, y, z3, x0, y, z0, x0, y1, z0, x3, y1, z3);
+    // sides (counter-clockwise seen from outside, so normals point outward)
+    this.quad(x0, y, z0, x0, y1, z0, x1, y1, z1, x1, y, z1);
+    this.quad(x1, y, z1, x1, y1, z1, x2, y1, z2, x2, y, z2);
+    this.quad(x2, y, z2, x2, y1, z2, x3, y1, z3, x3, y, z3);
+    this.quad(x3, y, z3, x3, y1, z3, x0, y1, z0, x0, y, z0);
+  }
+
+  /** Vertical rectangle centred at (cx, y+h/2, cz), width w, facing the horizontal direction (nx, nz). */
+  wallQuad(cx: number, y: number, cz: number, w: number, h: number, nx: number, nz: number, color: number): void {
+    this.setColor(color);
+    const len = Math.hypot(nx, nz) || 1;
+    const tx = (-nz / len) * (w / 2);
+    const tz = (nx / len) * (w / 2);
+    // bottom-left, top-left, top-right, bottom-right: counter-clockwise seen from the (nx, nz) side
+    this.quad(cx - tx, y, cz - tz, cx - tx, y + h, cz - tz, cx + tx, y + h, cz + tz, cx + tx, y, cz + tz);
   }
 
   /** Flat quad on the ground (y up), with slight y offset. */
@@ -99,11 +109,11 @@ export class MeshBuilder {
     const [rx1, rz1] = P(hw, 0);
     const y1 = y + h;
     // two slopes
-    this.quad(x0, y, z0, x1, y, z1, rx1, y1, rz1, rx0, y1, rz0);
-    this.quad(x2, y, z2, x3, y, z3, rx0, y1, rz0, rx1, y1, rz1);
+    this.quad(x0, y, z0, rx0, y1, rz0, rx1, y1, rz1, x1, y, z1);
+    this.quad(x2, y, z2, rx1, y1, rz1, rx0, y1, rz0, x3, y, z3);
     // gable ends
-    this.tri(x1, y, z1, x2, y, z2, rx1, y1, rz1);
-    this.tri(x3, y, z3, x0, y, z0, rx0, y1, rz0);
+    this.tri(x1, y, z1, rx1, y1, rz1, x2, y, z2);
+    this.tri(x3, y, z3, rx0, y1, rz0, x0, y, z0);
   }
 
   /** Hip roof / truncated pyramid. topW/topD = 0 gives a pyramid. */
@@ -122,9 +132,9 @@ export class MeshBuilder {
     for (let i = 0; i < 4; i++) {
       const j = (i + 1) % 4;
       if (topW > 0.01 || topD > 0.01) {
-        this.quad(b[i][0], y, b[i][1], b[j][0], y, b[j][1], t[j][0], y1, t[j][1], t[i][0], y1, t[i][1]);
+        this.quad(b[i][0], y, b[i][1], t[i][0], y1, t[i][1], t[j][0], y1, t[j][1], b[j][0], y, b[j][1]);
       } else {
-        this.tri(b[i][0], y, b[i][1], b[j][0], y, b[j][1], t[0][0], y1, t[0][1]);
+        this.tri(b[i][0], y, b[i][1], t[0][0], y1, t[0][1], b[j][0], y, b[j][1]);
       }
     }
     if (topW > 0.01 && topD > 0.01) {
