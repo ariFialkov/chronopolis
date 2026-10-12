@@ -170,22 +170,55 @@ export function isWater(x: number, z: number): boolean {
   return waterDepth(x, z) > 0;
 }
 
-/** Terrain height. Flat city with a gentle citadel hill, sloping shores and a riverbed. */
-export function terrainHeight(x: number, z: number): number {
-  let h = 0;
+/**
+ * Terrain before landmark flattening: rolling hills across the whole city, a valley that drops
+ * toward the river, the citadel hill, and ground that shelves down into the water.
+ */
+export function rawHeight(x: number, z: number): number {
+  let h = 5 + (fbm(x * 0.0036 + 3.1, z * 0.0036 + 7.7, 3, 21) - 0.5) * 17;
+  h += (fbm(x * 0.013 + 1.3, z * 0.013 + 2.9, 2, 23) - 0.5) * 3.2;
+  // valley toward the river
+  const rd = riverDistance(x, z);
+  h -= 3.5 * (1 - smoothstep(40, 260, rd));
+  // lowlands never dip below the water table
+  if (h < 1.2) h = 1.2 - (1.2 - h) * 0.15;
   const dh = Math.hypot(x - HILL.x, z - HILL.z);
   if (dh < HILL.radius) {
     h += HILL.height * (1 - smoothstep(HILL.plateau, HILL.radius, dh));
   }
-  // slow rolling ground outside the ring road
   const outside = Math.max(Math.abs(x), Math.abs(z)) - RING_ROAD;
   if (outside > 0) {
-    h += (fbm(x * 0.004, z * 0.004, 2, 9) - 0.5) * 10 * smoothstep(0, 120, outside);
+    h += (fbm(x * 0.004, z * 0.004, 2, 9) - 0.5) * 12 * smoothstep(0, 120, outside);
+  }
+  return h;
+}
+
+const siteBaseCache = new Map<string, number>();
+function siteBase(s: Site): number {
+  let v = siteBaseCache.get(s.id);
+  if (v === undefined) {
+    v = rawHeight(s.x, s.z);
+    siteBaseCache.set(s.id, v);
+  }
+  return v;
+}
+
+/** Final terrain height: raw hills, landmark sites flattened to a level base, shores shelving into water. */
+export function terrainHeight(x: number, z: number): number {
+  let h = rawHeight(x, z);
+  for (const id in SITES) {
+    const s = SITES[id];
+    const d = Math.hypot(x - s.x, z - s.z);
+    const outer = s.clear * 1.4;
+    if (d < outer) {
+      const t = 1 - smoothstep(s.clear * 0.95, outer, d);
+      h = h + (siteBase(s) - h) * t;
+    }
   }
   const wd = waterDepth(x, z);
-  if (wd > -14) {
+  if (wd > -16) {
     // shore shelves down into the water
-    const t = smoothstep(-14, 10, wd);
+    const t = smoothstep(-16, 10, wd);
     h = h * (1 - t) - 3.5 * t;
   }
   return h;

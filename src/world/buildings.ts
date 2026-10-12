@@ -55,17 +55,48 @@ interface Face {
  * Builds one building from an era template on a lot. Returns its collider, or null if the
  * lot was skipped. `detail` false skips the fine features (far chunks).
  */
-export function buildBuilding(mb: MeshBuilder, lot: Lot, era: Era, groundY: number, rng: Rng, tmpl?: BuildingTemplate, detail = true): BuiltBuilding | null {
+function rot0(lot: Lot): number {
+  return lot.rot;
+}
+
+export function buildBuilding(mb: MeshBuilder, lot: Lot, era: Era, groundY: number, rng: Rng, tmpl?: BuildingTemplate, detail = true, groundAt: (x: number, z: number) => number = () => groundY): BuiltBuilding | null {
   const t = tmpl ?? rng.weighted(era.buildings);
   const F = new Set<Feature>(t.features ?? []);
   const fp = rng.range(t.footprint[0], t.footprint[1]);
-  let w = Math.max(3.2, lot.w * fp);
-  let d = Math.max(3.2, lot.d * fp);
+  // How far this template's features stick out, so the footprint is shrunk to keep them inside the lot.
+  const ov = t.overhang ?? 0.35;
+  let frontOut = 0.3;
+  if (F.has('porch') || t.columns) frontOut = Math.max(frontOut, 2.1);
+  if (F.has('arcade')) frontOut = Math.max(frontOut, 2.1);
+  if (F.has('veranda')) frontOut = Math.max(frontOut, 2.4);
+  if (F.has('awning')) frontOut = Math.max(frontOut, 1.9);
+  if (F.has('bay')) frontOut = Math.max(frontOut, 1.1);
+  if (F.has('balcony')) frontOut = Math.max(frontOut, 1.0);
+  if (F.has('sign')) frontOut = Math.max(frontOut, 0.9);
+  if (t.stilts) frontOut = Math.max(frontOut, 1.6);
+  let sideOut = Math.max(0.35, ov + 0.15);
+  if (F.has('fireEscape')) sideOut = Math.max(sideOut, 1.3);
+  if (F.has('buttress')) sideOut = Math.max(sideOut, 1.3);
+  if (F.has('eaves')) sideOut = Math.max(sideOut, ov + 0.35);
+  if (F.has('plinth') || F.has('cornice')) sideOut = Math.max(sideOut, 0.45);
+  const fa0 = lot.front - rot0(lot);
+  const frontAlongZ0 = Math.abs(Math.sin(fa0)) >= Math.abs(Math.cos(fa0));
+  // usable extents inside the lot after setbacks (front/back along the front axis, sides across it)
+  const lotAlong = frontAlongZ0 ? lot.d : lot.w;
+  const lotAcross = frontAlongZ0 ? lot.w : lot.d;
+  const usableAlong = Math.max(3.2, lotAlong - frontOut - sideOut);
+  const usableAcross = Math.max(3.2, lotAcross - 2 * sideOut);
+  let along = Math.max(3.2, usableAlong * fp);
+  let across = Math.max(3.2, usableAcross * fp);
   if (t.round) {
-    const r = Math.min(w, d);
-    w = r;
-    d = r;
+    const r = Math.min(along, across);
+    along = r;
+    across = r;
   }
+  let w = frontAlongZ0 ? across : along;
+  let d = frontAlongZ0 ? along : across;
+  // shift the body back so the front features land inside the lot
+  const backShift = (frontOut - sideOut) / 2;
   const floors = rng.int(t.floors[0], t.floors[1]);
   const fh = t.floorHeight;
   const h = floors * fh;
@@ -76,11 +107,29 @@ export function buildBuilding(mb: MeshBuilder, lot: Lot, era: Era, groundY: numb
   const wallRep = t.texRepeat ?? texRepeat(wallTex);
   const roofTex = (t.roofTex ?? (t.roof === 'thatch' ? TILE.THATCH : t.roof === 'flat' ? TILE.CONCRETE : TILE.ROOFTILE)) as Tile;
   const rot = lot.rot;
-  const x = lot.x;
-  const z = lot.z;
-  let base = groundY;
   const cs = Math.cos(rot);
   const sn = Math.sin(rot);
+  const frontSign0 = frontAlongZ0 ? Math.sign(Math.sin(fa0)) || 1 : Math.sign(Math.cos(fa0)) || 1;
+  const shiftLx = frontAlongZ0 ? 0 : -frontSign0 * backShift;
+  const shiftLz = frontAlongZ0 ? -frontSign0 * backShift : 0;
+  const x = lot.x + shiftLx * cs - shiftLz * sn;
+  const z = lot.z + shiftLx * sn + shiftLz * cs;
+  // the building stands on the highest corner of its footprint; a foundation fills down to the lowest
+  const corners: [number, number][] = [
+    [x + (w / 2) * cs - (d / 2) * sn, z + (w / 2) * sn + (d / 2) * cs],
+    [x - (w / 2) * cs - (d / 2) * sn, z - (w / 2) * sn + (d / 2) * cs],
+    [x + (w / 2) * cs + (d / 2) * sn, z + (w / 2) * sn - (d / 2) * cs],
+    [x - (w / 2) * cs + (d / 2) * sn, z - (w / 2) * sn - (d / 2) * cs],
+  ];
+  let minY = groundY;
+  let maxY = groundY;
+  for (const [cx2, cz2] of corners) {
+    const gy = groundAt(cx2, cz2);
+    if (gy < minY) minY = gy;
+    if (gy > maxY) maxY = gy;
+  }
+  let base = maxY + 0.05;
+  const foundationDepth = base - minY + 0.6;
   const W = (lx: number, lz: number): [number, number] => [x + lx * cs - lz * sn, z + lx * sn + lz * cs];
   /** world-space outward normal of a face */
   const N = (f: Face): [number, number] => (f.alongX ? [-f.sign * sn, f.sign * cs] : [f.sign * cs, f.sign * sn]);
@@ -118,11 +167,12 @@ export function buildBuilding(mb: MeshBuilder, lot: Lot, era: Era, groundY: numb
       [0, d / 2 - 0.4],
     ]) {
       const [wx, wz] = W(px, pz);
-      mb.box(wx, groundY - 0.5, wz, 0.35, lift + 0.5, 0.35, postColor, rot);
+      const gy = groundAt(wx, wz);
+      mb.box(wx, gy - 0.5, wz, 0.35, base + lift - gy + 0.5, 0.35, postColor, rot);
     }
-    base = groundY + lift;
+    base = base + lift;
     const [sx, sz] = P(front, 0, 0.7);
-    mb.box(sx, groundY, sz, 1.2, lift, 1.2, shade(wall, 0.7), rot);
+    mb.box(sx, groundAt(sx, sz) - 0.2, sz, 1.2, base - groundAt(sx, sz) + 0.2, 1.2, shade(wall, 0.7), rot);
     // floor slab
     mb.box(x, base - 0.25, z, w + 0.6, 0.25, d + 0.6, shade(wall, 0.8), rot);
   }
@@ -133,11 +183,34 @@ export function buildBuilding(mb: MeshBuilder, lot: Lot, era: Era, groundY: numb
     return { x, z, hw: w / 2 + 0.2, hd: d / 2 + 0.2, rot, h, tag: t.tag, template: t, doorX: x, doorZ: z };
   }
 
+  // ---------------- foundation ----------------
+  // a stone podium from below the lowest corner up to the floor level, slightly wider than the body
+  mb.material(TILE.STONE, 0.4);
+  if (t.round) mb.cylinder(x, minY - 0.6, z, w / 2 + 0.12, w / 2 + 0.12, foundationDepth, shade(wall, 0.62), 12, rot);
+  else mb.box(x, minY - 0.6, z, w + 0.24, foundationDepth, d + 0.24, shade(wall, 0.62), rot, 0.8);
+  // steps up to the door when the ground in front is lower than the floor
+  {
+    const [sx, sz] = P(front, 0, 0.9);
+    const gyDoor = groundAt(sx, sz);
+    const rise = base - gyDoor;
+    if (rise > 0.3 && !t.stilts) {
+      const steps = Math.min(6, Math.ceil(rise / 0.25));
+      const run = 0.32;
+      for (let i = 0; i < steps; i++) {
+        const [px, pz] = P(front, 0, 0.12 + i * run);
+        const sh = base - (i * rise) / steps;
+        const sy = gyDoor - 0.2;
+        if (frontIsZ) mb.box(px, sy, pz, 2.4, sh - sy, run + 0.02, shade(wall, 0.7), rot);
+        else mb.box(px, sy, pz, run + 0.02, sh - sy, 2.4, shade(wall, 0.7), rot);
+      }
+    }
+  }
+
   // ---------------- body ----------------
   wallMat();
   if (t.round) {
     const r = w / 2;
-    mb.cylinder(x, base - 1, z, r, r, h + 1, wall, 12, rot);
+    mb.cylinder(x, base - 0.1, z, r, r, h + 0.1, wall, 12, rot);
     if (F.has('bands')) {
       mb.cylinder(x, base + 0.15, z, r + 0.06, r + 0.06, 0.35, accent, 12, rot);
       mb.cylinder(x, base + h - 0.5, z, r + 0.06, r + 0.06, 0.3, accent, 12, rot);
@@ -164,7 +237,7 @@ export function buildBuilding(mb: MeshBuilder, lot: Lot, era: Era, groundY: numb
     for (const [lx, lz, ww, dd] of wings) {
       const [wx, wz] = W(lx, lz);
       wallMat();
-      mb.box(wx, base - 1, wz, ww, h + 1, dd, wall, rot, 0.78);
+      mb.box(wx, base - 0.1, wz, ww, h + 0.1, dd, wall, rot, 0.78);
       addRoof(mb, t, wx, base + h, wz, ww, dd, rot, roofColor, wall, 0, true, roofTex);
     }
     if (t.parapet) {
@@ -178,7 +251,7 @@ export function buildBuilding(mb: MeshBuilder, lot: Lot, era: Era, groundY: numb
     const h1 = h * 0.45;
     const h2 = h * 0.3;
     const h3 = h * 0.25;
-    mb.box(x, base - 1, z, w, h1 + 1, d, wall, rot, 0.78);
+    mb.box(x, base - 0.1, z, w, h1 + 0.1, d, wall, rot, 0.78);
     mb.box(x, base + h1, z, w * 0.78, h2, d * 0.78, wall, rot);
     mb.box(x, base + h1 + h2, z, w * 0.55, h3, d * 0.55, wall, rot);
     if (detail) {
@@ -198,11 +271,11 @@ export function buildBuilding(mb: MeshBuilder, lot: Lot, era: Era, groundY: numb
     mb.material(TILE.CONCRETE, 0.5);
     mb.cylinder(x, base + h + 2, z, 0.3, 0.05, 6, 0x9a9aa0, 6);
   } else if (F.has('battered')) {
-    mb.hip(x, base - 1, z, w, h + 1, d, w * 0.9, d * 0.9, wall, rot);
+    mb.hip(x, base - 0.1, z, w, h + 0.1, d, w * 0.9, d * 0.9, wall, rot);
     if (detail) windows(mb, faces, W, N, P, base, floors, fh, t, F, accent, wall, insetAt, isFront, 0);
     if (t.parapet) mb.box(x, base + h - 0.1, z, w * 0.9 + 0.3, 0.5, d * 0.9 + 0.3, shade(wall, 0.85), rot);
   } else {
-    mb.box(x, base - 1, z, w, h + 1, d, wall, rot, 0.78);
+    mb.box(x, base - 0.1, z, w, h + 0.1, d, wall, rot, 0.78);
     if (detail) windows(mb, faces, W, N, P, base, floors, fh, t, F, accent, wall, insetAt, isFront, 0);
     if (t.trim && !F.has('bands')) {
       wallMat();
@@ -215,7 +288,7 @@ export function buildBuilding(mb: MeshBuilder, lot: Lot, era: Era, groundY: numb
   if (F.has('plinth')) {
     stoneMat();
     const ins = insetAt(base);
-    mb.box(x, base - 0.5, z, w - ins * 2 + 0.3, 1.2, d - ins * 2 + 0.3, shade(wall, 0.72), rot);
+    mb.box(x, base - 0.05, z, w - ins * 2 + 0.3, 0.75, d - ins * 2 + 0.3, shade(wall, 0.72), rot);
   }
   if (F.has('cornice') && !t.round) {
     wallMat();
@@ -245,16 +318,22 @@ export function buildBuilding(mb: MeshBuilder, lot: Lot, era: Era, groundY: numb
     const colColor = shade(wall, 1.08);
     const span = front.len;
     const n = Math.max(2, Math.floor(span / 2.2));
+    const depth = 2.0;
+    // floor slab (stylobate) from the lowest ground under the porch up to floor level
+    const [px, pz] = P(front, 0, depth / 2);
+    const gLow = Math.min(groundAt(...P(front, -span / 2, depth)), groundAt(...P(front, span / 2, depth)), groundAt(px, pz));
     stoneMat();
+    if (frontIsZ) mb.box(px, gLow - 0.3, pz, span + 0.6, base - gLow + 0.3, depth + 0.3, shade(wall, 0.8), rot, 0.8);
+    else mb.box(px, gLow - 0.3, pz, depth + 0.3, base - gLow + 0.3, span + 0.6, shade(wall, 0.8), rot, 0.8);
     for (let i = 0; i < n; i++) {
       const u = -span / 2 + 0.6 + (i / (n - 1)) * (span - 1.2);
-      const [cx, cz] = P(front, u, 0.9);
-      mb.cylinder(cx, base - 0.3, cz, 0.32, 0.28, colH, colColor, 8);
+      const [cx, cz] = P(front, u, depth - 0.45);
+      mb.cylinder(cx, base, cz, 0.32, 0.28, colH, colColor, 8);
+      mb.box(cx, base + colH - 0.05, cz, 0.8, 0.3, 0.8, colColor, rot);
     }
-    const [px, pz] = P(front, 0, 0.9);
     wallMat();
-    if (frontIsZ) mb.box(px, base + colH - 0.3, pz, w + 0.4, 0.5, 2.2, shade(wall, 0.95), rot);
-    else mb.box(px, base + colH - 0.3, pz, 2.2, 0.5, d + 0.4, shade(wall, 0.95), rot);
+    if (frontIsZ) mb.box(px, base + colH + 0.2, pz, w + 0.4, 0.5, depth + 0.4, shade(wall, 0.95), rot);
+    else mb.box(px, base + colH + 0.2, pz, depth + 0.4, 0.5, d + 0.4, shade(wall, 0.95), rot);
   }
   if (F.has('arcade') && !t.round) {
     // ground-floor arcade along the front: pillars, lintel, arched openings
@@ -265,16 +344,17 @@ export function buildBuilding(mb: MeshBuilder, lot: Lot, era: Era, groundY: numb
     stoneMat();
     for (let i = 0; i <= n; i++) {
       const u = -span / 2 + i * step;
-      const [cx, cz] = P(front, Math.max(-span / 2 + 0.35, Math.min(span / 2 - 0.35, u)), 1.0);
-      mb.box(cx, base - 0.3, cz, 0.7, ah, 0.7, shade(wall, 1.05), rot);
+      const [cx, cz] = P(front, Math.max(-span / 2 + 0.35, Math.min(span / 2 - 0.35, u)), 1.3);
+      mb.box(cx, base - 0.05, cz, 0.7, ah, 0.7, shade(wall, 1.05), rot);
     }
-    const [lx, lz] = P(front, 0, 1.0);
-    if (frontIsZ) mb.box(lx, base + ah - 0.35, lz, span + 0.5, 0.5, 1.5, shade(wall, 0.95), rot);
-    else mb.box(lx, base + ah - 0.35, lz, 1.5, 0.5, span + 0.5, shade(wall, 0.95), rot);
-    const [fx2, fz2] = P(front, 0, 0.9);
+    const [lx, lz] = P(front, 0, 0.75);
+    if (frontIsZ) mb.box(lx, base + ah - 0.35, lz, span + 0.5, 0.55, 1.9, shade(wall, 0.95), rot);
+    else mb.box(lx, base + ah - 0.35, lz, 1.9, 0.55, span + 0.5, shade(wall, 0.95), rot);
+    const [fx2, fz2] = P(front, 0, 0.85);
+    const gLow = Math.min(groundAt(...P(front, -span / 2, 1.8)), groundAt(...P(front, span / 2, 1.8)), groundAt(fx2, fz2));
     mb.material(TILE.SLAB, 0.4);
-    if (frontIsZ) mb.box(fx2, base - 0.3, fz2, span + 0.4, 0.36, 2.0, shade(wall, 0.8), rot);
-    else mb.box(fx2, base - 0.3, fz2, 2.0, 0.36, span + 0.4, shade(wall, 0.8), rot);
+    if (frontIsZ) mb.box(fx2, gLow - 0.3, fz2, span + 0.4, base - gLow + 0.36, 1.9, shade(wall, 0.8), rot, 0.8);
+    else mb.box(fx2, gLow - 0.3, fz2, 1.9, base - gLow + 0.36, span + 0.4, shade(wall, 0.8), rot, 0.8);
     if (detail) {
       mb.material(TILE.CONCRETE, 0.3);
       const [nx, nz] = N(front);
@@ -494,11 +574,12 @@ export function buildBuilding(mb: MeshBuilder, lot: Lot, era: Era, groundY: numb
         mb.box(cx, base, cz, 0.18, vh, 0.18, shade(wall, 0.6), rot);
       }
       const [px, pz] = P(front, 0, 1.0);
+      const gLow = Math.min(groundAt(...P(front, -span / 2, 2.1)), groundAt(...P(front, span / 2, 2.1)), groundAt(px, pz));
       if (frontIsZ) {
-        mb.box(px, base + 0.02, pz, span + 0.2, 0.14, 2.1, shade(wall, 0.8), rot);
+        mb.box(px, gLow - 0.3, pz, span + 0.2, base + 0.14 - gLow + 0.3, 2.1, shade(wall, 0.8), rot, 0.8);
         mb.box(px, base + vh - 0.1, pz, span + 0.5, 0.2, 2.4, shade(roofColor, 1.0), rot);
       } else {
-        mb.box(px, base + 0.02, pz, 2.1, 0.14, span + 0.2, shade(wall, 0.8), rot);
+        mb.box(px, gLow - 0.3, pz, 2.1, base + 0.14 - gLow + 0.3, span + 0.2, shade(wall, 0.8), rot, 0.8);
         mb.box(px, base + vh - 0.1, pz, 2.4, 0.2, span + 0.5, shade(roofColor, 1.0), rot);
       }
       const [rx, rz] = P(front, 0, 1.95);
@@ -655,16 +736,18 @@ function windows(
           mb.wallQuad(px + nx * 0.01, wy + winH * 0.5 - 0.04, pz + nz * 0.01, winW, 0.08, nx, nz, accent);
           mb.wallQuad(px + nx * 0.01, wy, pz + nz * 0.01, 0.08, winH, nx, nz, accent);
         }
+        // boxes aligned with the face: long side along the face, thin side along its normal
+        const faceRot = Math.atan2(nz, nx) - Math.PI / 2;
         if (F.has('sills')) {
           mb.material(TILE.STONE, 0.5);
           const [sx, sz] = P(f, u, 0.12 - inset);
-          mb.box(sx, wy - 0.14, sz, f.alongX ? winW + 0.4 : 0.3, 0.14, f.alongX ? 0.3 : winW + 0.4, shade(wall, 0.8), f.alongX ? Math.atan2(nz, nx) - Math.PI / 2 : Math.atan2(nz, nx) - Math.PI / 2);
+          mb.box(sx, wy - 0.14, sz, winW + 0.4, 0.14, 0.3, shade(wall, 0.8), faceRot);
         }
         if (F.has('shutters')) {
           mb.material(TILE.WOOD, 0.8);
           for (const s of [-1, 1]) {
             const [hx, hz] = P(f, u + s * (winW / 2 + 0.25), 0.1 - inset);
-            mb.box(hx, wy, hz, f.alongX ? 0.4 : 0.08, winH, f.alongX ? 0.08 : 0.4, accent, Math.atan2(nz, nx) - Math.PI / 2);
+            mb.box(hx, wy, hz, 0.4, winH, 0.08, accent, faceRot);
           }
         }
       }

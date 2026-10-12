@@ -148,15 +148,27 @@ function gridPattern(era: Era, seed: number, parkChance: number): CityPattern {
     if (L.pattern === 'spread') {
       // a few big plots, buildings placed freely with random rotation
       const n = 1 + Math.floor(hash2(i, j, seed + 7) * 3);
+      const placed: Lot[] = [];
       for (let k = 0; k < n; k++) {
-        const h = hash2(i * 13 + k, j * 17 + k, seed + 31);
-        const h2 = hash2(i * 19 + k, j * 23 + k, seed + 37);
-        const w = Math.min(L.lotSize, innerW * 0.6);
-        const d = Math.min(L.lotSize * 0.6, innerD * 0.6);
-        const x = xl + w / 2 + h * (innerW - w);
-        const z = zt + d / 2 + h2 * (innerD - d);
-        const rot = (hash2(i + k, j - k, seed + 41) - 0.5) * 1.2;
-        out.push({ x, z, w, d, rot, front: rot + Math.PI / 2, seed: blockSeed + k * 7919, weight: 1 });
+        const w = Math.min(L.lotSize, innerW * 0.5);
+        const d = Math.min(L.lotSize * 0.6, innerD * 0.5);
+        const r = Math.hypot(w, d) / 2 + 1.5; // rotated footprint radius plus a gap
+        let ok = false;
+        let x = 0;
+        let z = 0;
+        let rot = 0;
+        for (let attempt = 0; attempt < 6 && !ok; attempt++) {
+          const h = hash2(i * 13 + k * 3 + attempt, j * 17 + k, seed + 31);
+          const h2 = hash2(i * 19 + k, j * 23 + k * 5 + attempt, seed + 37);
+          x = xl + r + h * Math.max(0, innerW - 2 * r);
+          z = zt + r + h2 * Math.max(0, innerD - 2 * r);
+          rot = (hash2(i + k, j - k + attempt, seed + 41) - 0.5) * 1.2;
+          ok = placed.every((o) => Math.hypot(o.x - x, o.z - z) > 2 * r);
+        }
+        if (!ok) continue;
+        const lot: Lot = { x, z, w, d, rot, front: rot + Math.PI / 2, seed: blockSeed + k * 7919, weight: 1 };
+        placed.push(lot);
+        out.push(lot);
       }
       return;
     }
@@ -175,9 +187,23 @@ function gridPattern(era: Era, seed: number, parkChance: number): CityPattern {
         if (!onEdge && hash2(a + i * 50, b + j * 50, seed + 61) < 0.75) continue; // interior stays open (courtyards)
         const gx = xl + (a + 0.5) * lw;
         const gz = zt + (b + 0.5) * ld;
-        // local curvature: follow the nearest street's sway
+        // local curvature: follow the nearest street's sway, and turn the lot to the street's tangent
         const x = gx + (edgeL ? curveV(i, gz) - curveV(i, zc) : edgeR ? curveV(i + 1, gz) - curveV(i + 1, zc) : 0);
         const z = gz + (edgeT ? curveH(j, gx) - curveH(j, xc) : edgeB ? curveH(j + 1, gx) - curveH(j + 1, xc) : 0);
+        let lotRot = 0;
+        let lotW = lw;
+        let lotD = ld;
+        if (edgeL || edgeR) {
+          const si = edgeL ? i : i + 1;
+          const slope = (curveV(si, gz + 2) - curveV(si, gz - 2)) / 4;
+          lotRot = -Math.atan(slope);
+          lotD = Math.max(4, ld - Math.abs(slope) * lw);
+        } else if (edgeT || edgeB) {
+          const sj = edgeT ? j : j + 1;
+          const slope = (curveH(sj, gx + 2) - curveH(sj, gx - 2)) / 4;
+          lotRot = Math.atan(slope);
+          lotW = Math.max(4, lw - Math.abs(slope) * ld);
+        }
         let front = 0;
         if (edgeT) front = -Math.PI / 2;
         else if (edgeB) front = Math.PI / 2;
@@ -185,7 +211,7 @@ function gridPattern(era: Era, seed: number, parkChance: number): CityPattern {
         else front = 0;
         if (edgeL && (edgeT || edgeB) && hash2(a, b, seed + i + j) < 0.5) front = Math.PI;
         if (edgeR && (edgeT || edgeB) && hash2(a, b, seed + i - j) < 0.5) front = 0;
-        out.push({ x, z, w: lw, d: ld, rot: 0, front, seed: blockSeed + a * 131 + b * 977, weight: onEdge ? 1 : 0.6 });
+        out.push({ x, z, w: lotW, d: lotD, rot: lotRot, front: front + lotRot, seed: blockSeed + a * 131 + b * 977, weight: onEdge ? 1 : 0.6 });
       }
     }
   }
@@ -320,7 +346,8 @@ function radialPattern(era: Era, seed: number): CityPattern {
       const rMid = (rA + rB) / 2;
       const n = spokesAt(rMid);
       const step = (Math.PI * 2) / n;
-      const lotsPerSector = Math.max(1, Math.floor((rMid * step - sw) / L.lotSize));
+      // size lots by the inner arc so rings never overlap toward the centre
+      const lotsPerSector = Math.max(1, Math.floor((rA * step - sw) / L.lotSize));
       const depthLots = Math.max(1, Math.floor((rB - rA) / L.lotSize));
       for (let s = 0; s < n; s++) {
         for (let q = 0; q < lotsPerSector; q++) {
@@ -332,7 +359,7 @@ function radialPattern(era: Era, seed: number): CityPattern {
             const x = C.x + Math.cos(a) * r;
             const z = C.z + Math.sin(a) * r;
             if (x < x0 || x >= x1 || z < z0 || z >= z1) continue;
-            const w = Math.min(L.lotSize, (rMid * step - sw) / lotsPerSector);
+            const w = Math.min(L.lotSize, (rA * step - sw) / lotsPerSector);
             const d = Math.min(L.lotSize, (rB - rA) / depthLots);
             const facesIn = dq === 0;
             out.push({ x, z, w, d, rot: a + Math.PI / 2, front: facesIn ? a + Math.PI : a, seed: hash2(s + k * 1000, q + dq * 100, seed) * 1e6, weight: onEdge ? 1 : 0.6 });
