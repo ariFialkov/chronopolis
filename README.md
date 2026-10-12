@@ -4,7 +4,12 @@ A third-person open-world adventure that runs in the browser as a PWA, on deskto
 One city, one constant map, eighteen eras. Hidden "chronoports" let you walk the same streets in
 3200 BCE Uruk, 112 CE Rome, 1600 Sekigahara Japan or 1938, where the game begins.
 
-## Run it
+## Play it
+
+Live build (GitHub Pages, deployed by `.github/workflows/pages.yml` on every push):
+**https://arifialkov.github.io/chronopolis/**
+
+## Run it locally
 
 ```sh
 npm install

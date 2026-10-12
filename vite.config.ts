@@ -2,7 +2,8 @@ import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
-  base: './',
+  // Relative by default (works from any folder); CI sets BASE_PATH for GitHub Pages.
+  base: process.env.BASE_PATH ?? './',
   build: {
     target: 'es2022',
     chunkSizeWarningLimit: 1500,
