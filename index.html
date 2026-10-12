@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="theme-color" content="#0b0d12" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="description" content="Chronopolis: a third-person open-world adventure through one city across five thousand years." />
+    <link rel="icon" href="./icons/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="./icons/icon-192.png" />
+    <title>Chronopolis</title>
+  </head>
+  <body>
+    <canvas id="game"></canvas>
+
+    <div id="hud" class="hidden">
+      <div id="era-label"><div id="era-name"></div><div id="era-year"></div></div>
+      <div id="minimap-wrap"><canvas id="minimap" width="170" height="170"></canvas><div id="compass">N</div></div>
+      <div id="objective"><span id="objective-title"></span><span id="objective-text"></span></div>
+      <div id="prompt" class="hidden"></div>
+      <div id="toasts"></div>
+      <div id="district"></div>
+    </div>
+
+    <div id="touch-controls" class="hidden">
+      <div id="joy-base"><div id="joy-knob"></div></div>
+      <div class="btn-cluster">
+        <button class="btn btn-big" id="btn-interact">E</button>
+        <button class="btn" id="btn-jump">Jump</button>
+        <button class="btn" id="btn-sprint">Run</button>
+      </div>
+      <div class="btn-top">
+        <button class="btn" id="btn-map">Map</button>
+        <button class="btn" id="btn-pause">II</button>
+      </div>
+    </div>
+
+    <div id="dialogue" class="panel hidden ui-block">
+      <div id="dialogue-speaker"></div>
+      <div id="dialogue-text"></div>
+      <div id="dialogue-hint">E to continue</div>
+    </div>
+
+    <div id="journal" class="screen hidden ui-block">
+      <div class="screen-inner">
+        <div class="tabs">
+          <button class="tab active" data-tab="map">Map</button>
+          <button class="tab" data-tab="quests">Objectives</button>
+          <button class="tab" data-tab="ports">Chronoports</button>
+          <button class="tab" data-tab="insights">Insights</button>
+          <button class="btn close" id="journal-close">Close</button>
+        </div>
+        <div class="tab-page" id="tab-map"><canvas id="bigmap" width="640" height="640"></canvas><div id="map-legend"></div></div>
+        <div class="tab-page hidden" id="tab-quests"></div>
+        <div class="tab-page hidden" id="tab-ports"></div>
+        <div class="tab-page hidden" id="tab-insights"></div>
+      </div>
+    </div>
+
+    <div id="pause" class="screen hidden ui-block">
+      <div class="menu">
+        <h1>Paused</h1>
+        <button class="btn menu-btn" id="pause-resume">Resume</button>
+        <button class="btn menu-btn" id="pause-save">Save game</button>
+        <button class="btn menu-btn" id="pause-quality">Quality: medium</button>
+        <button class="btn menu-btn" id="pause-controls">Controls</button>
+        <button class="btn menu-btn" id="pause-quit">Save and quit to title</button>
+        <div id="controls-help" class="hidden">
+          <p><b>Desktop</b> WASD move, mouse look (click the game to capture), Shift run, Space jump, E talk / use / continue, M or Tab journal and map, Esc pause.</p>
+          <p><b>Mobile</b> Left half: joystick. Right half: drag to look. Buttons: E, Jump, Run, Map, Pause.</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="title" class="screen ui-block">
+      <div class="menu title-menu">
+        <h1 class="logo">CHRONOPOLIS</h1>
+        <p class="tag">One city. Five thousand years. Eighteen doors.</p>
+        <button class="btn menu-btn" id="title-continue">Continue</button>
+        <button class="btn menu-btn" id="title-new">New game</button>
+        <p class="small" id="title-hint">Desktop: WASD, mouse, E, M, Esc. Mobile: joystick, drag to look, on-screen buttons.</p>
+        <p class="small" id="install-hint"></p>
+      </div>
+    </div>
+
+    <div id="transition" class="screen hidden">
+      <div class="transition-inner">
+        <div id="transition-year"></div>
+        <div id="transition-name"></div>
+        <div id="transition-tag"></div>
+      </div>
+    </div>
+
+    <div id="loading" class="screen hidden"><div class="spinner"></div><div id="loading-text">Building the city...</div></div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
