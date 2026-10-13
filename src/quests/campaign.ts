@@ -7,9 +7,9 @@ import type { Quest, QuestStep } from './types';
 import { getEra } from '../eras';
 import { SITES } from '../world/macro';
 
-const VARGA = { name: 'Professor Ada Varga', role: 'Historian', look: { body: 0x4a3a5a, legs: 0x2a2a2a, skin: 0xe8c8a8, hat: 'none' as const, hatColor: 0 } };
-const DANNY = { name: 'Danny', role: 'Newsboy', look: { body: 0x7a6a5a, legs: 0x4a4a4a, skin: 0xe0c0a0, hat: 'cap' as const, hatColor: 0x5a4a3a } };
-const HALE = { name: 'Cornelius Hale', role: 'Industrialist', look: { body: 0x1a1a22, legs: 0x1a1a22, skin: 0xe8c8a8, hat: 'tophat' as const, hatColor: 0x111111 } };
+const VARGA = { name: 'Professor Ada Varga', role: 'Historian', look: { outfit: 'varga' } };
+const DANNY = { name: 'Danny', role: 'Newsboy', look: { outfit: 'danny' } };
+const HALE = { name: 'Cornelius Hale', role: 'Industrialist', look: { outfit: 'hale' } };
 
 const LIBRARY = { x: -250, z: -336 }; // library entrance; the Greek door hides in the stacks 35 m north
 const DOCKS = { x: SITES.harbor.x - 12, z: SITES.harbor.z - 26 };
@@ -61,7 +61,7 @@ export const CAMPAIGN: Quest[] = [
         'Two hundred thousand families on the grain dole. The grain comes from Egypt on ships. If the ships stop, the quiet stops.',
         'You want to know what holds it together? Go up to the Capitol and ask a senator. They own the ships.',
       ]),
-      talk('roman', 'pliny', { name: 'Pliny', role: 'Senator', look: { body: 0xf5f0e6, legs: 0xf5f0e6, hat: 'none', hatColor: 0 } }, SITES.citadel.x, SITES.citadel.z + 75, 'Climb to the Capitol and speak with Senator Pliny', [
+      talk('roman', 'pliny', { name: 'Pliny', role: 'Senator', look: { outfit: 'priest' } }, SITES.citadel.x, SITES.citadel.z + 75, 'Climb to the Capitol and speak with Senator Pliny', [
         'The dole? The dole is cheap. Dacia paid for it. The next war will pay for the next dole. There is always a next war.',
         'You ask what happens when there is no next war. A good question. Nobody who asks it keeps his seat in the Senate.',
         'Go to the Emporium. The harbor master keeps the ledger of every grain ship. Read it, and you will understand Rome better than most emperors.',
@@ -87,7 +87,7 @@ export const CAMPAIGN: Quest[] = [
     summary: 'The factories on the Eastside are humming again. Find out what they are making.',
     requires: ['rome'],
     steps: [
-      talk('industrial', 'walt', { name: 'Walt', role: 'Worker', look: { hat: 'cap', hatColor: 0x3a3a3a } }, FACTORY.x, FACTORY.z, 'Talk to Walt outside the Hale plant on the Eastside', [
+      talk('industrial', 'walt', { name: 'Walt', role: 'Worker', look: { outfit: 'worker' } }, FACTORY.x, FACTORY.z, 'Talk to Walt outside the Hale plant on the Eastside', [
         'Hale Armaments. Three shifts. We make shell casings and we do not ask who they are for. The pay is good. The pay is very good.',
         'Hale has Bureau men at the gate. Why does a shell plant need the Bureau of Temporal Compliance? You tell me, kid.',
         'Word is Hale bought the rights to every sealed door in the city. Bought them. From the government. For a dollar each.',

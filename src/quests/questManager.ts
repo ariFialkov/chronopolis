@@ -24,7 +24,7 @@ export interface Marker {
   questId: string;
 }
 
-const DEFAULT_LOOK: NpcArchetype = { role: '', weight: 1, body: 0x8a7a6a, legs: 0x3a3a3a, skin: 0xd8b094, hat: 'none', hatColor: 0, names: [], lines: [] };
+const DEFAULT_LOOK: NpcArchetype = { role: '', outfit: '', weight: 1, names: [], lines: [] };
 
 export class QuestManager {
   state: QuestState = { completed: [], stepIndex: {} };

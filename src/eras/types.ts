@@ -44,25 +44,6 @@ export type PropKind =
   | 'altar'
   | 'boulder';
 
-export type HatKind =
-  | 'none'
-  | 'helmet'
-  | 'cap'
-  | 'hood'
-  | 'crown'
-  | 'headdress'
-  | 'conical'
-  | 'tophat'
-  | 'cowboy'
-  | 'turban'
-  | 'feather'
-  | 'bowler'
-  | 'fedora'
-  | 'tricorn'
-  | 'kabuto'
-  | 'nemes'
-  | 'plume';
-
 export type Feature =
   | 'plinth' | 'cornice' | 'ledges' | 'sills' | 'frames' | 'shutters' | 'arcade' | 'porch' | 'awning' | 'bay'
   | 'fireEscape' | 'balcony' | 'lattice' | 'battered' | 'bands' | 'rooftank' | 'sign' | 'crenellation' | 'pilasters'
@@ -128,12 +109,9 @@ export interface EraLayout {
 
 export interface NpcArchetype {
   role: string;
+  /** which of the era's outfits (src/characters/cast.ts) this person wears */
+  outfit: string;
   weight: number;
-  body: number;
-  legs: number;
-  skin: number;
-  hat: HatKind;
-  hatColor: number;
   names: string[];
   lines: string[];
 }

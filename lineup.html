@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Character lineup</title>
+    <style>
+      html, body { margin: 0; height: 100%; background: #3a4458; overflow: hidden; font-family: system-ui, sans-serif; }
+      #labels { position: fixed; left: 0; right: 0; bottom: 18px; height: 20px; color: #fff; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; font-size: 14px; }
+      #title { position: fixed; top: 64px; width: 100%; text-align: center; color: #fff; font-size: 22px; font-weight: 700; }
+      #nav { position: fixed; top: 12px; left: 12px; display: flex; gap: 6px; flex-wrap: wrap; max-width: 60vw; }
+      #nav a { color: #fff; font-size: 12px; background: #0004; padding: 3px 6px; border-radius: 4px; text-decoration: none; }
+    </style>
+  </head>
+  <body>
+    <div id="nav"></div>
+    <div id="title"></div>
+    <div id="labels"></div>
+    <script type="module" src="/src/dev/lineup.ts"></script>
+  </body>
+</html>

@@ -1,5 +1,6 @@
 import type { Scene } from 'three';
-import { Humanoid } from '../engine/humanoid';
+import { Character } from '../characters/character';
+import { CAST } from '../characters/cast';
 import type { World } from '../world/world';
 import type { Collider } from '../world/collision';
 import { blocks, resolveCircle } from '../world/collision';
@@ -16,12 +17,29 @@ export class Player {
   vy = 0;
   grounded = true;
   speed = 0;
-  readonly figure: Humanoid;
+  figure: Character;
+  private scene: Scene;
+  private eraId = '';
   private tmp: Collider[] = [];
 
   constructor(scene: Scene) {
-    this.figure = new Humanoid({ body: 0x5a4a3a, legs: 0x2f3440, skin: 0xd8b094, hat: 'cap', hatColor: 0x3a3a3a, hair: 0x3a2a1a });
+    this.scene = scene;
+    this.figure = new Character(CAST.industrial.player, 'player:industrial');
     scene.add(this.figure.group);
+  }
+
+  /** Eli changes clothes to blend into each era. */
+  setEra(eraId: string): void {
+    if (eraId === this.eraId) return;
+    this.eraId = eraId;
+    const outfit = (CAST[eraId] ?? CAST.industrial).player;
+    const next = new Character(outfit, `player:${eraId}`);
+    next.group.position.copy(this.figure.group.position);
+    next.group.rotation.copy(this.figure.group.rotation);
+    this.scene.remove(this.figure.group);
+    this.figure.dispose();
+    this.figure = next;
+    this.scene.add(next.group);
   }
 
   teleport(x: number, z: number, world: World): void {

@@ -203,6 +203,7 @@ export class Game {
     this.world.setEra(era);
     this.ports.refreshHeights(this.world);
     this.npcs.setEra(era);
+    this.player.setEra(era.id);
     this.player.teleport(x, z, this.world);
     this.cam.snapTo(x, this.player.y, z);
     this.world.warmup(x, z);

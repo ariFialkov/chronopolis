@@ -37,6 +37,11 @@ A small panel on the left (toggle with the backquote key) shows fps, triangles, 
 loaded chunks, and has one-click chronoport buttons for every era. It is created by one line in
 `src/main.ts` (`new DevTools(game)`); delete that line before release.
 
+With `npm run dev` running, `http://localhost:5173/lineup.html?era=roman` shows an era's player
+outfit and five townspeople side by side, like the character sheet. Add `&yaw=2.6` to turn them,
+`&walk=1` to animate, `&zoom=1` for faces and `&variant=1` or `2` for the crowd variations. The
+page is not part of the game build.
+
 ## How the city works
 
 * `src/world/macro.ts` is the geography that never changes: the river, the bay, Citadel Hill, the
@@ -58,6 +63,11 @@ loaded chunks, and has one-click chronoport buttons for every era. It is created
   `src/world/surfaces.ts` defines each era's roads, plazas and parks.
 * `src/world/landmarks.ts` has every era's monument for every site: ziggurat, pyramid, Parthenon,
   Colosseum, Angkor, castle, Crystal Palace, city hall, and the harbors, arenas, plazas and markets.
+* `src/characters/` builds every person in the game from one shared rig: `character.ts` makes a
+  skinned, flat-shaded body (about 800 triangles, one draw call) and animates it procedurally,
+  `outfit.ts` is the clothing vocabulary (tunics, skirts, togas, armour, coats, vests, overalls,
+  sashes, aprons, capes, hair, beards and some 25 kinds of hat), and `cast.ts` dresses the player and
+  each era's five townspeople after the character sheet. Era NPC archetypes name their outfit.
 * `src/quests/campaign.ts` is the placeholder campaign (prologue, Rome, Hale, one investigation
   per era, finale). It is data: steps are `talk`, `read`, `goto`, `findPort`, `travel`.
 * Progress is saved to `localStorage` (autosave every 20 s, on era changes and on quit).

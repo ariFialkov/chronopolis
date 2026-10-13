@@ -1,6 +1,7 @@
 import { Group, Mesh, MeshBasicMaterial, OctahedronGeometry, Scene } from 'three';
 import type { Era, NpcArchetype } from '../eras/types';
-import { Humanoid } from '../engine/humanoid';
+import { Character } from '../characters/character';
+import { CAST, outfitKeyForRole, varyOutfit, VARIANTS } from '../characters/cast';
 import { Rng, hash2 } from '../util/rng';
 import { angleLerp } from '../util/math';
 import type { World } from '../world/world';
@@ -20,7 +21,7 @@ export interface QuestNpcSpec {
 }
 
 export class Npc {
-  readonly figure: Humanoid | null;
+  readonly figure: Character | null;
   readonly group: Group;
   x: number;
   z: number;
@@ -37,7 +38,7 @@ export class Npc {
   talking = 0;
   idle = 0;
 
-  constructor(arch: NpcArchetype, name: string, x: number, z: number, questId: string | null, isObject: boolean) {
+  constructor(arch: NpcArchetype, name: string, x: number, z: number, questId: string | null, isObject: boolean, eraId = 'industrial', variant = 0) {
     this.name = name;
     this.role = arch.role;
     this.lines = arch.lines;
@@ -57,7 +58,14 @@ export class Npc {
       base.position.y = 0.2;
       this.group.add(base);
     } else {
-      this.figure = new Humanoid({ body: arch.body, legs: arch.legs, skin: arch.skin, hat: arch.hat, hatColor: arch.hatColor });
+      const cast = CAST[eraId] ?? CAST.industrial;
+      // story characters from 1938 keep their own clothes wherever they turn up
+      const story = arch.outfit && !cast.roles[arch.outfit] ? CAST.industrial.roles[arch.outfit] : undefined;
+      let key = arch.outfit && cast.roles[arch.outfit] ? arch.outfit : outfitKeyForRole(eraId, arch.role);
+      if (!cast.roles[key]) key = Object.keys(cast.roles)[0];
+      this.figure = story
+        ? new Character(story, `story:${arch.outfit}`)
+        : new Character(varyOutfit(cast.roles[key], variant), `${eraId}:${key}:${variant}`);
       this.group = this.figure.group;
       if (questId) {
         const m = new Mesh(new OctahedronGeometry(0.22), new MeshBasicMaterial({ color: 0xffd36a }));
@@ -92,25 +100,30 @@ export class NpcManager {
 
   setEra(era: Era): void {
     this.era = era;
-    for (const n of this.npcs) this.scene.remove(n.group);
+    for (const n of this.npcs) this.remove(n);
     this.npcs = [];
     this.clearQuestNpcs();
   }
 
   clearQuestNpcs(): void {
-    for (const n of this.quest) this.scene.remove(n.group);
+    for (const n of this.quest) this.remove(n);
     this.quest = [];
   }
 
   setQuestNpcs(specs: QuestNpcSpec[]): void {
     this.clearQuestNpcs();
     for (const s of specs) {
-      const n = new Npc(s.look, s.name, s.x, s.z, s.id, s.kind === 'object');
+      const n = new Npc(s.look, s.name, s.x, s.z, s.id, s.kind === 'object', this.era.id, 0);
       n.y = this.world.groundY(s.x, s.z);
       n.group.position.set(n.x, n.y, n.z);
       this.scene.add(n.group);
       this.quest.push(n);
     }
+  }
+
+  private remove(n: Npc): void {
+    this.scene.remove(n.group);
+    n.figure?.dispose();
   }
 
   get all(): Npc[] {
@@ -143,7 +156,7 @@ export class NpcManager {
     for (let i = this.npcs.length - 1; i >= 0; i--) {
       const n = this.npcs[i];
       if (Math.hypot(n.x - px, n.z - pz) > DESPAWN_RADIUS) {
-        this.scene.remove(n.group);
+        this.remove(n);
         this.npcs.splice(i, 1);
       }
     }
@@ -181,7 +194,7 @@ export class NpcManager {
     if (this.world.loadedChunkCount === 0) return;
     const arch = this.rng.weighted(this.era.npcs);
     const name = arch.names[Math.floor(hash2(Math.round(node.x), Math.round(node.z), 3) * arch.names.length)];
-    const n = new Npc(arch, name, node.x, node.z, null, false);
+    const n = new Npc(arch, name, node.x, node.z, null, false, this.era.id, Math.floor(hash2(Math.round(node.x), Math.round(node.z), 7) * VARIANTS));
     n.current = node;
     n.y = this.world.groundY(n.x, n.z);
     n.yaw = this.rng.range(0, Math.PI * 2);
