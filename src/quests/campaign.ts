@@ -156,7 +156,7 @@ const BEATS: EraBeat[] = [
 ];
 
 /** Where the citadel conversation happens, relative to the site, for monuments that fill the hill. */
-const CITADEL_TALK: Record<string, [number, number]> = { egyptian: [30, 112] };
+const CITADEL_TALK: Record<string, [number, number]> = { egyptian: [30, 112], assyrian: [0, 55] };
 
 for (const b of BEATS) {
   const era = getEra(b.era);

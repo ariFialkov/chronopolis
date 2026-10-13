@@ -55,7 +55,7 @@ loaded chunks, and has one-click chronoport buttons for every era. It is created
   `src/world/material.ts` patches the Lambert shader so each face picks a tile while every chunk stays
   one draw call. `src/eras/styles.ts` holds each era's building recipes (textures, window styles and
   features such as arcades, porches, bay windows, fire escapes, lattices, false fronts).
-  `src/world/surfaces.ts` defines each era's roads, sidewalks, plazas and parks.
+  `src/world/surfaces.ts` defines each era's roads, plazas and parks.
 * `src/world/landmarks.ts` has every era's monument for every site: ziggurat, pyramid, Parthenon,
   Colosseum, Angkor, castle, Crystal Palace, city hall, and the harbors, arenas, plazas and markets.
 * `src/quests/campaign.ts` is the placeholder campaign (prologue, Rome, Hale, one investigation

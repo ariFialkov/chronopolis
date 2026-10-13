@@ -6,7 +6,7 @@ import { angleLerp } from '../util/math';
 import type { World } from '../world/world';
 import type { StreetNode } from '../world/pattern';
 import { CHUNK_SIZE, isWater, siteClearance } from '../world/macro';
-import { pointInCollider, type Collider } from '../world/collision';
+import { pointInCollider, topAt, STEP_UP, type Collider } from '../world/collision';
 
 export interface QuestNpcSpec {
   id: string;
@@ -227,7 +227,7 @@ export class NpcManager {
     // keep out of buildings and the player
     const cols = this.world.collidersNear(nx, nz, 1, this.tmp);
     for (const c of cols) {
-      if (c.h > 0.5 && pointInCollider(c, nx, nz, 0.35)) {
+      if ((c.top !== undefined ? topAt(c, nx, nz) > n.y + STEP_UP : c.h > 0.5) && pointInCollider(c, nx, nz, 0.35)) {
         n.idle = 0.6;
         n.target = null;
         return;
@@ -239,7 +239,7 @@ export class NpcManager {
     }
     n.x = nx;
     n.z = nz;
-    n.y = this.world.groundY(n.x, n.z);
+    n.y = this.world.groundY(n.x, n.z, n.y);
     n.group.position.set(n.x, n.y, n.z);
     n.group.rotation.y = n.yaw;
     n.figure?.animate(dt, sp);

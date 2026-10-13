@@ -3,7 +3,7 @@ import { Rng } from '../util/rng';
 import { shade } from '../util/math';
 import type { MeshBuilder } from './meshBuilder';
 import type { Lot } from './pattern';
-import type { Collider } from './collision';
+import { rampCollider, type Collider } from './collision';
 import { TILE, type Tile } from './textures';
 
 const DARK_WINDOW = 0x1e2228;
@@ -13,6 +13,8 @@ export interface BuiltBuilding extends Collider {
   template: BuildingTemplate;
   doorX: number;
   doorZ: number;
+  /** walkable floors, steps and column colliders around the body */
+  extra: Collider[];
 }
 
 function texRepeat(tile: Tile): number {
@@ -65,10 +67,10 @@ export function buildBuilding(mb: MeshBuilder, lot: Lot, era: Era, groundY: numb
   const fp = rng.range(t.footprint[0], t.footprint[1]);
   // How far this template's features stick out, so the footprint is shrunk to keep them inside the lot.
   const ov = t.overhang ?? 0.35;
-  let frontOut = 0.3;
-  if (F.has('porch') || t.columns) frontOut = Math.max(frontOut, 2.1);
-  if (F.has('arcade')) frontOut = Math.max(frontOut, 2.1);
-  if (F.has('veranda')) frontOut = Math.max(frontOut, 2.4);
+  let frontOut = 0.8;
+  if (F.has('porch') || t.columns) frontOut = Math.max(frontOut, 2.8);
+  if (F.has('arcade')) frontOut = Math.max(frontOut, 2.6);
+  if (F.has('veranda')) frontOut = Math.max(frontOut, 3.0);
   if (F.has('awning')) frontOut = Math.max(frontOut, 1.9);
   if (F.has('bay')) frontOut = Math.max(frontOut, 1.1);
   if (F.has('balcony')) frontOut = Math.max(frontOut, 1.0);
@@ -153,6 +155,39 @@ export function buildBuilding(mb: MeshBuilder, lot: Lot, era: Era, groundY: numb
   const insetAt = F.has('battered') ? (y: number): number => (0.1 * Math.min(w, d) * 0.5 * (y - base)) / h : (): number => 0;
   const wallMat = (): void => mb.material(wallTex, wallRep);
   const stoneMat = (): void => mb.material(TILE.STONE, 0.35);
+  const extra: Collider[] = [];
+  /** a walkable floor in front of the building, `out0..out1` metres from the front wall */
+  const frontFloor = (out0: number, out1: number, span: number, top: number): void => {
+    const [cx, cz] = P(front, 0, (out0 + out1) / 2);
+    const dd = (out1 - out0) / 2;
+    extra.push({ x: cx, z: cz, hw: frontIsZ ? span / 2 : dd, hd: frontIsZ ? dd : span / 2, rot, h: 0, top, tag: 'floor' });
+  };
+  /** a column or post that blocks */
+  const post = (px: number, pz: number, r: number, ph: number): void => {
+    extra.push({ x: px, z: pz, hw: r, hd: r, rot, h: ph, tag: 'post' });
+  };
+  /** steps from the ground up to `top`, leaving the front at `edgeOut`, with a ramp collider */
+  const frontSteps = (edgeOut: number, top: number, width: number, color: number, u = 0): void => {
+    const [gx, gz] = P(front, u, edgeOut + 0.8);
+    const gy = groundAt(gx, gz);
+    const rise = top - gy;
+    if (rise <= 0.12) return;
+    const n = Math.min(6, Math.max(1, Math.ceil(rise / 0.25)));
+    const run = 0.32;
+    for (let i = 0; i < n; i++) {
+      const [px, pz] = P(front, u, edgeOut + (i + 0.5) * run);
+      const sh = top - (i * rise) / n;
+      const sy = Math.min(gy, groundAt(px, pz)) - 0.2;
+      if (frontIsZ) mb.box(px, sy, pz, width, sh - sy, run + 0.02, color, rot);
+      else mb.box(px, sy, pz, run + 0.02, sh - sy, width, color, rot);
+    }
+    const [fx0, fz0] = P(front, u, edgeOut + n * run);
+    const [tx0, tz0] = P(front, u, edgeOut);
+    extra.push(rampCollider(fx0, fz0, gy, tx0, tz0, top, width, 'steps'));
+  };
+  /** the middle of the central opening in a row of n evenly spaced supports spanning `width` */
+  const openBay = (n: number, width: number): number => (n % 2 === 0 ? 0 : width / (n - 1) / 2);
+  const hasFrontDeck = !t.stilts && !t.round && (F.has('porch') || !!t.columns || F.has('arcade') || F.has('veranda'));
 
   if (t.stilts) {
     const lift = 2.2;
@@ -180,7 +215,7 @@ export function buildBuilding(mb: MeshBuilder, lot: Lot, era: Era, groundY: numb
   if (t.tent) {
     mb.material(TILE.THATCH, 0.4);
     mb.cylinder(x, groundY - 0.2, z, Math.min(w, d) / 2, 0, h, wall, 8, rot);
-    return { x, z, hw: w / 2 + 0.2, hd: d / 2 + 0.2, rot, h, tag: t.tag, template: t, doorX: x, doorZ: z };
+    return { x, z, hw: w / 2 + 0.2, hd: d / 2 + 0.2, rot, h, tag: t.tag, template: t, doorX: x, doorZ: z, extra: [] };
   }
 
   // ---------------- foundation ----------------
@@ -190,21 +225,17 @@ export function buildBuilding(mb: MeshBuilder, lot: Lot, era: Era, groundY: numb
   if (t.round) mb.cylinder(x, minY - 0.6, z, w / 2 + fw / 2, w / 2 + fw / 2, foundationDepth, shade(wall, 0.62), 12, rot);
   else mb.box(x, minY - 0.6, z, w + fw, foundationDepth, d + fw, shade(wall, 0.62), rot, 0.8);
   // steps up to the door when the ground in front is lower than the floor
-  {
-    const [sx, sz] = P(front, 0, 0.9);
-    const gyDoor = groundAt(sx, sz);
-    const rise = base - gyDoor;
-    if (rise > 0.3 && !t.stilts) {
-      const steps = Math.min(6, Math.ceil(rise / 0.25));
-      const run = 0.32;
-      for (let i = 0; i < steps; i++) {
-        const [px, pz] = P(front, 0, 0.12 + i * run);
-        const sh = base - (i * rise) / steps;
-        const sy = gyDoor - 0.2;
-        if (frontIsZ) mb.box(px, sy, pz, 2.4, sh - sy, run + 0.02, shade(wall, 0.7), rot);
-        else mb.box(px, sy, pz, run + 0.02, sh - sy, 2.4, shade(wall, 0.7), rot);
-      }
+  if (!t.stilts && !hasFrontDeck) {
+    // a small landing at floor level in front of the door, then the flight down to the street
+    const [lx, lz] = P(front, 0, 0.35);
+    const [gx, gz] = P(front, 0, 1.2);
+    if (base - groundAt(gx, gz) > 0.12) {
+      const ly = Math.min(groundAt(lx, lz), groundAt(gx, gz)) - 0.2;
+      if (frontIsZ) mb.box(lx, ly, lz, 2.6, base - ly, 0.72, shade(wall, 0.66), rot);
+      else mb.box(lx, ly, lz, 0.72, base - ly, 2.6, shade(wall, 0.66), rot);
+      frontFloor(0, 0.7, 2.6, base);
     }
+    frontSteps(0.7, base, 2.4, shade(wall, 0.7));
   }
 
   // ---------------- body ----------------
@@ -331,7 +362,13 @@ export function buildBuilding(mb: MeshBuilder, lot: Lot, era: Era, groundY: numb
       const [cx, cz] = P(front, u, depth - 0.45);
       mb.cylinder(cx, base, cz, 0.32, 0.28, colH, colColor, 8);
       mb.box(cx, base + colH - 0.05, cz, 0.8, 0.3, 0.8, colColor, rot);
+      // the middle bay stays open for the steps
+      post(cx, cz, 0.34, colH);
     }
+    frontFloor(0, depth + 0.15, span + 0.6, base);
+    stoneMat();
+    const bay = (span - 1.2) / (n - 1);
+    frontSteps(depth + 0.15, base, Math.min(3.2, bay - 0.8), shade(wall, 0.75), openBay(n, span - 1.2));
     wallMat();
     if (frontIsZ) mb.box(px, base + colH + 0.2, pz, w + 0.4, 0.5, depth + 0.4, shade(wall, 0.95), rot);
     else mb.box(px, base + colH + 0.2, pz, depth + 0.4, 0.5, d + 0.4, shade(wall, 0.95), rot);
@@ -356,6 +393,14 @@ export function buildBuilding(mb: MeshBuilder, lot: Lot, era: Era, groundY: numb
     mb.material(TILE.SLAB, 0.4);
     if (frontIsZ) mb.box(fx2, gLow - 0.3, fz2, span + 0.4, base - gLow + 0.36, 1.9, shade(wall, 0.8), rot, 0.8);
     else mb.box(fx2, gLow - 0.3, fz2, 1.9, base - gLow + 0.36, span + 0.4, shade(wall, 0.8), rot, 0.8);
+    frontFloor(-0.1, 1.8, span + 0.4, base + 0.06);
+    for (let i = 0; i <= n; i++) {
+      const u = -span / 2 + i * step;
+      const [cx, cz] = P(front, Math.max(-span / 2 + 0.35, Math.min(span / 2 - 0.35, u)), 1.3);
+      post(cx, cz, 0.36, ah);
+    }
+    stoneMat();
+    frontSteps(1.8, base + 0.06, Math.min(2.6, step - 0.8), shade(wall, 0.78), openBay(n + 1, span));
     if (detail) {
       mb.material(TILE.CONCRETE, 0.3);
       const [nx, nz] = N(front);
@@ -573,6 +618,7 @@ export function buildBuilding(mb: MeshBuilder, lot: Lot, era: Era, groundY: numb
         const u = -span / 2 + 0.4 + (i / (n - 1)) * (span - 0.8);
         const [cx, cz] = P(front, u, 1.9);
         mb.box(cx, base, cz, 0.18, vh, 0.18, shade(wall, 0.6), rot);
+        post(cx, cz, 0.12, vh);
       }
       const [px, pz] = P(front, 0, 1.0);
       const gLow = Math.min(groundAt(...P(front, -span / 2, 2.1)), groundAt(...P(front, span / 2, 2.1)), groundAt(px, pz));
@@ -583,9 +629,22 @@ export function buildBuilding(mb: MeshBuilder, lot: Lot, era: Era, groundY: numb
         mb.box(px, gLow - 0.3, pz, 2.1, base + 0.14 - gLow + 0.3, span + 0.2, shade(wall, 0.8), rot, 0.8);
         mb.box(px, base + vh - 0.1, pz, 2.4, 0.2, span + 0.5, shade(roofColor, 1.0), rot);
       }
-      const [rx, rz] = P(front, 0, 1.95);
-      if (frontIsZ) mb.box(rx, base + 0.9, rz, span - 0.6, 0.08, 0.08, shade(wall, 0.6), rot);
-      else mb.box(rx, base + 0.9, rz, 0.08, 0.08, span - 0.6, shade(wall, 0.6), rot);
+      // railing in two runs, open at the steps (which sit between two posts)
+      const gc = openBay(n, span - 0.8);
+      const gap = 1.1;
+      for (const [r0, r1] of [
+        [-span / 2 + 0.3, gc - gap],
+        [gc + gap, span / 2 - 0.3],
+      ]) {
+        const len = r1 - r0;
+        if (len < 0.3) continue;
+        const [rx, rz] = P(front, (r0 + r1) / 2, 1.95);
+        if (frontIsZ) mb.box(rx, base + 0.9, rz, len, 0.08, 0.08, shade(wall, 0.6), rot);
+        else mb.box(rx, base + 0.9, rz, 0.08, 0.08, len, shade(wall, 0.6), rot);
+        extra.push({ x: rx, z: rz, hw: frontIsZ ? len / 2 : 0.1, hd: frontIsZ ? 0.1 : len / 2, rot, h: 1, tag: 'rail' });
+      }
+      frontFloor(-0.05, 2.05, span + 0.2, base + 0.14);
+      frontSteps(2.05, base + 0.14, 2.0, shade(wall, 0.7), gc);
     }
     if (F.has('lattice')) {
       mb.material(TILE.WOOD, 0.8);
@@ -631,12 +690,14 @@ export function buildBuilding(mb: MeshBuilder, lot: Lot, era: Era, groundY: numb
       const [ax, az] = P(front, -0.45, 0.3);
       const [bx, bz] = P(front, 0.45, 0.3);
       mb.panel(ax, base, az, bx, base, bz, bx + nx * 1.4, groundY, bz + nz * 1.4, ax + nx * 1.4, groundY, az + nz * 1.4, shade(wall, 0.7));
+      const [lx, lz] = P(front, 0, 0.3);
+      extra.push(rampCollider(lx + nx * 1.4, lz + nz * 1.4, groundY, lx, lz, base, 0.9, 'ladder'));
     }
   }
 
   const [doorX, doorZ] = P(front, 0, 1.2);
   const pad = F.has('arcade') || F.has('porch') || F.has('veranda') ? 0 : 0;
-  return { x, z, hw: w / 2 + 0.15 + pad, hd: d / 2 + 0.15 + pad, rot, h, tag: t.tag, template: t, doorX, doorZ };
+  return { x, z, hw: w / 2 + 0.15 + pad, hd: d / 2 + 0.15 + pad, rot, h, tag: t.tag, template: t, doorX, doorZ, extra };
 }
 
 function windowSize(style: WindowStyle, fh: number): [number, number] {

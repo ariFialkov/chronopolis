@@ -36,6 +36,8 @@ for (const era of ERAS) {
       problems++;
     }
     for (const c of cols) {
+      // floors and terraces are fine to stand on; stairs and solids are not
+      if (c.top !== undefined && c.tag !== 'stair') continue;
       if (pointInCollider(c, p.x, p.z, 1.0)) {
         console.log(`BLOCKED ${era.id.padEnd(10)} ${p.label} (${p.x},${p.z}) by ${c.tag ?? 'landmark'} at (${c.x.toFixed(0)},${c.z.toFixed(0)}) ${(c.hw * 2).toFixed(0)}x${(c.hd * 2).toFixed(0)}`);
         problems++;

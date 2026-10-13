@@ -1,7 +1,7 @@
 import { PerspectiveCamera, Vector3 } from 'three';
 import { clamp, lerp } from '../util/math';
 import type { Collider } from '../world/collision';
-import { pointInCollider } from '../world/collision';
+import { pointInCollider, topAt } from '../world/collision';
 
 /** Third-person orbit camera that follows the player and avoids clipping into buildings. */
 export class ThirdPersonCamera {
@@ -48,7 +48,9 @@ export class ThirdPersonCamera {
       const pz = this.smoothed.z + dir.z * d;
       let hit = false;
       for (const c of colliders) {
-        if (c.h > this.smoothed.y + dir.y * d - groundAt(px, pz) && pointInCollider(c, px, pz, 0.4)) {
+        const cy = this.smoothed.y + dir.y * d;
+        const tall = c.top !== undefined ? topAt(c, px, pz) > cy - 0.3 : c.h > cy - groundAt(px, pz);
+        if (tall && pointInCollider(c, px, pz, 0.4)) {
           hit = true;
           break;
         }

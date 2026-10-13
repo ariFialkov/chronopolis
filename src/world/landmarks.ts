@@ -6,8 +6,8 @@ import type { Era } from '../eras/types';
 import { Rng } from '../util/rng';
 import { shade } from '../util/math';
 import type { MeshBuilder } from './meshBuilder';
-import type { Collider } from './collision';
-import type { Site } from './macro';
+import { rampCollider, type Collider } from './collision';
+import { meshHeight, type Site } from './macro';
 import { buildProp, buildTree } from './props';
 import { TILE, type Tile } from './textures';
 
@@ -35,22 +35,75 @@ function solid(c: Ctx, x: number, z: number, w: number, d: number, h: number, ro
   c.col.push({ x, z, hw: w / 2, hd: d / 2, rot, h, tag });
 }
 
+/** A walkable floor or terrace top (absolute height). */
+function platform(c: Ctx, x: number, z: number, w: number, d: number, top: number, rot = 0, tag?: string): void {
+  c.col.push({ x, z, hw: w / 2, hd: d / 2, rot, h: 0, top, tag });
+}
+
+/** Rectangles whose union approximates a disk of radius 1 (overshooting by at most 7%). */
+const DISK_RECTS: [number, number][] = [
+  [1, 0.3],
+  [0.3, 1],
+  [0.72, 0.72],
+  [0.92, 0.55],
+  [0.55, 0.92],
+];
+
+/** A round walkable floor. */
+function roundPlatform(c: Ctx, x: number, z: number, r: number, top: number): void {
+  for (const [a, b] of DISK_RECTS) platform(c, x, z, 2 * a * r, 2 * b * r, top);
+}
+
+/** A round solid. */
+function roundSolid(c: Ctx, x: number, z: number, r: number, h: number, tag?: string): void {
+  for (const [a, b] of DISK_RECTS) solid(c, x, z, 2 * a * r, 2 * b * r, h, 0, tag);
+}
+
+/** A column or post. */
+function column(c: Ctx, x: number, z: number, r: number, h: number): void {
+  c.col.push({ x, z, hw: r, hd: r, rot: 0, h });
+}
+
+/**
+ * A sloped mound or rampart from footprint w0 x d0 at y0 to w1 x d1 at y1, as stacked terraces
+ * that block at the slope and let you stand on top.
+ */
+function battered(c: Ctx, x: number, z: number, w0: number, d0: number, w1: number, d1: number, y0: number, y1: number, rings: number, rot = 0): void {
+  for (let k = 0; k < rings; k++) {
+    const f = k / rings;
+    platform(c, x, z, w0 + (w1 - w0) * f, d0 + (d1 - d0) * f, y0 + ((y1 - y0) * (k + 0.5)) / rings, rot);
+  }
+  platform(c, x, z, w1, d1, y1, rot);
+}
+
+/** Concentric steps around a podium; every step is walkable. */
 function steps(c: Ctx, x: number, z: number, w: number, d: number, n: number, stepH: number, color: number, rot = 0): void {
   for (let i = 0; i < n; i++) {
     const s = 1 - i / n;
     c.mb.box(x, c.y + i * stepH, z, w * s + 0.5, stepH, d * s + 0.5, shade(color, 1 - i * 0.02), rot);
+    platform(c, x, z, w * s + 0.5, d * s + 0.5, c.y + (i + 1) * stepH, rot);
   }
 }
 
+/**
+ * A flight of steps with its foot at (x,z), climbing `rise` metres over `run` metres in the
+ * direction (dirX,dirZ). The steps stand on `y`; the top is at y + rise. Walkable as a ramp.
+ */
 function stair(c: Ctx, x: number, y: number, z: number, width: number, run: number, rise: number, dirX: number, dirZ: number, color: number): void {
-  const n = Math.max(2, Math.round(rise / 0.5));
+  const n = Math.max(2, Math.round(rise / 0.4));
   const rot = Math.atan2(dirZ, dirX);
+  // the flight starts on the real ground at its foot, which may lie below the landmark's base
+  // (a flight standing on a terrace starts on that terrace)
+  const foot = y > c.y + 0.01 ? y : Math.min(c.y, meshHeight(x, z));
+  const top = y + rise;
   for (let i = 0; i < n; i++) {
-    const t = i / n;
+    const t = (i + 0.5) / n;
     const px = x + dirX * run * t;
     const pz = z + dirZ * run * t;
-    c.mb.box(px, y, pz, run / n + 0.05, rise * (1 - t), width, color, rot);
+    const by = y > c.y + 0.01 ? y : Math.min(y, meshHeight(px, pz) - 0.3);
+    c.mb.box(px, by, pz, run / n + 0.05, foot + ((top - foot) * (i + 1)) / n - by, width, color, rot);
   }
+  c.col.push(rampCollider(x, z, foot, x + dirX * run, z + dirZ * run, top, width, 'stair'));
 }
 
 function fence(c: Ctx, x: number, z: number, w: number, d: number, color: number, postEvery = 3): void {
@@ -146,12 +199,13 @@ function templeClassical(c: Ctx, x: number, z: number, w: number, d: number, col
       const [px, pz] = W(-w / 2 + (i / (cols - 1)) * w, -d / 2 + (j / (rows - 1)) * d);
       mb.cylinder(px, y, pz, 0.7, 0.6, colH, stone, 8);
       mb.box(px, y + colH, pz, 1.6, 0.4, 1.6, stone, rot);
+      column(c, px, pz, 0.72, colH + 1.5);
     }
   }
   mb.box(x, y, z, w * 0.72, colH, d * 0.78, shade(stone, 0.93), rot);
   mb.box(x, y + colH + 0.4, z, w + 2.4, 1.6, d + 2.4, stone, rot);
   mb.prism(x, y + colH + 2, z, w + 3, (d + 3) * 0.22, d + 3, roof, rot);
-  solid(c, x, z, w + 2, d + 2, colH + 4, rot, 'temple');
+  solid(c, x, z, w * 0.72, d * 0.78, colH + 4, rot, 'temple');
 }
 
 function ziggurat(c: Ctx, x: number, z: number, size: number, tiers: number, color: number): void {
@@ -160,35 +214,52 @@ function ziggurat(c: Ctx, x: number, z: number, size: number, tiers: number, col
   const tierH = 7;
   for (let i = 0; i < tiers; i++) {
     c.mb.hip(x, y - (i === 0 ? 1 : 0), z, w, tierH + (i === 0 ? 1 : 0), w * 0.9, w * 0.82, w * 0.72, shade(color, 1 - i * 0.04), 0);
+    // sloped faces block, the terrace on top is walkable
+    battered(c, x, z, w, w * 0.9, w * 0.82, w * 0.72, y, y + tierH, 3);
     y += tierH;
     w *= 0.72;
   }
   c.mb.box(x, y, z, w * 0.7, 6, w * 0.6, shade(color, 1.1));
+  solid(c, x, z, w * 0.7, w * 0.6, y - c.y + 7, 0, 'shrine');
   c.mb.box(x, y + 6, z, w * 0.8, 0.8, w * 0.7, 0x2a5a8a);
   // grand stair up the front
   stair(c, x, c.y, z + size * 0.45 + 12, 6, 12 + size * 0.45 - size * 0.36 * 0.5, tierH * tiers, 0, -1, shade(color, 1.05));
-  solid(c, x, z, size, size * 0.9, tierH * tiers, 0, 'citadel');
 }
 
 function steppedPyramid(c: Ctx, x: number, z: number, size: number, tiers: number, color: number, stairColor: number, twin = false): void {
   const tierH = size / (tiers * 2.2);
+  const sizes: number[] = [];
   for (let i = 0; i < tiers; i++) {
     const s = size * (1 - i / (tiers + 0.6));
+    sizes.push(s);
     c.mb.box(x, c.y + i * tierH - (i === 0 ? 1 : 0), z, s, tierH + (i === 0 ? 1 : 0), s, shade(color, 1 - i * 0.03));
+    platform(c, x, z, s, s, c.y + (i + 1) * tierH);
   }
   const top = c.y + tiers * tierH;
+  const H = tiers * tierH;
   const topS = size * (1 - tiers / (tiers + 0.6));
+  // the stair projects far enough from the base to clear every terrace edge on its way up
+  const dTop = sizes[tiers - 1] / 2; // the stair arrives at the edge of the top terrace
+  let out = 0;
+  for (let i = 0; i < tiers - 1; i++) {
+    const k = (i + 1) / tiers;
+    out = Math.max(out, (k * (size / 2 - dTop) - (size / 2 - sizes[i] / 2)) / (1 - k));
+  }
+  out += 1;
+  const run = size / 2 + out - dTop;
   if (twin) {
     c.mb.box(x - topS * 0.25, top, z, topS * 0.4, 5, topS * 0.5, 0xc83a2a);
     c.mb.box(x + topS * 0.25, top, z, topS * 0.4, 5, topS * 0.5, 0x2a6ab0);
-    stair(c, x - topS * 0.25, c.y, z + size / 2, topS * 0.3, size / 2 - topS * 0.25, tiers * tierH, 0, -1, stairColor);
-    stair(c, x + topS * 0.25, c.y, z + size / 2, topS * 0.3, size / 2 - topS * 0.25, tiers * tierH, 0, -1, stairColor);
+    solid(c, x - topS * 0.25, z, topS * 0.4, topS * 0.5, H + 5, 0, 'shrine');
+    solid(c, x + topS * 0.25, z, topS * 0.4, topS * 0.5, H + 5, 0, 'shrine');
+    stair(c, x - topS * 0.25, c.y, z + size / 2 + out, Math.max(2.4, topS * 0.3), run, H, 0, -1, stairColor);
+    stair(c, x + topS * 0.25, c.y, z + size / 2 + out, Math.max(2.4, topS * 0.3), run, H, 0, -1, stairColor);
   } else {
     c.mb.box(x, top, z, topS * 0.6, 5, topS * 0.6, shade(color, 1.1));
     c.mb.box(x, top + 5, z, topS * 0.5, 3, topS * 0.3, 0xd9cfb0);
-    stair(c, x, c.y, z + size / 2, 6, size / 2 - topS * 0.3, tiers * tierH, 0, -1, stairColor);
+    solid(c, x, z, topS * 0.6, topS * 0.6, H + 8, 0, 'shrine');
+    stair(c, x, c.y, z + size / 2 + out, 6, run, H, 0, -1, stairColor);
   }
-  solid(c, x, z, size, size, tiers * tierH, 0, 'citadel');
 }
 
 function pagodaTower(c: Ctx, x: number, z: number, w: number, tiers: number, wall: number, roof: number): void {
@@ -281,11 +352,13 @@ function quay(c: Ctx, shipKind: Era['ships'], stone: number, n: number): void {
   // two piers reaching into the water
   for (const px of [x - 30, x + 30]) {
     mb.box(px, c.y - 1, z + 30, 8, 2.2, 70, stone);
-    solid(c, px, z + 30, 8, 70, 2.2);
+    platform(c, px, z + 30, 8, 70, c.y + 1.2, 0, 'pier');
     for (let i = 0; i < 6; i++) mb.cylinder(px + 3.6, c.y + 1.2, z + i * 12, 0.3, 0.3, 1.0, 0x3a3a3a, 5);
   }
   mb.box(x, c.y - 1, z - 10, 80, 2.2, 14, stone);
-  solid(c, x, z - 10, 80, 14, 2.2);
+  platform(c, x, z - 10, 80, 14, c.y + 1.2, 0, 'quay');
+  // steps up from the street side
+  for (const sx of [x - 30, x, x + 30]) stair(c, sx, c.y - 0.3, z - 20, 6, 3, 1.5, 0, 1, shade(stone, 0.95));
   if (shipKind !== 'none') {
     for (let i = 0; i < n; i++) {
       const sx = x + (i - (n - 1) / 2) * 24 + rng.range(-3, 3);
@@ -318,6 +391,7 @@ const GENERATORS: Record<string, (c: Ctx) => void> = {
     const stone = 0xf1e7d2;
     const red = 0xb03a2a;
     mb.box(x, c.y - 1, z, 120, 1.6, 100, 0xd8ccb0);
+    platform(c, x, z, 120, 100, c.y + 0.6);
     for (const [ox, oz, w, d, floors] of [
       [-40, -30, 36, 36, 3],
       [40, -30, 36, 30, 2],
@@ -333,8 +407,10 @@ const GENERATORS: Record<string, (c: Ctx) => void> = {
     }
     // central court with inverted red columns
     for (let i = -2; i <= 2; i++) {
-      mb.cylinder(x + i * 8, c.y, z - 14, 0.5, 0.8, 4, red, 8);
-      mb.cylinder(x + i * 8, c.y, z + 14, 0.5, 0.8, 4, red, 8);
+      mb.cylinder(x + i * 8, c.y + 0.6, z - 14, 0.5, 0.8, 4, red, 8);
+      mb.cylinder(x + i * 8, c.y + 0.6, z + 14, 0.5, 0.8, 4, red, 8);
+      column(c, x + i * 8, z - 14, 0.8, 4);
+      column(c, x + i * 8, z + 14, 0.8, 4);
     }
     // horns of consecration
     for (const ox of [-55, 55]) {
@@ -352,10 +428,15 @@ const GENERATORS: Record<string, (c: Ctx) => void> = {
     mb.hip(x, c.y + 14, z + 70, 11, 3, 2.5, 3, 2, 0xb8a888);
     // megaron
     mb.box(x, c.y, z - 10, 40, 1.5, 30, 0xb8a888);
+    platform(c, x, z - 10, 40, 30, c.y + 1.5);
+    stair(c, x, c.y, z + 8, 8, 3, 1.5, 0, -1, 0xb0a080);
     mb.box(x, c.y + 1.5, z - 15, 30, 7, 20, 0xd3c4a0);
     solid(c, x, z - 15, 30, 20, 8.5, 0, 'palace');
     mb.prism(x, c.y + 8.5, z - 15, 32, 4, 22, 0x8a6d4a);
-    for (let i = -1; i <= 1; i++) mb.cylinder(x + i * 7, c.y + 1.5, z - 2, 0.7, 0.6, 7, 0xb03a2a, 8);
+    for (let i = -1; i <= 1; i++) {
+      mb.cylinder(x + i * 7, c.y + 1.5, z - 2, 0.7, 0.6, 7, 0xb03a2a, 8);
+      column(c, x + i * 7, z - 2, 0.7, 8.5);
+    }
     // houses inside
     for (let i = 0; i < 6; i++) {
       const hx = x - 60 + i * 24;
@@ -367,10 +448,11 @@ const GENERATORS: Record<string, (c: Ctx) => void> = {
     const { mb, x, z } = c;
     const brick = 0xc9a56c;
     mb.box(x, c.y - 1, z, 170, 6, 140, shade(brick, 0.9));
-    solid(c, x, z - 25, 170, 90, 18, 0, 'palace');
+    platform(c, x, z, 170, 140, c.y + 5);
+    solid(c, x, z - 25, 150, 80, 24, 0, 'palace');
     mb.box(x, c.y + 5, z - 25, 150, 14, 80, brick);
     crenellations(c, x, c.y + 19, z - 25, 150, 80, shade(brick, 0.9));
-    mb.box(x, c.y + 5, z + 45, 150, 2, 40, shade(brick, 1.05));
+    mb.box(x, c.y + 4.9, z + 45, 150, 0.15, 40, shade(brick, 1.05));
     // lamassu pairs at the gate
     for (const s of [-1, 1]) {
       const lx = x + s * 12;
@@ -379,31 +461,35 @@ const GENERATORS: Record<string, (c: Ctx) => void> = {
       mb.prism(lx + s * 1.5, c.y + 9, z + 14, 7, 2.5, 1, 0xd8ccb0, Math.PI / 2);
       solid(c, lx, z + 16, 4, 9, 11);
     }
-    stair(c, x, c.y - 1, z + 70, 20, 10, 6, 0, -1, shade(brick, 1.05));
+    stair(c, x, c.y - 1, z + 80, 20, 10, 6, 0, -1, shade(brick, 1.05));
     for (let i = 0; i < 5; i++) mb.cylinder(x - 40 + i * 20, c.y + 19, z - 55, 0.5, 0.4, 6, 0xd9a52a, 6);
   },
   parthenon: (c) => {
     templeClassical(c, c.x, c.z, 60, 28, 17, 8, 10, 0xf4efe4, 0xd9cfbc);
     templeClassical(c, c.x - 70, c.z + 40, 22, 12, 6, 4, 6, 0xf1ebdc, 0xb5533b);
     c.mb.box(c.x + 70, c.y, c.z + 40, 1.6, 12, 1.6, 0xd9cfbc);
+    column(c, c.x + 70, c.z + 40, 0.8, 16);
     c.mb.box(c.x + 70, c.y + 12, c.z + 40, 1.2, 4, 1.2, 0xb8a24a);
   },
   palace_maurya: (c) => {
     const { mb, x, z } = c;
     const stone = 0xf2e8d0;
     mb.box(x, c.y - 1, z, 120, 2.5, 100, 0xd8c8a0);
+    platform(c, x, z, 120, 100, c.y + 1.5);
+    stair(c, x, c.y - 1, z + 54, 20, 4, 2.5, 0, -1, 0xd0c098);
     for (let i = 0; i < 8; i++) {
       for (let j = 0; j < 7; j++) {
         mb.cylinder(x - 42 + i * 12, c.y + 1.5, z - 36 + j * 12, 0.9, 0.8, 10, stone, 8);
+        column(c, x - 42 + i * 12, z - 36 + j * 12, 0.9, 12);
       }
     }
     mb.box(x, c.y + 11.5, z, 100, 2.5, 84, 0x7a4a2c);
     mb.hip(x, c.y + 14, z, 100, 6, 84, 70, 54, 0x8a5a3a);
-    solid(c, x, z, 100, 84, 20, 0, 'palace');
     mb.box(x, c.y + 20, z, 30, 5, 24, stone);
     mb.hip(x, c.y + 25, z, 32, 5, 26, 0, 0, 0x7a4a2c);
     // Ashoka pillar
     mb.cylinder(x + 70, c.y, z + 50, 1.2, 1.0, 14, 0xe9dfc8, 10);
+    column(c, x + 70, z + 50, 1.2, 18);
     mb.dome(x + 70, c.y + 14, z + 50, 1.6, 0xd9c08a, 8, 2);
     mb.box(x + 70, c.y + 15.5, z + 50, 2.6, 2.4, 2.6, 0xd9c08a);
   },
@@ -443,7 +529,12 @@ const GENERATORS: Record<string, (c: Ctx) => void> = {
     mb.box(x, c.y - 1, z, 170, 3, 170, 0xa89e86);
     mb.box(x, c.y + 2, z, 130, 4, 130, stone);
     mb.box(x, c.y + 6, z, 80, 6, 80, shade(stone, 1.05));
-    solid(c, x, z, 130, 130, 12, 0, 'temple');
+    platform(c, x, z, 170, 170, c.y + 2);
+    platform(c, x, z, 130, 130, c.y + 6);
+    platform(c, x, z, 80, 80, c.y + 12);
+    // stairs up each terrace on the causeway axis
+    stair(c, x, c.y + 2, z + 70, 10, 5, 4, 0, -1, shade(stone, 1.02));
+    stair(c, x, c.y + 6, z + 46.5, 8, 6.5, 6, 0, -1, shade(stone, 1.06));
     const tower = (tx: number, tz: number, h: number, base: number): void => {
       const n = 5;
       for (let i = 0; i < n; i++) {
@@ -451,6 +542,7 @@ const GENERATORS: Record<string, (c: Ctx) => void> = {
         mb.box(tx, c.y + 12 + (i * h) / n, tz, s, h / n, s, shade(stone, 1 + i * 0.03));
       }
       mb.hip(tx, c.y + 12 + h, tz, base * 0.3, 4, base * 0.3, 0, 0, shade(stone, 1.1));
+      solid(c, tx, tz, base, base, 12 + h + 4, 0, 'temple');
     };
     tower(x, z, 30, 16);
     for (const [ox, oz] of [
@@ -460,9 +552,11 @@ const GENERATORS: Record<string, (c: Ctx) => void> = {
       [-28, 28],
     ]) tower(x + ox, z + oz, 22, 12);
     // causeway over the moat
-    mb.box(x, c.y + 0.2, z + 120, 12, 2.5, 60, 0xa89e86);
+    mb.box(x, c.y - 6, z + 117, 12, 8, 66, 0xa89e86);
+    platform(c, x, z + 117, 12, 66, c.y + 2);
+    stair(c, x, c.y, z + 160, 10, 10, 2, 0, -1, 0xa89e86);
     for (let i = 0; i < 6; i++) {
-      for (const s of [-1, 1]) mb.cylinder(x + s * 6, c.y + 2.7, z + 95 + i * 10, 0.4, 0.3, 1.2, stone, 6);
+      for (const s of [-1, 1]) mb.cylinder(x + s * 6, c.y + 2, z + 95 + i * 10, 0.4, 0.3, 1.2, stone, 6);
     }
     // naga heads
     for (const s of [-1, 1]) mb.hip(x + s * 7, c.y + 2.7, z + 148, 3, 3, 2, 1, 1, shade(stone, 1.1));
@@ -502,8 +596,9 @@ const GENERATORS: Record<string, (c: Ctx) => void> = {
     const { mb, x, z } = c;
     const stone = 0x6f6f68;
     mb.hip(x, c.y - 1, z, 120, 14, 110, 90, 80, stone);
-    solid(c, x, z, 100, 90, 14, 0, 'castle');
-    wallRect(c, x, z, 92, 82, 2, 3, 0xf0e8d4, 2, 8);
+    battered(c, x, z, 120, 110, 90, 80, c.y - 1, c.y + 13, 6);
+    solid(c, x, z, 40, 34, 45, 0, 'castle');
+    wallRect({ ...c, y: c.y + 13 }, x, z, 86, 76, 1.2, 2.4, 0xf0e8d4, 2, 12);
     const tiers = 5;
     for (let i = 0; i < tiers; i++) {
       const s = 1 - i * 0.14;
@@ -516,7 +611,7 @@ const GENERATORS: Record<string, (c: Ctx) => void> = {
     }
     mb.hip(x, c.y + 13 + tiers * 5, z, 40 * (1 - tiers * 0.14) + 3, 6, 34 * (1 - tiers * 0.14) + 3, 0, 0, 0x2e2e32);
     for (const s of [-1, 1]) mb.box(x + s * 2, c.y + 13 + tiers * 5 + 6, z, 1.2, 1.8, 0.4, 0xd9a52a, 0.6 * s);
-    stair(c, x, c.y - 1, z + 70, 10, 16, 14, 0, -1, shade(stone, 1.1));
+    stair(c, x, c.y - 1, z + 70, 10, 30, 14, 0, -1, shade(stone, 1.1));
   },
   fort_stone: (c) => {
     const { mb, x, z, rng } = c;
@@ -600,8 +695,13 @@ const GENERATORS: Record<string, (c: Ctx) => void> = {
     const stone = 0xd9d2c2;
     mb.box(x, c.y - 1, z, 90, 18, 70, stone);
     solid(c, x, z, 90, 70, 18, 0, 'civic');
-    for (let i = 0; i < 10; i++) mb.cylinder(x - 36 + i * 8, c.y + 2, z + 36, 1, 0.9, 14, shade(stone, 1.05), 8);
-    mb.box(x, c.y + 16, z + 36, 86, 2.5, 4, stone);
+    mb.box(x, c.y - 1, z + 37.5, 86, 3, 6, shade(stone, 0.95));
+    platform(c, x, z + 37.5, 86, 6, c.y + 2);
+    for (let i = 0; i < 10; i++) {
+      mb.cylinder(x - 36 + i * 8, c.y + 2, z + 37, 1, 0.9, 14, shade(stone, 1.05), 8);
+      column(c, x - 36 + i * 8, z + 37, 1, 16);
+    }
+    mb.box(x, c.y + 16, z + 37.5, 86, 2.5, 6, stone);
     mb.box(x, c.y + 17, z, 44, 40, 40, 0xcfc8b8);
     mb.box(x, c.y + 57, z, 30, 26, 28, 0xcac3b3);
     mb.box(x, c.y + 83, z, 18, 20, 18, 0xc4bdad);
@@ -613,9 +713,10 @@ const GENERATORS: Record<string, (c: Ctx) => void> = {
     }
     mb.hip(x, c.y + 103, z, 18, 10, 18, 2, 2, 0x8a8a92);
     mb.cylinder(x, c.y + 113, z, 0.6, 0.1, 18, 0x9a9aa0, 6);
-    stair(c, x, c.y - 1, z + 50, 40, 12, 3, 0, -1, shade(stone, 0.95));
-    mb.cylinder(x - 30, c.y + 3, z + 50, 0.2, 0.15, 16, 0x8a8a92, 5);
-    mb.box(x - 28, c.y + 15, z + 50, 4, 2.5, 0.2, 0x3a5a9a);
+    stair(c, x, c.y - 1, z + 48, 40, 7.5, 3, 0, -1, shade(stone, 0.95));
+    mb.cylinder(x - 30, c.y, z + 54, 0.2, 0.15, 16, 0x8a8a92, 5);
+    mb.box(x - 28, c.y + 12, z + 54, 4, 2.5, 0.2, 0x3a5a9a);
+    column(c, x - 30, z + 54, 0.3, 16);
   },
 
   // ---------- harbors ----------
@@ -690,7 +791,9 @@ const GENERATORS: Record<string, (c: Ctx) => void> = {
     const { mb, x, z } = c;
     mb.groundQuad(x - 90, z - 60, x + 90, z - 60, x + 90, z + 60, x - 90, z + 60, c.y + 0.05, c.era.water);
     mb.box(x, c.y - 1, z, 24, 3, 24, 0x9a9078);
-    pagodaTower(c, x, z, 8, 3, 0xa89e86, 0x8a8070);
+    platform(c, x, z, 24, 24, c.y + 2);
+    stair(c, x, c.y, z + 16, 6, 4, 2, 0, -1, 0x9a9078);
+    pagodaTower({ ...c, y: c.y + 2 }, x, z, 8, 3, 0xa89e86, 0x8a8070);
   },
   chinampas: (c) => {
     const { mb, x, z, rng } = c;
@@ -699,9 +802,10 @@ const GENERATORS: Record<string, (c: Ctx) => void> = {
       for (let j = 0; j < 5; j++) {
         const px = x - 78 + i * 22;
         const pz = z - 48 + j * 24;
-        mb.box(px, c.y - 0.2, pz, 16, 1.0, 16, shade(0x5a8a3a, rng.range(0.8, 1.2)));
-        for (let k = 0; k < 3; k++) mb.box(px - 6 + k * 6, c.y + 0.8, pz, 1.2, 0.8, 14, 0x4a7a2a);
-        if (rng.chance(0.5)) buildTree(mb, px + 7, c.y + 0.8, pz + 7, 'palm', rng);
+        mb.box(px, c.y - 0.5, pz, 16, 1.0, 16, shade(0x5a8a3a, rng.range(0.8, 1.2)));
+        platform(c, px, pz, 16, 16, c.y + 0.5);
+        for (let k = 0; k < 3; k++) mb.box(px - 6 + k * 6, c.y + 0.5, pz, 1.2, 0.8, 14, 0x4a7a2a);
+        if (rng.chance(0.5)) buildTree(mb, px + 7, c.y + 0.5, pz + 7, 'palm', rng);
       }
     }
     for (let i = 0; i < 5; i++) buildShip(mb, x - 60 + i * 30, c.y - 0.6, z + 56, 'canoe', rng.range(0, 3), rng);
@@ -710,10 +814,11 @@ const GENERATORS: Record<string, (c: Ctx) => void> = {
     for (let i = 0; i < 6; i++) buildProp(c.mb, c.x - 40 + i * 16, c.y, c.z - 20, 'tent', c.rng, c.rng.range(0, 3));
     buildProp(c.mb, c.x, c.y, c.z + 5, 'campfire', c.rng);
     c.mb.box(c.x, c.y - 0.5, c.z + 30, 20, 1.2, 10, 0x6a5a40);
+    platform(c, c.x, c.z + 30, 20, 10, c.y + 0.7, 0, 'pier');
   },
   canoe_landing: (c) => {
-    c.mb.box(c.x, c.y - 1, c.z + 10, 60, 1.8, 10, 0x8e7a52);
-    solid(c, c.x, c.z + 10, 60, 10, 1.8);
+    c.mb.box(c.x, c.y - 1, c.z + 10, 60, 1.7, 10, 0x8e7a52);
+    platform(c, c.x, c.z + 10, 60, 10, c.y + 0.7, 0, 'pier');
     for (let i = 0; i < 7; i++) buildShip(c.mb, c.x - 30 + i * 10, c.y - 0.6, c.z + 24 + c.rng.range(0, 6), 'canoe', 1.3 + c.rng.range(-0.3, 0.3), c.rng);
   },
 
@@ -760,7 +865,19 @@ const GENERATORS: Record<string, (c: Ctx) => void> = {
     for (let t = 0; t < 9; t++) {
       mb.ringWall(x, c.y + t * 1.2, z, 18 + t * 4, 4.2, 1.2, shade(0xe8e0d0, 1 - t * 0.02), 20 + t * 2, Math.PI, Math.PI * 2);
     }
-    for (let t = 0; t < 9; t += 2) c.col.push({ x, z: z - 18 - t * 4, hw: 18 + t * 4, hd: 2, rot: 0, h: 10, tag: 'arena' });
+    for (let t = 0; t < 9; t++) {
+      const r = 18 + t * 4;
+      const n = 20 + t * 2;
+      const step = Math.PI / n;
+      for (let i = 0; i < n; i++) {
+        const a = Math.PI + (i + 0.5) * step;
+        platform(c, x + Math.cos(a) * r, z + Math.sin(a) * r, 2 * r * Math.sin(step / 2) + 0.2, 4.2, c.y + (t + 1) * 1.2, a + Math.PI / 2);
+      }
+    }
+    // aisles: straight flights from the orchestra to the top row
+    for (const a of [Math.PI * 1.25, Math.PI * 1.5, Math.PI * 1.75]) {
+      stair(c, x + Math.cos(a) * 11.5, c.y, z + Math.sin(a) * 11.5, 2.2, 36, 10.8, Math.cos(a), Math.sin(a), 0xd8d0c0);
+    }
     mb.box(x, c.y, z + 12, 40, 8, 6, 0xd9cfbc);
     solid(c, x, z + 12, 40, 6, 8);
     mb.cylinder(x, c.y, z, 12, 12, 0.3, 0xcdb996, 16);
@@ -818,7 +935,8 @@ const GENERATORS: Record<string, (c: Ctx) => void> = {
   },
   elephant_terrace: (c) => {
     c.mb.box(c.x, c.y - 1, c.z, 100, 4, 20, 0x9a9078);
-    solid(c, c.x, c.z, 100, 20, 4);
+    platform(c, c.x, c.z, 100, 20, c.y + 3);
+    stair(c, c.x, c.y, c.z + 16, 8, 6, 3, 0, -1, 0x9a9078);
     for (let i = 0; i < 6; i++) {
       const ex = c.x - 40 + i * 16;
       c.mb.box(ex, c.y + 1, c.z + 11, 5, 3, 2.5, 0x8a8070);
@@ -845,7 +963,9 @@ const GENERATORS: Record<string, (c: Ctx) => void> = {
     c.mb.box(c.x, c.y, c.z, 8, 1.2, 6, 0x6a5a40);
     c.mb.box(c.x - 3, c.y + 1.2, c.z, 0.4, 5, 0.4, 0x5a4a3a);
     c.mb.box(c.x - 0.5, c.y + 6, c.z, 5.5, 0.4, 0.4, 0x5a4a3a);
-    solid(c, c.x, c.z, 8, 6, 2);
+    platform(c, c.x, c.z, 8, 6, c.y + 1.2);
+    stair(c, c.x + 7.5, c.y, c.z, 3, 3.5, 1.2, -1, 0, 0x6a5a40);
+    column(c, c.x - 3, c.z, 0.3, 6);
     for (let i = 0; i < 4; i++) buildTree(c.mb, c.x - 30 + i * 20, c.y, c.z + 25, 'palm', c.rng);
   },
   corral: (c) => {
@@ -883,11 +1003,17 @@ const GENERATORS: Record<string, (c: Ctx) => void> = {
     mb.box(x, c.y + 10, z + 30, 12, 6, 6, 0xe0d0a8);
     mb.box(x, c.y, z - 5, 44, 9, 50, 0xf0dfb4);
     solid(c, x, z - 5, 44, 50, 9, 0, 'temple');
-    for (let i = 0; i < 6; i++) mb.cylinder(x - 15 + i * 6, c.y, z + 22, 1.0, 0.9, 8, 0xe8dcc0, 8);
+    for (let i = 0; i < 6; i++) {
+      mb.cylinder(x - 15 + i * 6, c.y, z + 22, 1.0, 0.9, 8, 0xe8dcc0, 8);
+      column(c, x - 15 + i * 6, z + 22, 1.0, 8);
+    }
   },
   court_minoan: (c) => {
     c.mb.groundQuad(c.x - 30, c.z - 20, c.x + 30, c.z - 20, c.x + 30, c.z + 20, c.x - 30, c.z + 20, c.y + 0.08, 0xe8dcc0);
-    for (let i = 0; i < 4; i++) c.mb.cylinder(c.x - 18 + i * 12, c.y, c.z - 18, 0.5, 0.8, 4, 0xb03a2a, 8);
+    for (let i = 0; i < 4; i++) {
+      c.mb.cylinder(c.x - 18 + i * 12, c.y, c.z - 18, 0.5, 0.8, 4, 0xb03a2a, 8);
+      column(c, c.x - 18 + i * 12, c.z - 18, 0.8, 4);
+    }
     buildProp(c.mb, c.x, c.y, c.z, 'fountain', c.rng);
   },
   tholos: (c) => {
@@ -927,6 +1053,8 @@ const GENERATORS: Record<string, (c: Ctx) => void> = {
     for (let i = 0; i < 8; i++) {
       c.mb.cylinder(c.x - 42 + i * 12, c.y, c.z - 34, 0.8, 0.7, 9, 0xf0e8d8, 8);
       c.mb.cylinder(c.x - 42 + i * 12, c.y, c.z + 34, 0.8, 0.7, 9, 0xf0e8d8, 8);
+      column(c, c.x - 42 + i * 12, c.z - 34, 0.8, 9);
+      column(c, c.x - 42 + i * 12, c.z + 34, 0.8, 9);
     }
     c.mb.box(c.x, c.y + 9, c.z - 34, 100, 1.2, 3, 0xe8e0d0);
     c.mb.box(c.x, c.y + 9, c.z + 34, 100, 1.2, 3, 0xe8e0d0);
@@ -1062,47 +1190,64 @@ const GENERATORS: Record<string, (c: Ctx) => void> = {
   ziggurat_small: (c) => ziggurat(c, c.x, c.z, 50, 2, 0xc9a56c),
   oracle: (c) => {
     c.mb.cylinder(c.x, c.y - 1, c.z, 14, 14, 2, 0xf4efe4, 16);
+    roundPlatform(c, c.x, c.z, 14, c.y + 1);
+    stair(c, c.x, c.y, c.z + 16.5, 4, 3, 1, 0, -1, 0xe8e0d0);
     for (let i = 0; i < 12; i++) {
-      const a = (i / 12) * Math.PI * 2;
+      // offset half a bay so the front (toward +z) is an opening, not a column
+      const a = ((i + 0.5) / 12) * Math.PI * 2;
       c.mb.cylinder(c.x + Math.cos(a) * 11, c.y + 1, c.z + Math.sin(a) * 11, 0.7, 0.6, 8, 0xf4efe4, 8);
+      column(c, c.x + Math.cos(a) * 11, c.z + Math.sin(a) * 11, 0.7, 9);
     }
     c.mb.cylinder(c.x, c.y + 9, c.z, 13, 10, 1.5, 0xe8e0d0, 16);
     c.mb.cylinder(c.x, c.y + 10.5, c.z, 13, 0, 4, 0xb5533b, 16);
-    solid(c, c.x, c.z, 24, 24, 14, 0, 'temple');
     for (let i = 0; i < 5; i++) buildTree(c.mb, c.x - 30 + i * 15, c.y, c.z + 28, 'cypress', c.rng);
   },
   great_stupa: (c) => {
     c.mb.cylinder(c.x, c.y - 1, c.z, 30, 30, 4, 0xe6d6b2, 20);
+    roundPlatform(c, c.x, c.z, 30, c.y + 3);
+    roundSolid(c, c.x, c.z, 25.5, 30, 'stupa');
     c.mb.dome(c.x, c.y + 3, c.z, 26, 0xf1e9d4, 20, 6);
     c.mb.box(c.x, c.y + 28, c.z, 6, 3, 6, 0xd9c08a);
     c.mb.cylinder(c.x, c.y + 31, c.z, 0.4, 0.3, 6, 0x8a6a3a, 6);
     for (let i = 0; i < 3; i++) c.mb.cylinder(c.x, c.y + 33 + i * 1.3, c.z, 3 - i * 0.8, 3 - i * 0.8, 0.3, 0xd9c08a, 10);
-    solid(c, c.x, c.z, 56, 56, 30, 0, 'stupa');
     for (const [ox, oz] of [
       [0, 38],
       [38, 0],
       [0, -38],
       [-38, 0],
     ]) {
-      c.mb.box(c.x + ox, c.y, c.z + oz, 2, 8, 2, 0xd8c8a0);
-      c.mb.box(c.x + ox, c.y + 8, c.z + oz, 8, 1.2, 1.2, 0xd8c8a0, Math.atan2(oz, ox) + Math.PI / 2);
+      const len = Math.hypot(ox, oz);
+      stair(c, c.x + (ox / len) * 34.5, c.y, c.z + (oz / len) * 34.5, 4, 4.5, 3, -ox / len, -oz / len, 0xe6d6b2);
+      // torana gateway: two posts and a lintel, open in the middle
+      const tx = -oz / len;
+      const tz = ox / len;
+      for (const s2 of [-1, 1]) {
+        c.mb.box(c.x + ox + tx * 3.5 * s2, c.y, c.z + oz + tz * 3.5 * s2, 1.2, 8, 1.2, 0xd8c8a0);
+        column(c, c.x + ox + tx * 3.5 * s2, c.z + oz + tz * 3.5 * s2, 0.6, 8);
+      }
+      c.mb.box(c.x + ox, c.y + 8, c.z + oz, 9, 1.2, 1.2, 0xd8c8a0, Math.atan2(oz, ox) + Math.PI / 2);
     }
   },
   pantheon: (c) => {
     c.mb.cylinder(c.x, c.y - 1, c.z, 22, 22, 16, 0xe8dabd, 20);
     c.mb.dome(c.x, c.y + 15, c.z, 22, 0xb8b0a0, 20, 5);
     c.mb.box(c.x, c.y, c.z + 30, 30, 1.5, 16, 0xf0e8d8);
-    for (let i = 0; i < 8; i++) c.mb.cylinder(c.x - 12 + i * 3.4, c.y + 1.5, c.z + 36, 0.8, 0.7, 12, 0xf4efe4, 8);
+    platform(c, c.x, c.z + 30, 30, 16, c.y + 1.5);
+    stair(c, c.x, c.y, c.z + 41.5, 12, 3.5, 1.5, 0, -1, 0xe8e0d0);
+    for (let i = 0; i < 8; i++) {
+      c.mb.cylinder(c.x - 12 + i * 3.4, c.y + 1.5, c.z + 36, 0.8, 0.7, 12, 0xf4efe4, 8);
+      column(c, c.x - 12 + i * 3.4, c.z + 36, 0.8, 14);
+    }
     c.mb.box(c.x, c.y + 13.5, c.z + 30, 32, 2, 18, 0xf0e8d8);
     c.mb.prism(c.x, c.y + 15.5, c.z + 30, 18, 5, 34, 0xd9cfbc, Math.PI / 2);
-    solid(c, c.x, c.z, 44, 44, 30, 0, 'temple');
-    solid(c, c.x, c.z + 30, 30, 16, 20);
+    roundSolid(c, c.x, c.z, 22, 30, 'temple');
   },
   observatory: (c) => {
     c.mb.box(c.x, c.y - 1, c.z, 36, 8, 36, 0xdccfb0);
+    platform(c, c.x, c.z, 36, 36, c.y + 7);
     c.mb.cylinder(c.x, c.y + 7, c.z, 10, 9, 10, 0xe9dcc0, 12);
     c.mb.dome(c.x, c.y + 17, c.z, 9, 0xd0c4a8, 12, 3);
-    solid(c, c.x, c.z, 36, 36, 26, 0, 'observatory');
+    roundSolid(c, c.x, c.z, 10, 26, 'observatory');
     stair(c, c.x, c.y - 1, c.z + 30, 8, 12, 8, 0, -1, 0xc8b898);
   },
   hof: (c) => {
@@ -1115,7 +1260,11 @@ const GENERATORS: Record<string, (c: Ctx) => void> = {
   },
   naga_bridge: (c) => {
     c.mb.box(c.x, c.y, c.z, 60, 2, 10, 0xa89e86);
-    solid(c, c.x, c.z, 60, 10, 2);
+    platform(c, c.x, c.z, 60, 10, c.y + 2);
+    for (const s of [-1, 1]) {
+      stair(c, c.x + s * 35, c.y, c.z, 6, 5, 2, -s, 0, 0xa89e86);
+      solid(c, c.x, c.z + s * 5, 56, 1, 2, 0, 'rail');
+    }
     for (let i = 0; i < 12; i++) {
       for (const s of [-1, 1]) c.mb.box(c.x - 27 + i * 5, c.y + 2, c.z + s * 5, 1.4, 1.6, 1.0, 0x9a9078);
     }
@@ -1202,7 +1351,13 @@ const GENERATORS: Record<string, (c: Ctx) => void> = {
     mb.material(TILE.STONE, 0.35);
     for (let i = 0; i < 9; i++) {
       mb.cylinder(x - 28 + i * 7, c.y, z + 30, 0.6, 0.5, 5, stone, 8);
-      if (i === 0 || i === 8) for (let j = 1; j < 3; j++) mb.cylinder(x - 28 + i * 7, c.y, z + 30 - j * 7, 0.6, 0.5, 5, stone, 8);
+      column(c, x - 28 + i * 7, z + 30, 0.6, 5);
+      if (i === 0 || i === 8) {
+        for (let j = 1; j < 3; j++) {
+          mb.cylinder(x - 28 + i * 7, c.y, z + 30 - j * 7, 0.6, 0.5, 5, stone, 8);
+          column(c, x - 28 + i * 7, z + 30 - j * 7, 0.6, 5);
+        }
+      }
     }
     mb.material(TILE.SLAB, 0.35);
     mb.box(x, c.y + 5, z + 30, 58, 0.6, 2.2, stone);
@@ -1229,8 +1384,9 @@ const GENERATORS: Record<string, (c: Ctx) => void> = {
     mb.box(x - 21, c.y + 1.2, z - 12, 0.4, 5, 0.4, 0x5a4a3a);
     mb.box(x - 18.5, c.y + 6, z - 12, 5.5, 0.4, 0.4, 0x5a4a3a);
     mb.box(x - 16, c.y + 4.2, z - 12, 0.08, 1.8, 0.08, 0x3a2a1a);
-    stair(c, x - 14, c.y, z - 12, 3, 4, 1.2, 1, 0, 0x6a5a40);
-    solid(c, x - 18, z - 12, 8, 6, 2);
+    stair(c, x - 10.5, c.y, z - 12, 3, 3.5, 1.2, -1, 0, 0x6a5a40);
+    platform(c, x - 18, z - 12, 8, 6, c.y + 1.2);
+    column(c, x - 21, z - 12, 0.3, 6);
     // flagpole
     mb.material(TILE.CONCRETE, 0.5);
     mb.cylinder(x, c.y, z, 0.15, 0.1, 12, 0xe8e0d0, 6);
@@ -1264,7 +1420,11 @@ const GENERATORS: Record<string, (c: Ctx) => void> = {
   },
   stoa_market: (c) => {
     c.mb.box(c.x, c.y - 1, c.z - 20, 80, 1.6, 14, 0xf2ece0);
-    for (let i = 0; i < 16; i++) c.mb.cylinder(c.x - 37 + i * 5, c.y + 0.5, c.z - 14, 0.6, 0.5, 6, 0xf4efe4, 8);
+    platform(c, c.x, c.z - 20, 80, 14, c.y + 0.6);
+    for (let i = 0; i < 16; i++) {
+      c.mb.cylinder(c.x - 37 + i * 5, c.y + 0.5, c.z - 14, 0.6, 0.5, 6, 0xf4efe4, 8);
+      column(c, c.x - 37 + i * 5, c.z - 14, 0.6, 6.5);
+    }
     c.mb.box(c.x, c.y + 0.5, c.z - 23, 80, 6, 8, 0xe7dfcb);
     c.mb.box(c.x, c.y + 6.5, c.z - 20, 82, 1, 16, 0xe8e0d0);
     c.mb.prism(c.x, c.y + 7.5, c.z - 20, 84, 3, 18, 0xb5533b);
@@ -1273,9 +1433,11 @@ const GENERATORS: Record<string, (c: Ctx) => void> = {
   },
   macellum: (c) => {
     c.mb.cylinder(c.x, c.y - 1, c.z, 20, 20, 1.5, 0xd9d0bd, 16);
+    roundPlatform(c, c.x, c.z, 20, c.y + 0.5);
     for (let i = 0; i < 16; i++) {
       const a = (i / 16) * Math.PI * 2;
       c.mb.cylinder(c.x + Math.cos(a) * 17, c.y + 0.5, c.z + Math.sin(a) * 17, 0.6, 0.5, 6, 0xf0e8d8, 8);
+      column(c, c.x + Math.cos(a) * 17, c.z + Math.sin(a) * 17, 0.6, 6.5);
     }
     c.mb.cylinder(c.x, c.y + 6.5, c.z, 19, 19, 1, 0xe8e0d0, 16);
     c.mb.cylinder(c.x, c.y + 7.5, c.z, 19, 6, 4, 0xb04f36, 16);
