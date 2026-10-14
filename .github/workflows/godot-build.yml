@@ -1,0 +1,97 @@
+name: Desktop builds (Godot)
+
+# Builds the Godot version of the game for macOS (universal), Windows and Linux on every push that
+# touches it, uploads the builds as workflow artifacts and publishes them as a pre-release
+# ("Downloads" on the repository page).
+
+on:
+  push:
+    branches: [main, master, 'claude/**']
+    paths: ['godot/**', '.github/workflows/godot-build.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: godot-build-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  GODOT_VERSION: 4.7.2
+
+jobs:
+  export:
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: godot
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Install Godot .NET and export templates
+        working-directory: ${{ runner.temp }}
+        run: |
+          base=https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable
+          curl -fsSL -o godot.zip "$base/Godot_v${GODOT_VERSION}-stable_mono_linux_x86_64.zip"
+          curl -fsSL -o templates.tpz "$base/Godot_v${GODOT_VERSION}-stable_mono_export_templates.tpz"
+          unzip -q godot.zip -d godot
+          sudo ln -sf "$PWD/godot/Godot_v${GODOT_VERSION}-stable_mono_linux_x86_64/Godot_v${GODOT_VERSION}-stable_mono_linux.x86_64" /usr/local/bin/godot
+          tpl="$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable.mono"
+          mkdir -p "$tpl"
+          unzip -q templates.tpz -d tpl
+          mv tpl/templates/* "$tpl/"
+          godot --version
+
+      - name: Import project
+        run: godot --headless --editor --quit --path . || true
+
+      - name: Export
+        run: |
+          mkdir -p build/mac build/windows build/linux dist
+          godot --headless --path . --export-release "macOS" build/mac/Chronopolis-mac.zip
+          godot --headless --path . --export-release "Windows" build/windows/Chronopolis.exe
+          godot --headless --path . --export-release "Linux" build/linux/Chronopolis.x86_64
+          cp build/mac/Chronopolis-mac.zip dist/
+          (cd build/windows && zip -qr ../../dist/Chronopolis-windows.zip .)
+          (cd build/linux && zip -qr ../../dist/Chronopolis-linux.zip .)
+          ls -la dist
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Chronopolis-mac
+          path: godot/dist/Chronopolis-mac.zip
+          compression-level: 0
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Chronopolis-windows
+          path: godot/dist/Chronopolis-windows.zip
+          compression-level: 0
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Chronopolis-linux
+          path: godot/dist/Chronopolis-linux.zip
+          compression-level: 0
+
+      - name: Publish pre-release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: build-${{ github.run_number }}
+          name: Chronopolis desktop build ${{ github.run_number }}
+          target_commitish: ${{ github.sha }}
+          prerelease: true
+          body: |
+            Automatic desktop build from `${{ github.ref_name }}` (${{ github.sha }}).
+
+            **Mac:** download `Chronopolis-mac.zip`, unzip, and open Chronopolis.app. The app is not notarized yet,
+            so the first time macOS blocks it: open System Settings > Privacy & Security, scroll down and click
+            "Open Anyway". Or run `xattr -dr com.apple.quarantine Chronopolis.app` in Terminal once.
+            **Windows:** unzip and run `Chronopolis.exe` (SmartScreen: More info > Run anyway).
+            **Linux:** unzip and run `./Chronopolis.x86_64`.
+          files: |
+            godot/dist/Chronopolis-mac.zip
+            godot/dist/Chronopolis-windows.zip
+            godot/dist/Chronopolis-linux.zip

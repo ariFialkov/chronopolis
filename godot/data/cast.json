@@ -1,0 +1,3143 @@
+{
+ "sumerian": {
+  "player": {
+   "skin": 14462600,
+   "hair": 3810840,
+   "hairStyle": "short",
+   "beard": "mustache",
+   "build": "m",
+   "top": 15722194,
+   "sleeves": "short",
+   "sash": {
+    "color": 2902682
+   },
+   "skirt": {
+    "color": 15722194,
+    "length": 0.45,
+    "hem": 2902682
+   },
+   "belt": 5914152,
+   "legs": null,
+   "feet": {
+    "kind": "sandal",
+    "color": 8018482
+   },
+   "hat": {
+    "kind": "headband",
+    "color": 16052454
+   }
+  },
+  "roles": {
+   "farmer": {
+    "skin": 12881246,
+    "hair": 1709072,
+    "hairStyle": "shoulder",
+    "beard": "short",
+    "build": "m",
+    "top": null,
+    "legs": null,
+    "skirt": {
+     "color": 15722194,
+     "length": 0.42
+    },
+    "belt": 3811866,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    }
+   },
+   "priest": {
+    "skin": 12881246,
+    "hair": 1709072,
+    "hairStyle": "short",
+    "beard": "long",
+    "build": "m",
+    "top": 15722194,
+    "sleeves": "short",
+    "sleeveColor": 2902682,
+    "cross": 2902682,
+    "skirt": {
+     "color": 15722194,
+     "length": 0.72,
+     "hem": 2902682
+    },
+    "apron": {
+     "color": 2902682,
+     "length": 0.35,
+     "width": 0.12
+    },
+    "belt": 2902682,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 2902682
+    },
+    "hat": {
+     "kind": "skullcap",
+     "color": 2902682,
+     "color2": 16052454
+    }
+   },
+   "soldier": {
+    "skin": 12881246,
+    "hair": 1709072,
+    "hairStyle": "short",
+    "beard": "full",
+    "build": "m",
+    "top": 2902682,
+    "sleeves": "short",
+    "bracers": 2902682,
+    "sash": {
+     "color": 14263610,
+     "width": 0.07
+    },
+    "skirt": {
+     "color": 2902682,
+     "length": 0.6,
+     "hem": 14263610,
+     "bands": [
+      15722194
+     ]
+    },
+    "belt": 14263610,
+    "buckle": 14263610,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 2902682
+    },
+    "hat": {
+     "kind": "spike",
+     "color": 2902682,
+     "color2": 14263610
+    },
+    "hip": "sword"
+   },
+   "artisan": {
+    "skin": 12881246,
+    "hair": 1709072,
+    "hairStyle": "short",
+    "beard": "short",
+    "build": "m",
+    "top": 15722194,
+    "sleeves": "short",
+    "skirt": {
+     "color": 15722194,
+     "length": 0.5
+    },
+    "belt": 3811866,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 2902682
+    },
+    "hat": {
+     "kind": "skullcap",
+     "color": 2902682
+    },
+    "hip": "tools"
+   },
+   "merchant": {
+    "skin": 12881246,
+    "hair": 1709072,
+    "hairStyle": "short",
+    "beard": "long",
+    "build": "m",
+    "top": 2902682,
+    "sleeves": "short",
+    "sash": {
+     "color": 14263610,
+     "width": 0.07
+    },
+    "skirt": {
+     "color": 2902682,
+     "length": 0.72,
+     "hem": 14263610
+    },
+    "belt": 14263610,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 2902682
+    },
+    "hat": {
+     "kind": "skullcap",
+     "color": 2902682,
+     "color2": 2308987
+    },
+    "hip": "pouch"
+   }
+  }
+ },
+ "egyptian": {
+  "player": {
+   "skin": 14462600,
+   "hair": 3810840,
+   "hairStyle": "short",
+   "beard": "mustache",
+   "build": "m",
+   "top": 15722194,
+   "sleeves": "short",
+   "neck": "v",
+   "skirt": {
+    "color": 15722194,
+    "length": 0.62
+   },
+   "belt": 14263610,
+   "legs": null,
+   "feet": {
+    "kind": "sandal",
+    "color": 8018482
+   },
+   "hat": {
+    "kind": "headband",
+    "color": 16052454
+   }
+  },
+  "roles": {
+   "farmer": {
+    "skin": 11893068,
+    "hair": 1709072,
+    "hairStyle": "long",
+    "beard": "none",
+    "build": "f",
+    "top": 15722194,
+    "sleeves": "none",
+    "neck": "v",
+    "skirt": {
+     "color": 15722194,
+     "length": 0.75
+    },
+    "belt": 14263610,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    },
+    "hat": {
+     "kind": "headband",
+     "color": 16052454
+    }
+   },
+   "priest": {
+    "skin": 11893068,
+    "hair": 1709072,
+    "hairStyle": "short",
+    "beard": "none",
+    "build": "m",
+    "top": null,
+    "collar": 3832496,
+    "skirt": {
+     "color": 15722194,
+     "length": 0.78
+    },
+    "apron": {
+     "color": 14263610,
+     "length": 0.45,
+     "width": 0.12,
+     "trim": 2775720
+    },
+    "belt": 14263610,
+    "bracers": 14263610,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 9071162
+    },
+    "hat": {
+     "kind": "pschent",
+     "color": 2775720,
+     "color2": 16052454,
+     "color3": 14263610
+    }
+   },
+   "soldier": {
+    "skin": 11893068,
+    "hair": 1709072,
+    "hairStyle": "short",
+    "beard": "short",
+    "build": "m",
+    "top": null,
+    "armor": {
+     "color": 13213760,
+     "trim": 9071146,
+     "shoulders": 13213760
+    },
+    "cross": 9071146,
+    "skirt": {
+     "color": 15722194,
+     "length": 0.38,
+     "hem": 10500650
+    },
+    "belt": 14263610,
+    "greaves": 13213760,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    },
+    "hat": {
+     "kind": "spike",
+     "color": 13213760,
+     "color2": 14263610
+    },
+    "hip": "sword"
+   },
+   "artisan": {
+    "skin": 11893068,
+    "hair": 1709072,
+    "hairStyle": "bob",
+    "beard": "none",
+    "build": "m",
+    "top": 15722194,
+    "sleeves": "short",
+    "sash": {
+     "color": 9071178
+    },
+    "apron": {
+     "color": 10123866,
+     "length": 0.3
+    },
+    "skirt": {
+     "color": 15722194,
+     "length": 0.45
+    },
+    "belt": 5914664,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    },
+    "hat": {
+     "kind": "headband",
+     "color": 16052454
+    },
+    "hip": "tools"
+   },
+   "merchant": {
+    "skin": 11893068,
+    "hair": 1709072,
+    "hairStyle": "short",
+    "beard": "short",
+    "build": "m",
+    "top": 4861992,
+    "sleeves": "short",
+    "sash": {
+     "color": 14263610,
+     "width": 0.07
+    },
+    "skirt": {
+     "color": 4861992,
+     "length": 0.72
+    },
+    "belt": 14263610,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    },
+    "hat": {
+     "kind": "fez",
+     "color": 4860448,
+     "color2": 8014378,
+     "size": 0.2
+    },
+    "hip": "pouch"
+   }
+  }
+ },
+ "minoan": {
+  "player": {
+   "skin": 14462600,
+   "hair": 3810840,
+   "hairStyle": "short",
+   "beard": "mustache",
+   "build": "m",
+   "top": 12071466,
+   "sleeves": "short",
+   "cross": 16052454,
+   "apron": {
+    "color": 12071466,
+    "length": 0.5,
+    "width": 0.18,
+    "trim": 14263610
+   },
+   "skirt": {
+    "color": 15722194,
+    "length": 0.72
+   },
+   "belt": 14263610,
+   "legs": null,
+   "feet": {
+    "kind": "sandal",
+    "color": 8018482
+   },
+   "hat": {
+    "kind": "fez",
+    "color": 12071466,
+    "color2": 14263610,
+    "size": 0.12
+   }
+  },
+  "roles": {
+   "farmer": {
+    "skin": 13210463,
+    "hair": 1709072,
+    "hairStyle": "shoulder",
+    "beard": "none",
+    "build": "f",
+    "top": 4889194,
+    "sleeves": "none",
+    "cross": 2779722,
+    "apron": {
+     "color": 13217856,
+     "length": 0.3,
+     "width": 0.12
+    },
+    "skirt": {
+     "color": 15722194,
+     "length": 0.82
+    },
+    "belt": 14263610,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    },
+    "hat": {
+     "kind": "headband",
+     "color": 14263610
+    }
+   },
+   "priest": {
+    "skin": 13210463,
+    "hair": 1709072,
+    "hairStyle": "shoulder",
+    "beard": "none",
+    "build": "f",
+    "top": 12071466,
+    "sleeves": "short",
+    "neck": "v",
+    "skirt": {
+     "color": 12071466,
+     "length": 0.92,
+     "flare": 0.08,
+     "hem": 16052454,
+     "bands": [
+      16052454,
+      16052454
+     ]
+    },
+    "belt": 14263610,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    },
+    "hat": {
+     "kind": "horns",
+     "color": 12071466,
+     "color2": 14263610
+    }
+   },
+   "soldier": {
+    "skin": 13210463,
+    "hair": 1709072,
+    "hairStyle": "short",
+    "beard": "none",
+    "build": "m",
+    "top": null,
+    "armor": {
+     "color": 5921374,
+     "trim": 14263610,
+     "shoulders": 14263610
+    },
+    "skirt": {
+     "color": 12071466,
+     "length": 0.35
+    },
+    "belt": 14263610,
+    "greaves": 11567168,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    },
+    "hat": {
+     "kind": "crest",
+     "color": 14263610,
+     "color2": 12071466
+    },
+    "hip": "sword"
+   },
+   "artisan": {
+    "skin": 13210463,
+    "hair": 1709072,
+    "hairStyle": "buns",
+    "beard": "none",
+    "build": "f",
+    "top": 16052454,
+    "sleeves": "none",
+    "cross": 2775720,
+    "skirt": {
+     "color": 15722194,
+     "length": 0.85,
+     "hem": 2775720
+    },
+    "belt": 2767450,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    }
+   },
+   "merchant": {
+    "skin": 13210463,
+    "hair": 1709072,
+    "hairStyle": "shoulder",
+    "beard": "none",
+    "build": "f",
+    "top": 12071466,
+    "sleeves": "short",
+    "neck": "v",
+    "apron": {
+     "color": 3828400,
+     "length": 0.32,
+     "width": 0.14
+    },
+    "skirt": {
+     "color": 12071466,
+     "length": 0.86,
+     "flare": 0.06,
+     "hem": 16052454,
+     "bands": [
+      16052454,
+      16052454
+     ]
+    },
+    "belt": 14263610,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    }
+   }
+  }
+ },
+ "mycenaean": {
+  "player": {
+   "skin": 14462600,
+   "hair": 3810840,
+   "hairStyle": "short",
+   "beard": "mustache",
+   "build": "m",
+   "top": 15722194,
+   "sleeves": "short",
+   "sash": {
+    "color": 2902682
+   },
+   "skirt": {
+    "color": 15722194,
+    "length": 0.5,
+    "hem": 2902682
+   },
+   "belt": 2902682,
+   "legs": null,
+   "feet": {
+    "kind": "sandal",
+    "color": 8018482
+   }
+  },
+  "roles": {
+   "farmer": {
+    "skin": 13802604,
+    "hair": 1709072,
+    "hairStyle": "long",
+    "beard": "none",
+    "build": "f",
+    "top": 14729370,
+    "sleeves": "none",
+    "cross": 11024938,
+    "apron": {
+     "color": 13213760,
+     "length": 0.35,
+     "width": 0.08
+    },
+    "skirt": {
+     "color": 15722194,
+     "length": 0.65
+    },
+    "belt": 6965802,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    }
+   },
+   "priest": {
+    "skin": 13802604,
+    "hair": 1709072,
+    "hairStyle": "short",
+    "beard": "full",
+    "build": "m",
+    "top": 15722194,
+    "sleeves": "short",
+    "sash": {
+     "color": 2902682
+    },
+    "skirt": {
+     "color": 15722194,
+     "length": 0.85
+    },
+    "belt": 3811882,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    },
+    "hat": {
+     "kind": "spike",
+     "color": 2771610
+    }
+   },
+   "soldier": {
+    "skin": 13802604,
+    "hair": 1709072,
+    "hairStyle": "short",
+    "beard": "short",
+    "build": "m",
+    "top": null,
+    "armor": {
+     "color": 6978186,
+     "trim": 14263610,
+     "shoulders": 9083562
+    },
+    "skirt": {
+     "color": 2902682,
+     "length": 0.4,
+     "hem": 14263610
+    },
+    "cape": {
+     "color": 12071466,
+     "length": 0.7
+    },
+    "belt": 14263610,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    },
+    "hat": {
+     "kind": "spike",
+     "color": 14263610,
+     "color2": 14263610
+    },
+    "hip": "sword"
+   },
+   "artisan": {
+    "skin": 13802604,
+    "hair": 1709072,
+    "hairStyle": "short",
+    "beard": "full",
+    "build": "m",
+    "top": null,
+    "cross": 10521194,
+    "skirt": {
+     "color": 15722194,
+     "length": 0.55
+    },
+    "belt": 5913130,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    },
+    "hat": {
+     "kind": "skullcap",
+     "color": 2763322
+    },
+    "hip": "tools"
+   },
+   "merchant": {
+    "skin": 13802604,
+    "hair": 1709072,
+    "hairStyle": "short",
+    "beard": "full",
+    "build": "m",
+    "top": 5921322,
+    "sleeves": "short",
+    "skirt": {
+     "color": 5921322,
+     "length": 0.6
+    },
+    "belt": 14263610,
+    "buckle": 14263610,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    },
+    "hat": {
+     "kind": "fez",
+     "color": 9054762,
+     "color2": 14263610,
+     "size": 0.18
+    },
+    "hip": "pouch"
+   }
+  }
+ },
+ "assyrian": {
+  "player": {
+   "skin": 14462600,
+   "hair": 3810840,
+   "hairStyle": "short",
+   "beard": "mustache",
+   "build": "m",
+   "top": 15722194,
+   "sleeves": "short",
+   "sash": {
+    "color": 2902682
+   },
+   "skirt": {
+    "color": 2902682,
+    "length": 0.55,
+    "hem": 16052454,
+    "bands": [
+     10500650
+    ]
+   },
+   "belt": 14263610,
+   "legs": null,
+   "feet": {
+    "kind": "sandal",
+    "color": 8018482
+   },
+   "hat": {
+    "kind": "fez",
+    "color": 1714778,
+    "color2": 14263610,
+    "size": 0.24
+   }
+  },
+  "roles": {
+   "farmer": {
+    "skin": 12618332,
+    "hair": 1314572,
+    "hairStyle": "shoulder",
+    "beard": "square",
+    "build": "m",
+    "top": 13215866,
+    "sleeves": "short",
+    "cross": 9071178,
+    "skirt": {
+     "color": 13215866,
+     "length": 0.8
+    },
+    "belt": 5913130,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    },
+    "hat": {
+     "kind": "fez",
+     "color": 5909034,
+     "color2": 14263610,
+     "color3": 14263610,
+     "size": 0.24
+    }
+   },
+   "priest": {
+    "skin": 12618332,
+    "hair": 1314572,
+    "hairStyle": "shoulder",
+    "beard": "square",
+    "build": "m",
+    "top": 15722194,
+    "sleeves": "short",
+    "cross": 3811882,
+    "skirt": {
+     "color": 15722194,
+     "length": 0.86,
+     "hem": 14263610
+    },
+    "belt": 3811882,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    },
+    "hat": {
+     "kind": "fez",
+     "color": 1714778,
+     "color2": 10500650,
+     "size": 0.22
+    }
+   },
+   "soldier": {
+    "skin": 12618332,
+    "hair": 1314572,
+    "hairStyle": "shoulder",
+    "beard": "square",
+    "build": "m",
+    "top": 9062954,
+    "sleeves": "short",
+    "cross": 5913130,
+    "skirt": {
+     "color": 4872826,
+     "length": 0.55,
+     "hem": 14263610
+    },
+    "belt": 14263610,
+    "buckle": 14263610,
+    "legs": null,
+    "feet": {
+     "kind": "boot",
+     "color": 5913130,
+     "height": 0.28
+    },
+    "hat": {
+     "kind": "spike",
+     "color": 14263610,
+     "color2": 14263610
+    },
+    "hip": "sword"
+   },
+   "artisan": {
+    "skin": 12618332,
+    "hair": 1314572,
+    "hairStyle": "shoulder",
+    "beard": "square",
+    "build": "m",
+    "top": 15722194,
+    "sleeves": "short",
+    "cross": 3816010,
+    "skirt": {
+     "color": 15722194,
+     "length": 0.8
+    },
+    "belt": 3811882,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    },
+    "hat": {
+     "kind": "bandana",
+     "color": 1710618
+    },
+    "hip": "tools"
+   },
+   "merchant": {
+    "skin": 12618332,
+    "hair": 1314572,
+    "hairStyle": "shoulder",
+    "beard": "square",
+    "build": "m",
+    "top": 3817034,
+    "sleeves": "short",
+    "sleeveColor": 9054762,
+    "skirt": {
+     "color": 3817034,
+     "length": 0.8
+    },
+    "belt": 14263610,
+    "buckle": 14263610,
+    "legs": null,
+    "feet": {
+     "kind": "boot",
+     "color": 3811882,
+     "height": 0.2
+    },
+    "hat": {
+     "kind": "fez",
+     "color": 1710618,
+     "color2": 14263610,
+     "color3": 14263610,
+     "size": 0.28
+    },
+    "hip": "pouch"
+   }
+  }
+ },
+ "greek": {
+  "player": {
+   "skin": 14462600,
+   "hair": 3810840,
+   "hairStyle": "short",
+   "beard": "mustache",
+   "build": "m",
+   "top": 15722194,
+   "sleeves": "short",
+   "skirt": {
+    "color": 15722194,
+    "length": 0.5
+   },
+   "belt": 6961706,
+   "legs": null,
+   "feet": {
+    "kind": "sandal",
+    "color": 8018482
+   },
+   "hat": {
+    "kind": "wreath",
+    "color": 4885050
+   }
+  },
+  "roles": {
+   "farmer": {
+    "skin": 14198647,
+    "hair": 1709072,
+    "hairStyle": "shoulder",
+    "beard": "none",
+    "build": "f",
+    "top": 15722194,
+    "sleeves": "none",
+    "neck": "v",
+    "neckColor": 4885184,
+    "skirt": {
+     "color": 15722194,
+     "length": 1
+    },
+    "belt": 2775720,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    }
+   },
+   "priest": {
+    "skin": 14198647,
+    "hair": 1709072,
+    "hairStyle": "long",
+    "beard": "none",
+    "build": "f",
+    "top": 15722194,
+    "sleeves": "none",
+    "cross": 2775720,
+    "apron": {
+     "color": 2775720,
+     "length": 0.95,
+     "width": 0.06
+    },
+    "skirt": {
+     "color": 15722194,
+     "length": 1
+    },
+    "belt": 2775720,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    },
+    "hat": {
+     "kind": "athena",
+     "color": 12633288
+    }
+   },
+   "soldier": {
+    "skin": 14198647,
+    "hair": 1709072,
+    "hairStyle": "short",
+    "beard": "none",
+    "build": "m",
+    "top": null,
+    "armor": {
+     "color": 5922920,
+     "trim": 14263610,
+     "shoulders": 14263610
+    },
+    "skirt": {
+     "color": 12071466,
+     "length": 0.35
+    },
+    "belt": 14263610,
+    "greaves": 12619840,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    },
+    "hat": {
+     "kind": "crest",
+     "color": 14263610,
+     "color2": 12071466
+    },
+    "hip": "sword"
+   },
+   "artisan": {
+    "skin": 14198647,
+    "hair": 1709072,
+    "hairStyle": "bun",
+    "beard": "none",
+    "build": "f",
+    "top": 15722194,
+    "sleeves": "none",
+    "sash": {
+     "color": 12071466
+    },
+    "skirt": {
+     "color": 15722194,
+     "length": 1
+    },
+    "belt": 3815994,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    },
+    "hat": {
+     "kind": "headband",
+     "color": 14263610
+    }
+   },
+   "merchant": {
+    "skin": 14198647,
+    "hair": 1709072,
+    "hairStyle": "short",
+    "beard": "short",
+    "build": "m",
+    "top": 11022890,
+    "sleeves": "short",
+    "skirt": {
+     "color": 14206106,
+     "length": 0.45
+    },
+    "belt": 6965802,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    },
+    "hip": "pouch"
+   }
+  }
+ },
+ "mauryan": {
+  "player": {
+   "skin": 14462600,
+   "hair": 3810840,
+   "hairStyle": "short",
+   "beard": "mustache",
+   "build": "m",
+   "top": 15722194,
+   "sleeves": "none",
+   "sash": {
+    "color": 12071466
+   },
+   "apron": {
+    "color": 2902682,
+    "length": 0.6,
+    "width": 0.08
+   },
+   "skirt": {
+    "color": 15722194,
+    "length": 0.7,
+    "hem": 14262352
+   },
+   "belt": 2902682,
+   "legs": null,
+   "feet": {
+    "kind": "sandal",
+    "color": 8018482
+   }
+  },
+  "roles": {
+   "farmer": {
+    "skin": 11037764,
+    "hair": 1183244,
+    "hairStyle": "topknot",
+    "beard": "short",
+    "build": "m",
+    "top": null,
+    "skirt": {
+     "color": 15722194,
+     "length": 0.45
+    },
+    "belt": 15722194,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    }
+   },
+   "priest": {
+    "skin": 11037764,
+    "hair": 1709072,
+    "hairStyle": "short",
+    "beard": "short",
+    "build": "m",
+    "top": 15242794,
+    "sleeves": "short",
+    "skirt": {
+     "color": 15242794,
+     "length": 0.55
+    },
+    "belt": 9067050,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    },
+    "hat": {
+     "kind": "turban",
+     "color": 15245344
+    }
+   },
+   "soldier": {
+    "skin": 11037764,
+    "hair": 1709072,
+    "hairStyle": "short",
+    "beard": "short",
+    "build": "m",
+    "top": null,
+    "armor": {
+     "color": 8030874,
+     "trim": 12071466,
+     "shoulders": 10135736
+    },
+    "skirt": {
+     "color": 12071466,
+     "length": 0.4
+    },
+    "cape": {
+     "color": 12071466,
+     "length": 0.6
+    },
+    "belt": 14263610,
+    "greaves": 5925498,
+    "legs": null,
+    "feet": {
+     "kind": "boot",
+     "color": 4864554,
+     "height": 0.2
+    },
+    "hat": {
+     "kind": "crest",
+     "color": 14263610,
+     "color2": 12071466
+    },
+    "hip": "sword"
+   },
+   "artisan": {
+    "skin": 11037764,
+    "hair": 1709072,
+    "hairStyle": "short",
+    "beard": "short",
+    "build": "m",
+    "top": 4876992,
+    "sleeves": "short",
+    "skirt": {
+     "color": 4876992,
+     "length": 0.75
+    },
+    "belt": 10500650,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    },
+    "hat": {
+     "kind": "turban",
+     "color": 1714762
+    },
+    "hip": "tools"
+   },
+   "merchant": {
+    "skin": 11037764,
+    "hair": 1709072,
+    "hairStyle": "short",
+    "beard": "short",
+    "build": "m",
+    "top": 4872826,
+    "sleeves": "short",
+    "legs": 3820138,
+    "legsKnee": true,
+    "belt": 5913130,
+    "buckle": 14263610,
+    "feet": {
+     "kind": "boot",
+     "color": 3816010,
+     "height": 0.25
+    },
+    "hat": {
+     "kind": "turban",
+     "color": 15261896
+    },
+    "hip": "pouch"
+   }
+  }
+ },
+ "roman": {
+  "player": {
+   "skin": 14462600,
+   "hair": 3810840,
+   "hairStyle": "short",
+   "beard": "mustache",
+   "build": "m",
+   "top": 15722194,
+   "sleeves": "short",
+   "toga": {
+    "color": 16052454,
+    "trim": 11018782
+   },
+   "legs": null,
+   "belt": 16052454,
+   "feet": {
+    "kind": "sandal",
+    "color": 6965802
+   }
+  },
+  "roles": {
+   "farmer": {
+    "skin": 14066806,
+    "hair": 1709072,
+    "hairStyle": "short",
+    "beard": "short",
+    "build": "m",
+    "top": 15722194,
+    "sleeves": "short",
+    "neck": "v",
+    "skirt": {
+     "color": 15722194,
+     "length": 0.5
+    },
+    "belt": 5913124,
+    "apron": {
+     "color": 5913124,
+     "length": 0.4,
+     "width": 0.05
+    },
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    }
+   },
+   "priest": {
+    "skin": 14066806,
+    "hair": 1709072,
+    "hairStyle": "short",
+    "beard": "short",
+    "build": "m",
+    "top": 15722194,
+    "sleeves": "short",
+    "toga": {
+     "color": 16052454,
+     "trim": 11018782
+    },
+    "legs": null,
+    "belt": 16052454,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    },
+    "hat": {
+     "kind": "skullcap",
+     "color": 11018782
+    }
+   },
+   "soldier": {
+    "skin": 14066806,
+    "hair": 1709072,
+    "hairStyle": "short",
+    "beard": "none",
+    "build": "m",
+    "top": 12071466,
+    "sleeves": "short",
+    "sleeveColor": 12071466,
+    "armor": {
+     "color": 8027782,
+     "trim": 4869718,
+     "shoulders": 9080470
+    },
+    "skirt": {
+     "color": 6965802,
+     "length": 0.3,
+     "alt": 12071466
+    },
+    "cape": {
+     "color": 12071466,
+     "length": 0.75
+    },
+    "belt": 6965802,
+    "buckle": 14263610,
+    "greaves": 11567168,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    },
+    "hat": {
+     "kind": "crest",
+     "color": 14263610,
+     "color2": 12071466
+    },
+    "hip": "sword"
+   },
+   "artisan": {
+    "skin": 14066806,
+    "hair": 1709072,
+    "hairStyle": "short",
+    "beard": "mustache",
+    "build": "m",
+    "top": 15722194,
+    "sleeves": "short",
+    "cross": 2767450,
+    "skirt": {
+     "color": 15722194,
+     "length": 0.45
+    },
+    "belt": 5913124,
+    "legs": null,
+    "feet": {
+     "kind": "boot",
+     "color": 2771530,
+     "height": 0.18
+    },
+    "hip": "tools"
+   },
+   "merchant": {
+    "skin": 14066806,
+    "hair": 1709072,
+    "hairStyle": "short",
+    "beard": "short",
+    "build": "m",
+    "top": 2787962,
+    "sleeves": "short",
+    "skirt": {
+     "color": 2787962,
+     "length": 0.5
+    },
+    "belt": 6965802,
+    "buckle": 14263610,
+    "legs": null,
+    "feet": {
+     "kind": "boot",
+     "color": 2775626,
+     "height": 0.2
+    },
+    "hat": {
+     "kind": "skullcap",
+     "color": 16052454,
+     "color2": 11018782
+    },
+    "hip": "pouch"
+   }
+  }
+ },
+ "mayan": {
+  "player": {
+   "skin": 14462600,
+   "hair": 3810840,
+   "hairStyle": "short",
+   "beard": "mustache",
+   "build": "m",
+   "top": 15722194,
+   "sleeves": "none",
+   "collar": 3840602,
+   "skirt": {
+    "color": 15722194,
+    "length": 0.4,
+    "hem": 12071466
+   },
+   "apron": {
+    "color": 3840602,
+    "length": 0.3,
+    "width": 0.12
+   },
+   "belt": 3840602,
+   "greaves": 3836490,
+   "legs": null,
+   "feet": {
+    "kind": "sandal",
+    "color": 8018482
+   },
+   "hat": {
+    "kind": "feathers",
+    "color": 13120042,
+    "color2": 3840602,
+    "color3": 3840602,
+    "size": 0.25
+   }
+  },
+  "roles": {
+   "farmer": {
+    "skin": 11564104,
+    "hair": 1709072,
+    "hairStyle": "long",
+    "beard": "none",
+    "build": "f",
+    "top": 15722194,
+    "sleeves": "none",
+    "collar": 3840602,
+    "skirt": {
+     "color": 15722194,
+     "length": 0.3,
+     "hem": 3840602
+    },
+    "belt": 3840602,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    },
+    "hat": {
+     "kind": "headband",
+     "color": 3840602
+    }
+   },
+   "priest": {
+    "skin": 11564104,
+    "hair": 1709072,
+    "hairStyle": "short",
+    "beard": "goatee",
+    "build": "m",
+    "top": 13124138,
+    "sleeves": "short",
+    "collar": 3840602,
+    "skirt": {
+     "color": 13124138,
+     "length": 0.5,
+     "hem": 15249456
+    },
+    "belt": 3840602,
+    "legs": null,
+    "feet": {
+     "kind": "boot",
+     "color": 11561530,
+     "height": 0.25
+    },
+    "hat": {
+     "kind": "feathers",
+     "color": 14170666,
+     "color2": 3840602,
+     "size": 1
+    }
+   },
+   "soldier": {
+    "skin": 11564104,
+    "hair": 1709072,
+    "hairStyle": "short",
+    "beard": "goatee",
+    "build": "m",
+    "top": 14182954,
+    "sleeves": "short",
+    "collar": 6987850,
+    "skirt": {
+     "color": 14182954,
+     "length": 0.45,
+     "hem": 15249456
+    },
+    "apron": {
+     "color": 5933626,
+     "length": 0.3
+    },
+    "belt": 5933626,
+    "legs": null,
+    "feet": {
+     "kind": "boot",
+     "color": 14182954,
+     "height": 0.3
+    },
+    "hat": {
+     "kind": "feathers",
+     "color": 3828416,
+     "color2": 14263610,
+     "color3": 15249456,
+     "size": 0.6
+    },
+    "hip": "sword",
+    "hipColor": 2763306
+   },
+   "artisan": {
+    "skin": 11564104,
+    "hair": 1709072,
+    "hairStyle": "long",
+    "beard": "none",
+    "build": "f",
+    "top": 15722194,
+    "sleeves": "none",
+    "sash": {
+     "color": 9067066
+    },
+    "skirt": {
+     "color": 15722194,
+     "length": 0.6
+    },
+    "belt": 6965802,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    },
+    "hat": {
+     "kind": "feathers",
+     "color": 2771648,
+     "color2": 14263610,
+     "size": 0.7
+    },
+    "hip": "satchel",
+    "hipColor": 9067066
+   },
+   "merchant": {
+    "skin": 11564104,
+    "hair": 1709072,
+    "hairStyle": "short",
+    "beard": "mustache",
+    "build": "m",
+    "top": 14206106,
+    "sleeves": "short",
+    "sash": {
+     "color": 6965802
+    },
+    "skirt": {
+     "color": 3832394,
+     "length": 0.45
+    },
+    "belt": 6965802,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    },
+    "hat": {
+     "kind": "feathers",
+     "color": 2787930,
+     "color2": 2779722,
+     "size": 0.2
+    },
+    "hip": "pouch"
+   }
+  }
+ },
+ "viking": {
+  "player": {
+   "skin": 14462600,
+   "hair": 3810840,
+   "hairStyle": "short",
+   "beard": "mustache",
+   "build": "m",
+   "top": 2765904,
+   "sleeves": "long",
+   "cuff": 15722194,
+   "apron": {
+    "color": 15722194,
+    "length": 0.4,
+    "width": 0.12
+   },
+   "skirt": {
+    "color": 2765904,
+    "length": 0.42
+   },
+   "belt": 5914152,
+   "buckle": 14263610,
+   "legs": 2765904,
+   "feet": {
+    "kind": "boot",
+    "color": 4861984,
+    "height": 0.25
+   },
+   "hat": {
+    "kind": "viking",
+    "color": 13213760,
+    "color2": 9071146
+   }
+  },
+  "roles": {
+   "farmer": {
+    "skin": 15253664,
+    "hair": 4861984,
+    "hairStyle": "long",
+    "beard": "full",
+    "build": "m",
+    "top": 2765904,
+    "sleeves": "long",
+    "sleeveColor": 13217930,
+    "skirt": {
+     "color": 2765904,
+     "length": 0.45,
+     "hem": 13217930
+    },
+    "belt": 5914152,
+    "buckle": 14263610,
+    "legs": 6969930,
+    "feet": {
+     "kind": "boot",
+     "color": 4861984,
+     "height": 0.25
+    },
+    "hat": {
+     "kind": "hood",
+     "color": 6967360
+    }
+   },
+   "priest": {
+    "skin": 15253664,
+    "hair": 14200928,
+    "hairStyle": "long",
+    "beard": "long",
+    "build": "m",
+    "top": 2767466,
+    "sleeves": "long",
+    "cuff": 15722194,
+    "skirt": {
+     "color": 2767466,
+     "length": 0.5,
+     "hem": 13217930
+    },
+    "belt": 5914152,
+    "legs": 13217930,
+    "feet": {
+     "kind": "boot",
+     "color": 4861984,
+     "height": 0.3
+    },
+    "hat": {
+     "kind": "viking",
+     "color": 13213760,
+     "color2": 9071146,
+     "spike": true
+    }
+   },
+   "soldier": {
+    "skin": 15253664,
+    "hair": 9067056,
+    "hairStyle": "shoulder",
+    "beard": "full",
+    "build": "m",
+    "top": 11020330,
+    "sleeves": "long",
+    "cross": 6974058,
+    "skirt": {
+     "color": 11020330,
+     "length": 0.45
+    },
+    "belt": 5914152,
+    "buckle": 14263610,
+    "legs": 6969930,
+    "feet": {
+     "kind": "boot",
+     "color": 4861984,
+     "height": 0.3
+    },
+    "hat": {
+     "kind": "viking",
+     "color": 11054256,
+     "color2": 6975090,
+     "horns": true
+    },
+    "hip": "sword"
+   },
+   "artisan": {
+    "skin": 15253664,
+    "hair": 1314832,
+    "hairStyle": "shoulder",
+    "beard": "full",
+    "build": "m",
+    "top": 13217930,
+    "sleeves": "long",
+    "cross": 4861984,
+    "skirt": {
+     "color": 5918784,
+     "length": 0.3
+    },
+    "belt": 5914152,
+    "legs": 5918784,
+    "feet": {
+     "kind": "boot",
+     "color": 4861984,
+     "height": 0.3
+    },
+    "hat": {
+     "kind": "viking",
+     "color": 10133154,
+     "color2": 6975090,
+     "spike": true
+    },
+    "hip": "tools"
+   },
+   "merchant": {
+    "skin": 15253664,
+    "hair": 9067056,
+    "hairStyle": "long",
+    "beard": "full",
+    "build": "m",
+    "top": 6965808,
+    "sleeves": "long",
+    "skirt": {
+     "color": 6965808,
+     "length": 0.4
+    },
+    "belt": 5914152,
+    "buckle": 14263610,
+    "legs": 4864618,
+    "feet": {
+     "kind": "boot",
+     "color": 4861984,
+     "height": 0.3
+    },
+    "hat": {
+     "kind": "viking",
+     "color": 10133154,
+     "color2": 6975090,
+     "horns": true
+    },
+    "hip": "pouch"
+   }
+  }
+ },
+ "khmer": {
+  "player": {
+   "skin": 14462600,
+   "hair": 3810840,
+   "hairStyle": "short",
+   "beard": "mustache",
+   "build": "m",
+   "top": 12071466,
+   "sleeves": "none",
+   "neck": "wrap",
+   "apron": {
+    "color": 14263610,
+    "length": 0.25,
+    "width": 0.12
+   },
+   "skirt": {
+    "color": 12071466,
+    "length": 0.45,
+    "hem": 14263610
+   },
+   "belt": 14263610,
+   "legs": null,
+   "feet": {
+    "kind": "sandal",
+    "color": 8018482
+   },
+   "hat": {
+    "kind": "mukuta",
+    "color": 14263610
+   }
+  },
+  "roles": {
+   "farmer": {
+    "skin": 11565130,
+    "hair": 1314832,
+    "hairStyle": "shoulder",
+    "beard": "none",
+    "build": "m",
+    "top": null,
+    "cross": 13213776,
+    "skirt": {
+     "color": 2783818,
+     "length": 0.45
+    },
+    "belt": 14263610,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    },
+    "hat": {
+     "kind": "mukuta",
+     "color": 14263610
+    }
+   },
+   "priest": {
+    "skin": 11565130,
+    "hair": 1314832,
+    "hairStyle": "shoulder",
+    "beard": "none",
+    "build": "m",
+    "top": 13122106,
+    "sleeves": "none",
+    "apron": {
+     "color": 14263610,
+     "length": 0.4,
+     "width": 0.12
+    },
+    "skirt": {
+     "color": 10123952,
+     "length": 0.5,
+     "hem": 14263610
+    },
+    "belt": 14263610,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    },
+    "hat": {
+     "kind": "mukuta",
+     "color": 14263610
+    }
+   },
+   "soldier": {
+    "skin": 11565130,
+    "hair": 1314832,
+    "hairStyle": "shoulder",
+    "beard": "none",
+    "build": "m",
+    "top": 2783834,
+    "sleeves": "none",
+    "sash": {
+     "color": 1727034
+    },
+    "skirt": {
+     "color": 2783834,
+     "length": 0.4,
+     "hem": 14263610
+    },
+    "belt": 14263610,
+    "buckle": 14263610,
+    "greaves": 2779722,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    },
+    "hat": {
+     "kind": "mukuta",
+     "color": 14263610
+    },
+    "hip": "sword"
+   },
+   "artisan": {
+    "skin": 11565130,
+    "hair": 1709072,
+    "hairStyle": "long",
+    "beard": "none",
+    "build": "f",
+    "top": 16052454,
+    "sleeves": "none",
+    "neck": "v",
+    "apron": {
+     "color": 14263610,
+     "length": 0.4,
+     "width": 0.14
+    },
+    "skirt": {
+     "color": 16052454,
+     "length": 1
+    },
+    "belt": 14263610,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    },
+    "hat": {
+     "kind": "mukuta",
+     "color": 14263610
+    }
+   },
+   "merchant": {
+    "skin": 11565130,
+    "hair": 1314832,
+    "hairStyle": "shoulder",
+    "beard": "none",
+    "build": "m",
+    "top": 13126202,
+    "sleeves": "short",
+    "skirt": {
+     "color": 13126202,
+     "length": 0.55,
+     "hem": 14188618
+    },
+    "belt": 11024938,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    },
+    "hat": {
+     "kind": "mukuta",
+     "color": 14263610
+    },
+    "hip": "pouch"
+   }
+  }
+ },
+ "mongol": {
+  "player": {
+   "skin": 14462600,
+   "hair": 3810840,
+   "hairStyle": "short",
+   "beard": "mustache",
+   "build": "m",
+   "top": 12071466,
+   "sleeves": "long",
+   "neck": "wrap",
+   "neckColor": 16052454,
+   "skirt": {
+    "color": 12071466,
+    "length": 0.45,
+    "hem": 16052454
+   },
+   "belt": 6965802,
+   "buckle": 14263610,
+   "legs": 6965818,
+   "feet": {
+    "kind": "boot",
+    "color": 4861984,
+    "height": 0.3
+   },
+   "hat": {
+    "kind": "skullcap",
+    "color": 12071466
+   }
+  },
+  "roles": {
+   "farmer": {
+    "skin": 13935218,
+    "hair": 1314832,
+    "hairStyle": "long",
+    "beard": "full",
+    "build": "m",
+    "top": 5925514,
+    "sleeves": "long",
+    "sleeveColor": 14209216,
+    "cross": 6965802,
+    "skirt": {
+     "color": 5925514,
+     "length": 0.45,
+     "hem": 15261904
+    },
+    "belt": 6965802,
+    "legs": 4868682,
+    "feet": {
+     "kind": "boot",
+     "color": 4861984,
+     "height": 0.3
+    },
+    "hat": {
+     "kind": "mongol",
+     "color": 15525594,
+     "color2": 12071466
+    }
+   },
+   "priest": {
+    "skin": 13935218,
+    "hair": 1314832,
+    "hairStyle": "long",
+    "beard": "mustache",
+    "build": "m",
+    "top": 13159632,
+    "sleeves": "long",
+    "cross": 5925514,
+    "skirt": {
+     "color": 13159632,
+     "length": 0.5
+    },
+    "belt": 5917242,
+    "legs": 5921370,
+    "feet": {
+     "kind": "boot",
+     "color": 4861984,
+     "height": 0.32
+    },
+    "hat": {
+     "kind": "mongol",
+     "color": 15525594,
+     "color2": 12071466,
+     "horns": true
+    }
+   },
+   "soldier": {
+    "skin": 13935218,
+    "hair": 1314832,
+    "hairStyle": "long",
+    "beard": "full",
+    "build": "m",
+    "top": 10115642,
+    "sleeves": "long",
+    "cross": 5913124,
+    "skirt": {
+     "color": 10115642,
+     "length": 0.45,
+     "hem": 15261904
+    },
+    "belt": 5914152,
+    "legs": 5917242,
+    "feet": {
+     "kind": "boot",
+     "color": 4861984,
+     "height": 0.32
+    },
+    "hat": {
+     "kind": "mongol",
+     "color": 15525594,
+     "color2": 12071466
+    },
+    "hip": "sword"
+   },
+   "artisan": {
+    "skin": 13935218,
+    "hair": 1709072,
+    "hairStyle": "long",
+    "beard": "none",
+    "build": "f",
+    "top": 14207144,
+    "sleeves": "long",
+    "cross": 6965802,
+    "skirt": {
+     "color": 14207144,
+     "length": 0.5
+    },
+    "belt": 5914152,
+    "legs": 3815994,
+    "feet": {
+     "kind": "boot",
+     "color": 4861984,
+     "height": 0.3
+    },
+    "hat": {
+     "kind": "mongol",
+     "color": 15525594,
+     "color2": 3815994
+    }
+   },
+   "merchant": {
+    "skin": 13935218,
+    "hair": 1314832,
+    "hairStyle": "long",
+    "beard": "full",
+    "build": "m",
+    "top": 8018498,
+    "sleeves": "long",
+    "cross": 4861984,
+    "skirt": {
+     "color": 8018498,
+     "length": 0.5,
+     "hem": 14207144
+    },
+    "belt": 5914152,
+    "legs": 4864554,
+    "feet": {
+     "kind": "boot",
+     "color": 4861984,
+     "height": 0.3
+    },
+    "hat": {
+     "kind": "mongol",
+     "color": 15525594,
+     "color2": 12071466
+    },
+    "hip": "pouch"
+   }
+  }
+ },
+ "aztec": {
+  "player": {
+   "skin": 14462600,
+   "hair": 3810840,
+   "hairStyle": "short",
+   "beard": "mustache",
+   "build": "m",
+   "top": null,
+   "collar": 2787914,
+   "skirt": {
+    "color": 15722194,
+    "length": 0.35,
+    "hem": 12071466
+   },
+   "apron": {
+    "color": 2787914,
+    "length": 0.25
+   },
+   "belt": 12071466,
+   "greaves": 2787914,
+   "legs": null,
+   "feet": {
+    "kind": "sandal",
+    "color": 14263610
+   },
+   "hat": {
+    "kind": "feathers",
+    "color": 2787914,
+    "color2": 14263610,
+    "color3": 12071466,
+    "size": 0.55
+   }
+  },
+  "roles": {
+   "farmer": {
+    "skin": 11564104,
+    "hair": 1314832,
+    "hairStyle": "shoulder",
+    "beard": "none",
+    "build": "m",
+    "top": null,
+    "collar": 3840602,
+    "skirt": {
+     "color": 15722194,
+     "length": 0.35
+    },
+    "apron": {
+     "color": 3840602,
+     "length": 0.25,
+     "width": 0.12
+    },
+    "belt": 3840602,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    },
+    "hat": {
+     "kind": "feathers",
+     "color": 2787914,
+     "color2": 2779706,
+     "size": 0.25
+    }
+   },
+   "priest": {
+    "skin": 11564104,
+    "hair": 1314832,
+    "hairStyle": "shoulder",
+    "beard": "none",
+    "build": "m",
+    "top": 2792074,
+    "sleeves": "short",
+    "collar": 14263610,
+    "skirt": {
+     "color": 15722194,
+     "length": 0.5,
+     "hem": 15249456
+    },
+    "apron": {
+     "color": 2787930,
+     "length": 0.4
+    },
+    "bracers": 2792074,
+    "greaves": 2787930,
+    "belt": 2787930,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    },
+    "hat": {
+     "kind": "feathers",
+     "color": 2779856,
+     "color2": 16052454,
+     "color3": 4885216,
+     "size": 1
+    }
+   },
+   "soldier": {
+    "skin": 11564104,
+    "hair": 1314832,
+    "hairStyle": "shoulder",
+    "beard": "none",
+    "build": "m",
+    "top": 15249456,
+    "sleeves": "short",
+    "collar": 2787914,
+    "skirt": {
+     "color": 15249456,
+     "length": 0.5,
+     "hem": 2787914
+    },
+    "apron": {
+     "color": 2787914,
+     "length": 0.4
+    },
+    "greaves": 2787914,
+    "belt": 2787914,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    },
+    "hat": {
+     "kind": "feathers",
+     "color": 2787914,
+     "color2": 14263610,
+     "size": 1.1
+    },
+    "hip": "sword",
+    "hipColor": 2763306
+   },
+   "artisan": {
+    "skin": 11564104,
+    "hair": 1314832,
+    "hairStyle": "shoulder",
+    "beard": "short",
+    "build": "m",
+    "top": 2783818,
+    "sleeves": "none",
+    "skirt": {
+     "color": 2783818,
+     "length": 0.5,
+     "hem": 15249456
+    },
+    "belt": 6965802,
+    "greaves": 2783818,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    },
+    "hat": {
+     "kind": "feathers",
+     "color": 1727034,
+     "color2": 14263610,
+     "size": 0.25
+    },
+    "hip": "satchel",
+    "hipColor": 15722194
+   },
+   "merchant": {
+    "skin": 11564104,
+    "hair": 1314832,
+    "hairStyle": "shoulder",
+    "beard": "none",
+    "build": "m",
+    "top": 4885200,
+    "sleeves": "short",
+    "cross": 6965802,
+    "skirt": {
+     "color": 4885200,
+     "length": 0.7,
+     "hem": 15722194,
+     "bands": [
+      15722194
+     ]
+    },
+    "belt": 6965802,
+    "greaves": 2779722,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    },
+    "hat": {
+     "kind": "feathers",
+     "color": 2779824,
+     "color2": 14263610,
+     "size": 0.55
+    },
+    "hip": "pouch"
+   }
+  }
+ },
+ "sengoku": {
+  "player": {
+   "skin": 14462600,
+   "hair": 3810840,
+   "hairStyle": "short",
+   "beard": "mustache",
+   "build": "m",
+   "top": 1976900,
+   "sleeves": "wide",
+   "neck": "wrap",
+   "neckColor": 16052454,
+   "sash": {
+    "color": 11018782,
+    "width": 0.07
+   },
+   "skirt": {
+    "color": 1976900,
+    "length": 0.72
+   },
+   "belt": 11018782,
+   "legs": null,
+   "feet": {
+    "kind": "sandal",
+    "color": 6965802
+   },
+   "hat": {
+    "kind": "jingasa",
+    "color": 2236968
+   },
+   "hip": "katana",
+   "hipColor": 2763306
+  },
+  "roles": {
+   "farmer": {
+    "skin": 14858638,
+    "hair": 1709072,
+    "hairStyle": "short",
+    "beard": "none",
+    "build": "m",
+    "top": 2767466,
+    "sleeves": "wide",
+    "neck": "wrap",
+    "neckColor": 16052454,
+    "skirt": {
+     "color": 2767466,
+     "length": 0.75
+    },
+    "belt": 6965802,
+    "buckle": 14263610,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    },
+    "hat": {
+     "kind": "kasa",
+     "color": 14200912
+    }
+   },
+   "priest": {
+    "skin": 14858638,
+    "hair": 1709072,
+    "hairStyle": "short",
+    "beard": "mustache",
+    "build": "m",
+    "top": 16052454,
+    "sleeves": "wide",
+    "vest": {
+     "color": 11018782
+    },
+    "apron": {
+     "color": 16052454,
+     "length": 0.62,
+     "width": 0.22
+    },
+    "skirt": {
+     "color": 3815994,
+     "length": 0.6
+    },
+    "belt": 9071162,
+    "legs": 3815994,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    },
+    "hat": {
+     "kind": "jingasa",
+     "color": 2236968
+    }
+   },
+   "soldier": {
+    "skin": 14858638,
+    "hair": 1709072,
+    "hairStyle": "short",
+    "beard": "full",
+    "build": "m",
+    "top": 2763314,
+    "sleeves": "long",
+    "cuff": 11018782,
+    "armor": {
+     "color": 2763314,
+     "trim": 14182954,
+     "shoulders": 2763314
+    },
+    "skirt": {
+     "color": 2763314,
+     "length": 0.4,
+     "alt": 3816004,
+     "hem": 14182954
+    },
+    "belt": 11018782,
+    "legs": 9054762,
+    "feet": {
+     "kind": "boot",
+     "color": 4864554,
+     "height": 0.3
+    },
+    "hat": {
+     "kind": "kabuto",
+     "color": 2763312,
+     "color2": 14263610
+    },
+    "hip": "katana",
+    "hipColor": 2763306
+   },
+   "artisan": {
+    "skin": 14858638,
+    "hair": 1709072,
+    "hairStyle": "long",
+    "beard": "none",
+    "build": "f",
+    "top": 14206106,
+    "sleeves": "wide",
+    "neck": "wrap",
+    "neckColor": 16052454,
+    "sash": {
+     "color": 6965802
+    },
+    "skirt": {
+     "color": 14206106,
+     "length": 0.82
+    },
+    "belt": 6965802,
+    "legs": null,
+    "feet": {
+     "kind": "sandal",
+     "color": 8018482
+    }
+   },
+   "merchant": {
+    "skin": 14858638,
+    "hair": 1709072,
+    "hairStyle": "short",
+    "beard": "mustache",
+    "build": "m",
+    "top": 3817030,
+    "sleeves": "wide",
+    "neck": "wrap",
+    "neckColor": 16052454,
+    "skirt": {
+     "color": 3817030,
+     "length": 0.7
+    },
+    "belt": 6965802,
+    "buckle": 14263610,
+    "legs": null,
+    "feet": {
+     "kind": "boot",
+     "color": 3811866,
+     "height": 0.25
+    },
+    "hat": {
+     "kind": "jingasa",
+     "color": 2236968
+    },
+    "hip": "pouch"
+   }
+  }
+ },
+ "buccaneer": {
+  "player": {
+   "skin": 14462600,
+   "hair": 3810840,
+   "hairStyle": "short",
+   "beard": "mustache",
+   "build": "m",
+   "top": 16052454,
+   "sleeves": "long",
+   "cuff": 11018782,
+   "vest": {
+    "color": 10101282
+   },
+   "legs": 5917242,
+   "legsKnee": true,
+   "belt": 4861984,
+   "buckle": 14263610,
+   "feet": {
+    "kind": "boot",
+    "color": 5913122,
+    "height": 0.38
+   },
+   "hat": {
+    "kind": "cowboy",
+    "color": 1973794,
+    "color2": 1973794
+   }
+  },
+  "roles": {
+   "farmer": {
+    "skin": 14462600,
+    "hair": 2759184,
+    "hairStyle": "short",
+    "beard": "mustache",
+    "build": "m",
+    "top": 16052454,
+    "sleeves": "long",
+    "vest": {
+     "color": 1973794
+    },
+    "tie": 1973794,
+    "legs": 5917242,
+    "belt": 4861984,
+    "feet": {
+     "kind": "boot",
+     "color": 5913122,
+     "height": 0.38
+    },
+    "hat": {
+     "kind": "cowboy",
+     "color": 1973794,
+     "color2": 1973794
+    },
+    "hip": "pouch"
+   },
+   "priest": {
+    "skin": 14462600,
+    "hair": 2759184,
+    "hairStyle": "short",
+    "beard": "none",
+    "build": "m",
+    "top": 16052454,
+    "coat": {
+     "color": 5921330,
+     "length": 0.5,
+     "trim": 14191162
+    },
+    "vest": {
+     "color": 6978186
+    },
+    "legs": 5917242,
+    "legsKnee": true,
+    "feet": {
+     "kind": "boot",
+     "color": 5913122,
+     "height": 0.38
+    },
+    "hat": {
+     "kind": "cowboy",
+     "color": 1973794,
+     "color2": 1973794
+    }
+   },
+   "soldier": {
+    "skin": 14462600,
+    "hair": 1314832,
+    "hairStyle": "short",
+    "beard": "long",
+    "build": "m",
+    "top": 16052454,
+    "coat": {
+     "color": 1976906,
+     "length": 0.55,
+     "trim": 14191162
+    },
+    "vest": {
+     "color": 11018782
+    },
+    "legs": 1976906,
+    "belt": 4861984,
+    "buckle": 14263610,
+    "feet": {
+     "kind": "boot",
+     "color": 5913122,
+     "height": 0.38
+    },
+    "hat": {
+     "kind": "bandana",
+     "color": 12067358
+    },
+    "hip": "sword"
+   },
+   "artisan": {
+    "skin": 14462600,
+    "hair": 2759184,
+    "hairStyle": "short",
+    "beard": "none",
+    "build": "m",
+    "top": 16052454,
+    "sleeves": "long",
+    "vest": {
+     "color": 6965810
+    },
+    "legs": 5921370,
+    "legsKnee": true,
+    "belt": 4861984,
+    "feet": {
+     "kind": "boot",
+     "color": 5913122,
+     "height": 0.38
+    },
+    "hat": {
+     "kind": "tricorn",
+     "color": 1973794,
+     "color2": 16052454
+    },
+    "hip": "tools"
+   },
+   "merchant": {
+    "skin": 14462600,
+    "hair": 2759184,
+    "hairStyle": "short",
+    "beard": "mustache",
+    "build": "m",
+    "top": 16052454,
+    "sleeves": "long",
+    "vest": {
+     "color": 4863016
+    },
+    "tie": 2759184,
+    "legs": 5921370,
+    "belt": 4861984,
+    "buckle": 14263610,
+    "feet": {
+     "kind": "boot",
+     "color": 5913122,
+     "height": 0.38
+    },
+    "hat": {
+     "kind": "tricorn",
+     "color": 2761760,
+     "color2": 14263610
+    },
+    "hip": "pouch"
+   }
+  }
+ },
+ "victorian": {
+  "player": {
+   "skin": 14462600,
+   "hair": 3810840,
+   "hairStyle": "short",
+   "beard": "mustache",
+   "build": "m",
+   "top": 16052454,
+   "coat": {
+    "color": 2500140,
+    "length": 0.22
+   },
+   "vest": {
+    "color": 6965802
+   },
+   "tie": 6965802,
+   "legs": 2500140,
+   "feet": {
+    "kind": "shoe",
+    "color": 1710618
+   },
+   "hat": {
+    "kind": "tophat",
+    "color": 1579036,
+    "color2": 2763312
+   }
+  },
+  "roles": {
+   "farmer": {
+    "skin": 15254692,
+    "hair": 2759184,
+    "hairStyle": "bun",
+    "beard": "none",
+    "build": "f",
+    "top": 6967360,
+    "sleeves": "long",
+    "sleeveColor": 15261904,
+    "neck": "v",
+    "neckColor": 16052454,
+    "skirt": {
+     "color": 6967360,
+     "length": 1,
+     "flare": 0.1,
+     "hem": 5914672
+    },
+    "belt": 5914672,
+    "legs": null,
+    "feet": {
+     "kind": "shoe",
+     "color": 2759184
+    },
+    "hat": {
+     "kind": "bonnet",
+     "color": 16052454,
+     "spike": true
+    }
+   },
+   "priest": {
+    "skin": 15254692,
+    "hair": 2759184,
+    "hairStyle": "short",
+    "beard": "full",
+    "build": "m",
+    "top": 16052454,
+    "coat": {
+     "color": 1976900,
+     "length": 0.72
+    },
+    "tie": 1710618,
+    "legs": 2763312,
+    "feet": {
+     "kind": "shoe",
+     "color": 1710618
+    },
+    "hat": {
+     "kind": "tophat",
+     "color": 1579036,
+     "color2": 2763312
+    }
+   },
+   "soldier": {
+    "skin": 15254692,
+    "hair": 2759184,
+    "hairStyle": "bun",
+    "beard": "none",
+    "build": "f",
+    "top": 8002086,
+    "sleeves": "long",
+    "neck": "v",
+    "neckColor": 16052454,
+    "skirt": {
+     "color": 8002086,
+     "length": 1,
+     "flare": 0.12,
+     "hem": 14200970,
+     "bands": [
+      14200970
+     ]
+    },
+    "belt": 5902360,
+    "buckle": 14263610,
+    "legs": null,
+    "feet": {
+     "kind": "shoe",
+     "color": 1710618
+    },
+    "hat": {
+     "kind": "ladyhat",
+     "color": 1710618,
+     "color2": 6953506
+    }
+   },
+   "artisan": {
+    "skin": 15254692,
+    "hair": 2759184,
+    "hairStyle": "short",
+    "beard": "full",
+    "build": "m",
+    "top": 16052454,
+    "sleeves": "long",
+    "vest": {
+     "color": 6965810
+    },
+    "apron": {
+     "color": 16052454,
+     "length": 0.6,
+     "width": 0.3
+    },
+    "legs": 16052454,
+    "feet": {
+     "kind": "boot",
+     "color": 3811866,
+     "height": 0.3
+    },
+    "hat": {
+     "kind": "tophat",
+     "color": 1579036,
+     "color2": 2763312
+    },
+    "hip": "tools"
+   },
+   "merchant": {
+    "skin": 15254692,
+    "hair": 2759184,
+    "hairStyle": "short",
+    "beard": "full",
+    "build": "m",
+    "top": 16052454,
+    "coat": {
+     "color": 1973796,
+     "length": 0.72
+    },
+    "tie": 1710618,
+    "legs": 1973796,
+    "feet": {
+     "kind": "shoe",
+     "color": 1710618
+    },
+    "hat": {
+     "kind": "tophat",
+     "color": 1579036,
+     "color2": 2763312
+    }
+   }
+  }
+ },
+ "wildwest": {
+  "player": {
+   "skin": 14462600,
+   "hair": 3810840,
+   "hairStyle": "short",
+   "beard": "mustache",
+   "build": "m",
+   "top": 16052454,
+   "sleeves": "long",
+   "vest": {
+    "color": 2760216
+   },
+   "coat": {
+    "color": 2760216,
+    "length": 0.45
+   },
+   "tie": 11018782,
+   "legs": 2761760,
+   "belt": 3811866,
+   "buckle": 14263610,
+   "feet": {
+    "kind": "boot",
+    "color": 4861984,
+    "height": 0.3
+   },
+   "hat": {
+    "kind": "cowboy",
+    "color": 3811870,
+    "color2": 2628885
+   },
+   "hip": "holster"
+  },
+  "roles": {
+   "farmer": {
+    "skin": 14264450,
+    "hair": 3810326,
+    "hairStyle": "long",
+    "beard": "none",
+    "build": "f",
+    "top": 11028010,
+    "sleeves": "long",
+    "cross": 5913124,
+    "skirt": {
+     "color": 11028010,
+     "length": 0.85,
+     "flare": 0.06
+    },
+    "belt": 5913124,
+    "legs": null,
+    "feet": {
+     "kind": "boot",
+     "color": 5913124,
+     "height": 0.3
+    },
+    "hat": {
+     "kind": "cowboy",
+     "color": 3811870,
+     "color2": 2628885
+    }
+   },
+   "priest": {
+    "skin": 14264450,
+    "hair": 2759184,
+    "hairStyle": "short",
+    "beard": "full",
+    "build": "m",
+    "top": 16052454,
+    "vest": {
+     "color": 2761760
+    },
+    "coat": {
+     "color": 2761760,
+     "length": 0.45
+    },
+    "tie": 1710618,
+    "legs": 2761760,
+    "belt": 3811866,
+    "buckle": 14263610,
+    "feet": {
+     "kind": "boot",
+     "color": 4861984,
+     "height": 0.3
+    },
+    "hat": {
+     "kind": "cowboy",
+     "color": 2761760,
+     "color2": 1906966
+    }
+   },
+   "outlaw": {
+    "skin": 14264450,
+    "hair": 2759184,
+    "hairStyle": "short",
+    "beard": "full",
+    "build": "m",
+    "top": 16052454,
+    "vest": {
+     "color": 11018782
+    },
+    "coat": {
+     "color": 2503758,
+     "length": 0.55,
+     "trim": 13126186
+    },
+    "legs": 2503758,
+    "belt": 3811866,
+    "buckle": 14263610,
+    "feet": {
+     "kind": "boot",
+     "color": 4861984,
+     "height": 0.32
+    },
+    "hat": {
+     "kind": "cowboy",
+     "color": 2761760,
+     "color2": 1906966
+    },
+    "hip": "holster"
+   },
+   "doctor": {
+    "skin": 14264450,
+    "hair": 3810326,
+    "hairStyle": "bun",
+    "beard": "none",
+    "build": "f",
+    "top": 16052454,
+    "sleeves": "long",
+    "vest": {
+     "color": 5909082
+    },
+    "skirt": {
+     "color": 6957674,
+     "length": 1,
+     "flare": 0.1
+    },
+    "belt": 5909082,
+    "legs": null,
+    "feet": {
+     "kind": "shoe",
+     "color": 2759194
+    },
+    "hat": {
+     "kind": "ladyhat",
+     "color": 5909082,
+     "color2": 3807802
+    },
+    "hip": "satchel",
+    "hipColor": 3811866
+   },
+   "merchant": {
+    "skin": 14264450,
+    "hair": 2759184,
+    "hairStyle": "short",
+    "beard": "mustache",
+    "build": "m",
+    "top": 16052454,
+    "sleeves": "long",
+    "vest": {
+     "color": 8018490
+    },
+    "tie": 2759184,
+    "legs": 8018490,
+    "belt": 3811866,
+    "feet": {
+     "kind": "boot",
+     "color": 4861984,
+     "height": 0.28
+    },
+    "hat": {
+     "kind": "bowler",
+     "color": 2761760,
+     "goggles": true
+    },
+    "hip": "pouch"
+   }
+  }
+ },
+ "industrial": {
+  "player": {
+   "skin": 14462600,
+   "hair": 3810840,
+   "hairStyle": "short",
+   "beard": "mustache",
+   "build": "m",
+   "top": 16052454,
+   "sleeves": "long",
+   "overalls": 2765896,
+   "legs": 2765896,
+   "feet": {
+    "kind": "boot",
+    "color": 5913124,
+    "height": 0.25
+   },
+   "hat": {
+    "kind": "flatcap",
+    "color": 2763824
+   }
+  },
+  "roles": {
+   "farmer": {
+    "skin": 14859416,
+    "hair": 3810326,
+    "hairStyle": "long",
+    "beard": "none",
+    "build": "f",
+    "top": 16052454,
+    "sleeves": "long",
+    "overalls": 3029586,
+    "legs": 3029586,
+    "feet": {
+     "kind": "boot",
+     "color": 5913124,
+     "height": 0.25
+    },
+    "hat": {
+     "kind": "flatcap",
+     "color": 4867652
+    }
+   },
+   "priest": {
+    "skin": 14859416,
+    "hair": 2759184,
+    "hairStyle": "short",
+    "beard": "none",
+    "build": "m",
+    "top": 14203018,
+    "sleeves": "long",
+    "cross": 6965802,
+    "tie": 2759184,
+    "legs": 3029586,
+    "belt": 5913124,
+    "feet": {
+     "kind": "boot",
+     "color": 5913124,
+     "height": 0.25
+    },
+    "hat": {
+     "kind": "flatcap",
+     "color": 2763824
+    }
+   },
+   "soldier": {
+    "skin": 14859416,
+    "hair": 2759184,
+    "hairStyle": "short",
+    "beard": "none",
+    "build": "m",
+    "top": 16052454,
+    "coat": {
+     "color": 4869200,
+     "length": 0.45,
+     "trim": 13142586
+    },
+    "tie": 1710618,
+    "legs": 2765896,
+    "belt": 3811866,
+    "feet": {
+     "kind": "boot",
+     "color": 5913124,
+     "height": 0.32
+    },
+    "hat": {
+     "kind": "bowler",
+     "color": 1973794,
+     "goggles": true
+    }
+   },
+   "inventor": {
+    "skin": 14859416,
+    "hair": 2759184,
+    "hairStyle": "short",
+    "beard": "mustache",
+    "build": "m",
+    "top": 16052454,
+    "vest": {
+     "color": 6965810
+    },
+    "coat": {
+     "color": 6965810,
+     "length": 0.55
+    },
+    "tie": 2759184,
+    "legs": 6965810,
+    "feet": {
+     "kind": "boot",
+     "color": 5913124,
+     "height": 0.3
+    },
+    "hat": {
+     "kind": "bowler",
+     "color": 5914154
+    }
+   },
+   "merchant": {
+    "skin": 14859416,
+    "hair": 2759184,
+    "hairStyle": "short",
+    "beard": "mustache",
+    "build": "m",
+    "top": 16052454,
+    "coat": {
+     "color": 2894896,
+     "length": 0.7
+    },
+    "tie": 1710618,
+    "legs": 2894896,
+    "feet": {
+     "kind": "shoe",
+     "color": 1710618
+    },
+    "hat": {
+     "kind": "flatcap",
+     "color": 2763824
+    }
+   },
+   "varga": {
+    "skin": 15255720,
+    "hair": 9079434,
+    "hairStyle": "bun",
+    "beard": "none",
+    "build": "f",
+    "top": 16052454,
+    "coat": {
+     "color": 4864602,
+     "length": 0.92,
+     "trim": 2761268
+    },
+    "tie": 6957626,
+    "legs": 2763306,
+    "feet": {
+     "kind": "shoe",
+     "color": 1710618
+    }
+   },
+   "danny": {
+    "skin": 14729376,
+    "hair": 6965802,
+    "hairStyle": "short",
+    "beard": "none",
+    "build": "m",
+    "top": 16052454,
+    "sleeves": "long",
+    "vest": {
+     "color": 8022618
+    },
+    "legs": 4868682,
+    "legsKnee": true,
+    "feet": {
+     "kind": "shoe",
+     "color": 3811866
+    },
+    "hat": {
+     "kind": "flatcap",
+     "color": 5917242
+    },
+    "hip": "satchel",
+    "hipColor": 9071178
+   },
+   "hale": {
+    "skin": 15255720,
+    "hair": 10132122,
+    "hairStyle": "short",
+    "beard": "short",
+    "build": "m",
+    "top": 16052454,
+    "coat": {
+     "color": 1710626,
+     "length": 0.72
+    },
+    "vest": {
+     "color": 3811898
+    },
+    "tie": 6953498,
+    "legs": 1710626,
+    "feet": {
+     "kind": "shoe",
+     "color": 1710618
+    },
+    "hat": {
+     "kind": "tophat",
+     "color": 1118481,
+     "color2": 2763306
+    }
+   },
+   "worker": {
+    "skin": 14859416,
+    "hair": 3811866,
+    "hairStyle": "short",
+    "beard": "short",
+    "build": "m",
+    "top": 9079418,
+    "sleeves": "long",
+    "overalls": 3820122,
+    "legs": 3820122,
+    "feet": {
+     "kind": "boot",
+     "color": 4861984,
+     "height": 0.25
+    },
+    "hat": {
+     "kind": "flatcap",
+     "color": 3815994
+    }
+   }
+  }
+ }
+}

@@ -1,0 +1,5291 @@
+{
+ "home": "industrial",
+ "eras": [
+  {
+   "id": "sumerian",
+   "name": "Uruk of the Reeds",
+   "civ": "Sumerian",
+   "year": -3200,
+   "tagline": "The first city. Ziggurats of mud brick, the first written words, the first kings.",
+   "sky": 14270602,
+   "horizon": 15259300,
+   "fog": 14270602,
+   "fogDensity": 0.0032,
+   "sun": 16773577,
+   "sunIntensity": 2.4,
+   "ambient": 9141595,
+   "ground": 12032611,
+   "road": 10979926,
+   "dirt": 10979926,
+   "water": 6261882,
+   "layout": {
+    "pattern": "organic",
+    "blockW": 46,
+    "blockD": 40,
+    "streetWidth": 5,
+    "curve": 9,
+    "curveLen": 140,
+    "lotSize": 12,
+    "density": 0.8,
+    "extent": 0.62,
+    "fields": true,
+    "walls": true,
+    "pavedArterials": false
+   },
+   "buildings": [
+    {
+     "weight": 7,
+     "floors": [
+      1,
+      1
+     ],
+     "floorHeight": 3.2,
+     "footprint": [
+      0.7,
+      0.95
+     ],
+     "roof": "flat",
+     "roofColors": [
+      11570266
+     ],
+     "wallColors": [
+      12887148,
+      12162911,
+      13480058
+     ],
+     "parapet": true,
+     "tex": 13,
+     "windows": "slit",
+     "features": [
+      "plinth",
+      "ladder"
+     ]
+    },
+    {
+     "weight": 3,
+     "floors": [
+      2,
+      2
+     ],
+     "floorHeight": 2.9,
+     "footprint": [
+      0.6,
+      0.9
+     ],
+     "roof": "flat",
+     "roofColors": [
+      11043919
+     ],
+     "wallColors": [
+      12557667,
+      13216370
+     ],
+     "parapet": true,
+     "tex": 13,
+     "windows": "slit",
+     "features": [
+      "plinth",
+      "ledges"
+     ]
+    },
+    {
+     "weight": 1.5,
+     "floors": [
+      1,
+      1
+     ],
+     "floorHeight": 2.6,
+     "footprint": [
+      0.5,
+      0.7
+     ],
+     "roof": "thatch",
+     "roofColors": [
+      13612665
+     ],
+     "wallColors": [
+      13152382
+     ],
+     "round": true,
+     "tex": 5,
+     "roofTex": 5,
+     "windows": "none"
+    },
+    {
+     "weight": 1,
+     "floors": [
+      1,
+      2
+     ],
+     "floorHeight": 3.6,
+     "footprint": [
+      0.8,
+      0.95
+     ],
+     "roof": "flat",
+     "roofColors": [
+      10320972
+     ],
+     "wallColors": [
+      13808771
+     ],
+     "parapet": true,
+     "courtyard": true,
+     "tex": 13,
+     "windows": "slit",
+     "features": [
+      "bands",
+      "pilasters",
+      "plinth"
+     ],
+     "accent": 2775690,
+     "tag": "temple"
+    },
+    {
+     "weight": 1,
+     "floors": [
+      1,
+      1
+     ],
+     "floorHeight": 4,
+     "footprint": [
+      0.85,
+      0.95
+     ],
+     "roof": "flat",
+     "roofColors": [
+      11043919
+     ],
+     "wallColors": [
+      12162911
+     ],
+     "parapet": true,
+     "tex": 13,
+     "windows": "none",
+     "features": [
+      "plinth",
+      "pilasters"
+     ],
+     "tag": "granary"
+    }
+   ],
+   "props": [
+    "amphora",
+    "well",
+    "stall",
+    "haystack",
+    "cart",
+    "altar"
+   ],
+   "propDensity": 0.5,
+   "trees": "palm",
+   "treeDensity": 0.25,
+   "landmarks": {
+    "citadel": "ziggurat",
+    "harbor": "quay",
+    "arena": "none",
+    "plaza": "temple_sumer",
+    "sacred": "standing_stones",
+    "market": "bazaar"
+   },
+   "npcs": [
+    {
+     "role": "Scribe",
+     "outfit": "priest",
+     "weight": 3,
+     "names": [
+      "Enheduanna",
+      "Lugal",
+      "Ninsun",
+      "Ur-Nammu",
+      "Shulgi"
+     ],
+     "lines": [
+      "A pressed reed, a wet clay tablet, and the wheat counts itself. Writing is only counting that remembers.",
+      "The temple owns the fields. The temple owns the seed. Who owns the temple? Ask the priests, not me.",
+      "The canals need dredging again. Every year the water comes back saltier."
+     ]
+    },
+    {
+     "role": "Farmer",
+     "outfit": "farmer",
+     "weight": 4,
+     "names": [
+      "Abu",
+      "Dumuzi",
+      "Geme",
+      "Ninlil",
+      "Ur-zababa"
+     ],
+     "lines": [
+      "The barley grows where the wheat will not. White crust on the soil, stranger. We pray and we plant barley.",
+      "They say a king in the north built walls of baked brick. Baked! The fuel alone would feed a village.",
+      "The river gives and the river takes. This spring it gave too much."
+     ]
+    },
+    {
+     "role": "Guard",
+     "outfit": "soldier",
+     "weight": 2,
+     "names": [
+      "Gilgamesh",
+      "Enkidu",
+      "Agga",
+      "Mesannepada"
+     ],
+     "lines": [
+      "Bronze spear, copper helm. Better than the stone the hill people carry.",
+      "The gate closes at dusk. The lion comes to the reeds at night.",
+      "I guard grain. There is nothing more valuable in Uruk than grain."
+     ]
+    },
+    {
+     "role": "Potter",
+     "outfit": "artisan",
+     "weight": 3,
+     "names": [
+      "Ninkasi",
+      "Lu-Enlil",
+      "Amar-Sin",
+      "Geshtinanna",
+      "Ur-Ningal"
+     ],
+     "lines": [
+      "The wheel turns, the clay rises. A pot is a promise that there will be something to put in it.",
+      "I stamp every jar with the temple seal. Grain in, beer out, all of it counted.",
+      "The kiln eats more reeds every year. The reed beds are thinner than when I was a boy."
+     ]
+    },
+    {
+     "role": "Trader",
+     "outfit": "merchant",
+     "weight": 2,
+     "names": [
+      "Ea-nasir",
+      "Puzur-Ashur",
+      "Lu-Nanna",
+      "Ku-Baba",
+      "Shu-Ilishu"
+     ],
+     "lines": [
+      "Copper from Dilmun, lapis from the mountains, and everybody wants it on credit.",
+      "A customer wrote to complain the copper was poor. On a tablet! Now his complaint will outlive us both.",
+      "Barley is the money here. When the barley fails, so do the prices."
+     ]
+    }
+   ],
+   "npcDensity": 0.7,
+   "ships": "reed",
+   "chronoport": {
+    "x": -520,
+    "z": 300,
+    "placeName": "the collapsed cistern behind the West Market rail yard",
+    "hint": "Where the oldest bricks in the city were dug up during the 1911 cistern works."
+   },
+   "districtNames": {
+    "citadel": "Eanna Precinct",
+    "oldtown": "Old Reed Quarter",
+    "harbor": "Canal Mouth",
+    "eastside": "Potters’ Ward",
+    "westmarket": "Grain Court",
+    "north": "Gate of Inanna",
+    "fields": "The Barley Fields"
+   },
+   "lore": "Uruk is the largest settlement on Earth. Its temples run the economy with clay tablets and ration bowls. The canals that feed it are already salting the soil.",
+   "insight": {
+    "title": "The Salt in the Soil",
+    "text": "Sumer irrigated itself to death. Every harvest the canals left a little more salt behind, so they switched from wheat to barley, then to less barley, then to nothing. A system that quietly consumes its own foundation will fail no matter how strong its walls are."
+   },
+   "yearLabel": "3200 BCE"
+  },
+  {
+   "id": "egyptian",
+   "name": "Men-nefer on the River",
+   "civ": "Egyptian",
+   "year": -2560,
+   "tagline": "The Great Pyramid is finished. The Pharaoh is a god, and the river is his calendar.",
+   "sky": 9422574,
+   "horizon": 16114360,
+   "fog": 15325357,
+   "fogDensity": 0.0026,
+   "sun": 16774876,
+   "sunIntensity": 2.8,
+   "ambient": 10127978,
+   "ground": 14204805,
+   "road": 13217140,
+   "dirt": 13217140,
+   "water": 4161167,
+   "layout": {
+    "pattern": "organic",
+    "blockW": 54,
+    "blockD": 44,
+    "streetWidth": 5,
+    "curve": 12,
+    "curveLen": 180,
+    "lotSize": 13,
+    "density": 0.72,
+    "extent": 0.58,
+    "fields": true,
+    "walls": false,
+    "pavedArterials": false
+   },
+   "buildings": [
+    {
+     "weight": 7,
+     "floors": [
+      1,
+      2
+     ],
+     "floorHeight": 3,
+     "footprint": [
+      0.65,
+      0.92
+     ],
+     "roof": "flat",
+     "roofColors": [
+      13480058
+     ],
+     "wallColors": [
+      14929048,
+      14204805,
+      15390890,
+      15852479
+     ],
+     "parapet": true,
+     "tex": 13,
+     "windows": "slit",
+     "features": [
+      "battered",
+      "bands"
+     ],
+     "accent": 11553338
+    },
+    {
+     "weight": 2,
+     "floors": [
+      2,
+      3
+     ],
+     "floorHeight": 3.1,
+     "footprint": [
+      0.7,
+      0.9
+     ],
+     "roof": "flat",
+     "roofColors": [
+      12756336
+     ],
+     "wallColors": [
+      15785908,
+      15127459
+     ],
+     "parapet": true,
+     "tex": 0,
+     "windows": "square",
+     "features": [
+      "battered",
+      "bands",
+      "cornice"
+     ],
+     "accent": 2973094,
+     "trim": 11553338
+    },
+    {
+     "weight": 1,
+     "floors": [
+      1,
+      1
+     ],
+     "floorHeight": 4.4,
+     "footprint": [
+      0.8,
+      0.95
+     ],
+     "roof": "flat",
+     "roofColors": [
+      14271117
+     ],
+     "wallColors": [
+      15918272
+     ],
+     "tex": 2,
+     "windows": "none",
+     "features": [
+      "battered",
+      "pilasters",
+      "bands",
+      "cornice"
+     ],
+     "accent": 2973094,
+     "tag": "temple"
+    },
+    {
+     "weight": 1.5,
+     "floors": [
+      1,
+      1
+     ],
+     "floorHeight": 2.6,
+     "footprint": [
+      0.6,
+      0.85
+     ],
+     "roof": "flat",
+     "roofColors": [
+      13349503
+     ],
+     "wallColors": [
+      14270602
+     ],
+     "courtyard": true,
+     "tex": 13,
+     "windows": "slit",
+     "features": [
+      "porch",
+      "bands"
+     ],
+     "accent": 2973094
+    },
+    {
+     "weight": 1,
+     "floors": [
+      1,
+      1
+     ],
+     "floorHeight": 3.4,
+     "footprint": [
+      0.5,
+      0.7
+     ],
+     "roof": "dome",
+     "roofColors": [
+      14204805
+     ],
+     "wallColors": [
+      14204805
+     ],
+     "round": true,
+     "tex": 13,
+     "windows": "none",
+     "tag": "granary"
+    }
+   ],
+   "props": [
+    "obelisk",
+    "amphora",
+    "well",
+    "stall",
+    "statue",
+    "cart",
+    "altar"
+   ],
+   "propDensity": 0.5,
+   "trees": "palm",
+   "treeDensity": 0.35,
+   "landmarks": {
+    "citadel": "pyramid",
+    "harbor": "quay",
+    "arena": "none",
+    "plaza": "temple_egypt",
+    "sacred": "sphinx",
+    "market": "bazaar"
+   },
+   "npcs": [
+    {
+     "role": "Priest",
+     "outfit": "priest",
+     "weight": 2,
+     "names": [
+      "Imhotep",
+      "Hemiunu",
+      "Ankhhaf",
+      "Kawab",
+      "Meritites"
+     ],
+     "lines": [
+      "Khufu rests in stone that will outlast the sun. We who built it rest in mud.",
+      "The god-king eats first. Then the nobles. Then the scribes. When the flood fails, the order eats itself from the bottom.",
+      "Measure the river at the nilometer and you can measure next year’s famine."
+     ]
+    },
+    {
+     "role": "Laborer",
+     "outfit": "farmer",
+     "weight": 4,
+     "names": [
+      "Merer",
+      "Nakht",
+      "Seneb",
+      "Hesire",
+      "Ipi"
+     ],
+     "lines": [
+      "Ten loaves and two jugs of beer a day. The pyramid pays better than the fields.",
+      "We haul stone in the flood months, when the fields are under water. Nobody is a slave here. Nobody is free either.",
+      "My gang is called Friends of Khufu. The gang on the south face is called Drunkards of Menkaure."
+     ]
+    },
+    {
+     "role": "Noble",
+     "outfit": "merchant",
+     "weight": 1,
+     "names": [
+      "Nefermaat",
+      "Khufukhaf",
+      "Hetepheres",
+      "Djedefre"
+     ],
+     "lines": [
+      "My tomb is being painted as we speak. Every day of my life, carved so I may live it again.",
+      "The provinces grow bold. Their governors bury themselves like kings now.",
+      "The gods have animal heads because animals do not lie."
+     ]
+    },
+    {
+     "role": "Soldier",
+     "outfit": "soldier",
+     "weight": 2,
+     "names": [
+      "Weni",
+      "Senedjemib",
+      "Kaemtjenent",
+      "Inti",
+      "Mereruka"
+     ],
+     "lines": [
+      "We march south to Nubia for gold and stone. The gods want their temples bright.",
+      "A soldier eats when the granary is full. So I pray for the flood like everyone else.",
+      "The nomarchs keep their own guards now. Strange, for a kingdom with one god-king."
+     ]
+    },
+    {
+     "role": "Artisan",
+     "outfit": "artisan",
+     "weight": 3,
+     "names": [
+      "Ptahshepses",
+      "Nefer",
+      "Rahotep",
+      "Iry",
+      "Tjeti"
+     ],
+     "lines": [
+      "I paint the false doors in the tombs. The dead walk through them, the priests say.",
+      "Copper chisels, sand and patience. The granite does not care about the Pharaoh.",
+      "Every brush stroke follows the grid. Even the gods are drawn to rule."
+     ]
+    }
+   ],
+   "npcDensity": 0.75,
+   "ships": "barque",
+   "chronoport": {
+    "x": -560,
+    "z": -400,
+    "placeName": "the sealed vault under the Northgate cemetery chapel",
+    "hint": "The chapel on the north cemetery was built over something the groundskeepers refuse to discuss."
+   },
+   "districtNames": {
+    "citadel": "Horizon of Khufu",
+    "oldtown": "White Walls",
+    "harbor": "River Landing",
+    "eastside": "Workmen’s Town",
+    "westmarket": "Granary Row",
+    "north": "The Necropolis Road",
+    "fields": "The Black Land"
+   },
+   "lore": "The Old Kingdom at its peak. The river floods on schedule, the Pharaoh is divine, and the Great Pyramid stands white and blinding on the plateau above the city.",
+   "insight": {
+    "title": "When the River Forgot",
+    "text": "The Old Kingdom fell when the Nile floods failed for decades. A state built on a god-king who guaranteed the harvest could not survive a harvest that did not come. Legitimacy that rests on one promise dies with that promise."
+   },
+   "yearLabel": "2560 BCE"
+  },
+  {
+   "id": "minoan",
+   "name": "Knossos by the Sea",
+   "civ": "Minoan",
+   "year": -1600,
+   "tagline": "Palaces with no walls. Bull-leapers, frescoes, and a mountain across the water that has begun to smoke.",
+   "sky": 7320296,
+   "horizon": 15134965,
+   "fog": 13624558,
+   "fogDensity": 0.0024,
+   "sun": 16775398,
+   "sunIntensity": 2.6,
+   "ambient": 9281704,
+   "ground": 11972746,
+   "road": 13156256,
+   "dirt": 12102024,
+   "water": 2064035,
+   "layout": {
+    "pattern": "organic",
+    "blockW": 40,
+    "blockD": 36,
+    "streetWidth": 5,
+    "curve": 10,
+    "curveLen": 120,
+    "lotSize": 11,
+    "density": 0.78,
+    "extent": 0.56,
+    "fields": true,
+    "walls": false,
+    "pavedArterials": true
+   },
+   "buildings": [
+    {
+     "weight": 6,
+     "floors": [
+      2,
+      3
+     ],
+     "floorHeight": 2.9,
+     "footprint": [
+      0.65,
+      0.9
+     ],
+     "roof": "flat",
+     "roofColors": [
+      14141091
+     ],
+     "wallColors": [
+      15919317,
+      15259837,
+      16248800
+     ],
+     "parapet": true,
+     "tex": 0,
+     "windows": "square",
+     "features": [
+      "ledges",
+      "frames",
+      "bands"
+     ],
+     "accent": 11549226,
+     "trim": 11549226
+    },
+    {
+     "weight": 3,
+     "floors": [
+      1,
+      2
+     ],
+     "floorHeight": 3,
+     "footprint": [
+      0.6,
+      0.85
+     ],
+     "roof": "flat",
+     "roofColors": [
+      13219215
+     ],
+     "wallColors": [
+      15392710,
+      15854038
+     ],
+     "tex": 2,
+     "windows": "square",
+     "features": [
+      "frames",
+      "bands",
+      "plinth"
+     ],
+     "accent": 2908042,
+     "trim": 2908042
+    },
+    {
+     "weight": 1,
+     "floors": [
+      2,
+      2
+     ],
+     "floorHeight": 3.2,
+     "footprint": [
+      0.8,
+      0.95
+     ],
+     "roof": "flat",
+     "roofColors": [
+      13481615
+     ],
+     "wallColors": [
+      16182488
+     ],
+     "courtyard": true,
+     "tex": 0,
+     "windows": "square",
+     "features": [
+      "porch",
+      "bands",
+      "horns",
+      "ledges"
+     ],
+     "accent": 11549226,
+     "trim": 11549226,
+     "tag": "villa"
+    },
+    {
+     "weight": 1,
+     "floors": [
+      1,
+      1
+     ],
+     "floorHeight": 3.4,
+     "footprint": [
+      0.8,
+      0.95
+     ],
+     "roof": "flat",
+     "roofColors": [
+      13219215
+     ],
+     "wallColors": [
+      15259837
+     ],
+     "tex": 2,
+     "windows": "none",
+     "features": [
+      "plinth"
+     ],
+     "tag": "magazine"
+    }
+   ],
+   "props": [
+    "amphora",
+    "well",
+    "stall",
+    "altar",
+    "fountain"
+   ],
+   "propDensity": 0.45,
+   "trees": "cypress",
+   "treeDensity": 0.4,
+   "landmarks": {
+    "citadel": "palace_minoan",
+    "harbor": "quay",
+    "arena": "bull_court",
+    "plaza": "court_minoan",
+    "sacred": "peak_sanctuary",
+    "market": "bazaar"
+   },
+   "npcs": [
+    {
+     "role": "Bull-leaper",
+     "outfit": "artisan",
+     "weight": 2,
+     "names": [
+      "Ariadne",
+      "Minos",
+      "Britomartis",
+      "Daidalos",
+      "Pasiphae"
+     ],
+     "lines": [
+      "You grab the horns, let the bull throw you, and land on your feet. The trick is to want to be thrown.",
+      "No walls on our palaces. Who would attack an island that owns every ship?",
+      "The mountain on Thera has been shaking. The priestesses say the earth-bull is restless."
+     ]
+    },
+    {
+     "role": "Merchant",
+     "outfit": "merchant",
+     "weight": 3,
+     "names": [
+      "Idomeneus",
+      "Kydon",
+      "Rhadamanthys",
+      "Tanit",
+      "Phaistos"
+     ],
+     "lines": [
+      "Saffron to Egypt, copper from Cyprus, tin from gods know where. The sea is our road.",
+      "Every ship that comes home is a ship that beat a storm. Nobody counts the others.",
+      "The palace stores the grain and the oil. In a bad year, the palace is the only thing between us and hunger."
+     ]
+    },
+    {
+     "role": "Priestess",
+     "outfit": "priest",
+     "weight": 1,
+     "names": [
+      "Pasiphae",
+      "Eileithyia",
+      "Diktynna",
+      "Rhea"
+     ],
+     "lines": [
+      "The snake goddess holds one serpent in each hand. Balance. We have forgotten that the sea keeps its own balance.",
+      "Ash fell on the orchards this morning. The children thought it was snow.",
+      "We paint dolphins on the walls so that we remember the sea is alive."
+     ]
+    },
+    {
+     "role": "Farmer",
+     "outfit": "farmer",
+     "weight": 4,
+     "names": [
+      "Kore",
+      "Melissa",
+      "Aithra",
+      "Phaidra",
+      "Glauke"
+     ],
+     "lines": [
+      "Olives on the hills, barley in the valleys, and the palace takes its share of both.",
+      "The storerooms at the palace hold jars taller than a man. All of it ours, in a way.",
+      "The ground shook again last night. The goats knew before we did."
+     ]
+    },
+    {
+     "role": "Guard",
+     "outfit": "soldier",
+     "weight": 2,
+     "names": [
+      "Asterion",
+      "Talos",
+      "Deukalion",
+      "Molos",
+      "Meriones"
+     ],
+     "lines": [
+      "Guard what? Nobody attacks Crete. I guard the storerooms from the clerks.",
+      "Our fleet is our wall. As long as the ships come home, the island is safe.",
+      "The bronze comes from overseas. Everything important comes from overseas."
+     ]
+    }
+   ],
+   "npcDensity": 0.7,
+   "ships": "galley",
+   "chronoport": {
+    "x": 250,
+    "z": 480,
+    "placeName": "the flooded boathouse at the east end of the Old Harbor",
+    "hint": "Fishermen say the east boathouse has a tide that moves against the moon."
+   },
+   "districtNames": {
+    "citadel": "The Labyrinth",
+    "oldtown": "The Lower Town",
+    "harbor": "Dolphin Harbor",
+    "eastside": "Potters’ Hill",
+    "westmarket": "Saffron Court",
+    "north": "Cypress Terraces",
+    "fields": "The Olive Groves"
+   },
+   "lore": "A trading empire with no walls and fleets on every horizon. Across the water, the volcano at Thera has begun to smoke.",
+   "insight": {
+    "title": "One Bad Day",
+    "text": "Thera erupted and the wave took the fleet, the harbors and the trust that the sea would always provide. Minoan Crete did not fall to an enemy. It fell because everything depended on one thing that could not fail, until it did."
+   },
+   "yearLabel": "1600 BCE"
+  },
+  {
+   "id": "mycenaean",
+   "name": "The Lion Citadel",
+   "civ": "Mycenaean",
+   "year": -1250,
+   "tagline": "Bronze-armored kings behind cyclopean walls. Across the sea, a war over Troy is about to begin.",
+   "sky": 8037321,
+   "horizon": 14209728,
+   "fog": 13222574,
+   "fogDensity": 0.0028,
+   "sun": 16773328,
+   "sunIntensity": 2.3,
+   "ambient": 8355700,
+   "ground": 10197614,
+   "road": 11774860,
+   "dirt": 10721912,
+   "water": 2781071,
+   "layout": {
+    "pattern": "radial",
+    "blockW": 44,
+    "blockD": 30,
+    "streetWidth": 5,
+    "curve": 0,
+    "curveLen": 1,
+    "lotSize": 12,
+    "density": 0.7,
+    "extent": 0.55,
+    "fields": true,
+    "walls": true,
+    "pavedArterials": false
+   },
+   "buildings": [
+    {
+     "weight": 6,
+     "floors": [
+      1,
+      2
+     ],
+     "floorHeight": 2.9,
+     "footprint": [
+      0.65,
+      0.9
+     ],
+     "roof": "flat",
+     "roofColors": [
+      11048306
+     ],
+     "wallColors": [
+      14207913,
+      13483932,
+      14734516
+     ],
+     "tex": 2,
+     "texRepeat": 0.3,
+     "windows": "slit",
+     "features": [
+      "plinth"
+     ]
+    },
+    {
+     "weight": 3,
+     "floors": [
+      1,
+      1
+     ],
+     "floorHeight": 3.2,
+     "footprint": [
+      0.6,
+      0.85
+     ],
+     "roof": "gable",
+     "roofColors": [
+      10189397
+     ],
+     "wallColors": [
+      13878432,
+      13154190
+     ],
+     "tex": 13,
+     "roofTex": 5,
+     "windows": "slit",
+     "features": [
+      "plinth",
+      "ridge"
+     ]
+    },
+    {
+     "weight": 1,
+     "floors": [
+      1,
+      1
+     ],
+     "floorHeight": 4.6,
+     "footprint": [
+      0.8,
+      0.95
+     ],
+     "roof": "gable",
+     "roofColors": [
+      9071946
+     ],
+     "wallColors": [
+      14931637
+     ],
+     "tex": 2,
+     "roofTex": 4,
+     "windows": "none",
+     "features": [
+      "porch",
+      "plinth",
+      "bands"
+     ],
+     "accent": 11549226,
+     "tag": "megaron"
+    },
+    {
+     "weight": 1,
+     "floors": [
+      1,
+      1
+     ],
+     "floorHeight": 3.2,
+     "footprint": [
+      0.85,
+      0.95
+     ],
+     "roof": "flat",
+     "roofColors": [
+      11048306
+     ],
+     "wallColors": [
+      13154190
+     ],
+     "tex": 2,
+     "texRepeat": 0.25,
+     "windows": "none",
+     "features": [
+      "plinth",
+      "crenellation"
+     ],
+     "tag": "storehouse"
+    }
+   ],
+   "props": [
+    "amphora",
+    "well",
+    "stall",
+    "altar",
+    "boulder",
+    "torch"
+   ],
+   "propDensity": 0.4,
+   "trees": "cypress",
+   "treeDensity": 0.3,
+   "landmarks": {
+    "citadel": "citadel_mycenae",
+    "harbor": "quay",
+    "arena": "none",
+    "plaza": "tholos",
+    "sacred": "grave_circle",
+    "market": "bazaar"
+   },
+   "npcs": [
+    {
+     "role": "Warrior",
+     "outfit": "soldier",
+     "weight": 3,
+     "names": [
+      "Agamemnon",
+      "Diomedes",
+      "Ajax",
+      "Nestor",
+      "Idomeneus"
+     ],
+     "lines": [
+      "Boar-tusk helmet. Forty boars for one helmet. That is what a king is worth.",
+      "The wanax calls for ships. Every lord sends his sons and his bronze. For a woman, they say. For the tin routes, I say.",
+      "My armor weighs as much as a child. On the field, I am a chariot with legs."
+     ]
+    },
+    {
+     "role": "Scribe",
+     "outfit": "priest",
+     "weight": 2,
+     "names": [
+      "Pylos",
+      "Alxoitas",
+      "Wedaneus",
+      "Tiri"
+     ],
+     "lines": [
+      "Linear B. Every jar of oil, every slave, every chariot wheel, on a tablet in the palace. If the palace burns, the world forgets how to count.",
+      "The palace takes the wool and gives back bronze. Nothing moves without the palace.",
+      "Rumors from the coast: raiders who come from the sea and leave nothing."
+     ]
+    },
+    {
+     "role": "Shepherd",
+     "outfit": "farmer",
+     "weight": 3,
+     "names": [
+      "Eumaios",
+      "Melanthios",
+      "Philoitios",
+      "Dolios"
+     ],
+     "lines": [
+      "Two bad harvests. The palace still takes its share. The gods still take theirs.",
+      "The hills are full of men who used to be farmers.",
+      "They say the bronze comes from an island so far west the sun sets on it."
+     ]
+    },
+    {
+     "role": "Bronzesmith",
+     "outfit": "artisan",
+     "weight": 2,
+     "names": [
+      "Kyknos",
+      "Pelagon",
+      "Amphion",
+      "Daidalion",
+      "Tekton"
+     ],
+     "lines": [
+      "Tin from the far west, copper from Cyprus. If either ship sinks, no swords this year.",
+      "The palace counts every ingot it gives me and every blade I return. Twice.",
+      "The raiders burned a city across the gulf. The palace wants more spears, faster."
+     ]
+    },
+    {
+     "role": "Merchant",
+     "outfit": "merchant",
+     "weight": 2,
+     "names": [
+      "Atreides",
+      "Nestor",
+      "Pylos",
+      "Euryalos",
+      "Kadmos"
+     ],
+     "lines": [
+      "The trade routes are closing one by one. Egypt is nervous, the Hittites are fighting.",
+      "Gold masks for the dead kings, and the living ones want gold for the walls.",
+      "Everyone is building walls. When a whole sea builds walls at once, something is coming."
+     ]
+    }
+   ],
+   "npcDensity": 0.6,
+   "ships": "galley",
+   "chronoport": {
+    "x": 470,
+    "z": -420,
+    "placeName": "the cave behind the reservoir on the back slope of Citadel Hill",
+    "hint": "Behind the Citadel Hill reservoir there is a cave the water board walled up twice. It keeps opening."
+   },
+   "districtNames": {
+    "citadel": "The Lion Gate",
+    "oldtown": "Lower Town",
+    "harbor": "Ship Sheds",
+    "eastside": "Bronze Yards",
+    "westmarket": "Wool Court",
+    "north": "Tomb Road",
+    "fields": "The Pastures"
+   },
+   "lore": "Palace kingdoms linked by bronze and tin trade, with every warehouse counted on clay. In a century, every palace will burn and the writing will be forgotten for four hundred years.",
+   "insight": {
+    "title": "The Web Breaks",
+    "text": "The Bronze Age ended all at once: drought, earthquakes, raiders, broken trade routes. Each kingdom could have survived one of them. None survived all of them together, because every kingdom depended on every other. Interconnection is strength until the day it becomes contagion."
+   },
+   "yearLabel": "1250 BCE"
+  },
+  {
+   "id": "assyrian",
+   "name": "Kalhu of the Winged Bulls",
+   "civ": "Neo-Assyrian",
+   "year": -879,
+   "tagline": "A new capital inaugurated with a ten-day feast for seventy thousand. Siege engines wait in the yards.",
+   "sky": 13215852,
+   "horizon": 14927770,
+   "fog": 14203784,
+   "fogDensity": 0.0032,
+   "sun": 16771520,
+   "sunIntensity": 2.2,
+   "ambient": 9074264,
+   "ground": 12031846,
+   "road": 10848863,
+   "dirt": 10848863,
+   "water": 5210742,
+   "layout": {
+    "pattern": "grid",
+    "blockW": 60,
+    "blockD": 48,
+    "streetWidth": 7,
+    "curve": 3,
+    "curveLen": 200,
+    "lotSize": 14,
+    "density": 0.8,
+    "extent": 0.66,
+    "fields": true,
+    "walls": true,
+    "pavedArterials": true
+   },
+   "buildings": [
+    {
+     "weight": 6,
+     "floors": [
+      1,
+      2
+     ],
+     "floorHeight": 3.2,
+     "footprint": [
+      0.7,
+      0.95
+     ],
+     "roof": "flat",
+     "roofColors": [
+      10912851
+     ],
+     "wallColors": [
+      13215084,
+      12557155,
+      13741686
+     ],
+     "parapet": true,
+     "tex": 13,
+     "windows": "slit",
+     "features": [
+      "plinth",
+      "crenellation"
+     ]
+    },
+    {
+     "weight": 2,
+     "floors": [
+      2,
+      3
+     ],
+     "floorHeight": 3.3,
+     "footprint": [
+      0.75,
+      0.95
+     ],
+     "roof": "flat",
+     "roofColors": [
+      10254924
+     ],
+     "wallColors": [
+      13610616
+     ],
+     "parapet": true,
+     "tex": 13,
+     "windows": "slit",
+     "features": [
+      "crenellation",
+      "bands",
+      "pilasters"
+     ],
+     "accent": 4157342,
+     "trim": 4157342
+    },
+    {
+     "weight": 1,
+     "floors": [
+      2,
+      2
+     ],
+     "floorHeight": 4,
+     "footprint": [
+      0.85,
+      0.95
+     ],
+     "roof": "flat",
+     "roofColors": [
+      9400133
+     ],
+     "wallColors": [
+      14070908
+     ],
+     "parapet": true,
+     "courtyard": true,
+     "tower": true,
+     "tex": 1,
+     "windows": "slit",
+     "features": [
+      "crenellation",
+      "bands",
+      "pilasters",
+      "plinth"
+     ],
+     "accent": 4157342,
+     "tag": "palace"
+    },
+    {
+     "weight": 1,
+     "floors": [
+      1,
+      1
+     ],
+     "floorHeight": 3.4,
+     "footprint": [
+      0.85,
+      0.95
+     ],
+     "roof": "flat",
+     "roofColors": [
+      10912851
+     ],
+     "wallColors": [
+      12557155
+     ],
+     "parapet": true,
+     "tex": 13,
+     "windows": "none",
+     "features": [
+      "plinth",
+      "arcade"
+     ],
+     "tag": "storehouse"
+    }
+   ],
+   "props": [
+    "statue",
+    "amphora",
+    "stall",
+    "torch",
+    "cart",
+    "stele",
+    "altar"
+   ],
+   "propDensity": 0.5,
+   "trees": "palm",
+   "treeDensity": 0.2,
+   "landmarks": {
+    "citadel": "palace_assyria",
+    "harbor": "quay",
+    "arena": "siege_yard",
+    "plaza": "lamassu_gate",
+    "sacred": "ziggurat_small",
+    "market": "bazaar"
+   },
+   "npcs": [
+    {
+     "role": "Soldier",
+     "outfit": "soldier",
+     "weight": 4,
+     "names": [
+      "Ashur-bel",
+      "Sin-ahi",
+      "Nabu-zer",
+      "Shamshi",
+      "Tukulti"
+     ],
+     "lines": [
+      "The king flays rebels and nails the skins to the wall. The next city opens its gates. Efficient.",
+      "Iron swords now. The bronze men fall like wheat.",
+      "Siege towers, ramps, sappers. There is no wall we cannot climb or dig under."
+     ]
+    },
+    {
+     "role": "Courtier",
+     "outfit": "merchant",
+     "weight": 2,
+     "names": [
+      "Bel-tarsi",
+      "Ashur-nasir",
+      "Mullissu",
+      "Sammu-ramat"
+     ],
+     "lines": [
+      "Seventy thousand guests at the inauguration. Ten days. Ten thousand sheep. The king wants it carved on the wall.",
+      "Deported peoples build the palace. Their homelands are quiet because they are here.",
+      "Every province sends tribute. Every province hates us. One is the cause of the other."
+     ]
+    },
+    {
+     "role": "Deportee",
+     "outfit": "farmer",
+     "weight": 3,
+     "names": [
+      "Hoshea",
+      "Tirzah",
+      "Aram",
+      "Yakin",
+      "Malka"
+     ],
+     "lines": [
+      "They marched us a thousand miles to make bricks for a king we had never heard of.",
+      "Keep your head down and your hands busy. That is the whole law here.",
+      "They think we will forget where we came from. We will not."
+     ]
+    },
+    {
+     "role": "Priest",
+     "outfit": "priest",
+     "weight": 2,
+     "names": [
+      "Nabu-zuqup",
+      "Ashur-iddin",
+      "Sin-leqi",
+      "Bel-ibni",
+      "Urad-Gula"
+     ],
+     "lines": [
+      "The liver of the sheep said the campaign would succeed. The liver is rarely wrong for kings.",
+      "Ashur demands tribute, and the empire delivers it. The god grows fat on provinces.",
+      "We read the stars for the king every night. Lately the stars are anxious."
+     ]
+    },
+    {
+     "role": "Stonecarver",
+     "outfit": "artisan",
+     "weight": 3,
+     "names": [
+      "Ilu-bani",
+      "Kisir-Ashur",
+      "Ubru",
+      "Nergal-eresh",
+      "Mannu-ki"
+     ],
+     "lines": [
+      "I carve the king hunting lions, the king crushing rebels, the king being king. Forever, in alabaster.",
+      "The palace walls are a book nobody can read but everyone understands.",
+      "Captives from every land work beside me. Their gods are carved too, in chains."
+     ]
+    }
+   ],
+   "npcDensity": 0.75,
+   "ships": "reed",
+   "chronoport": {
+    "x": 560,
+    "z": -180,
+    "placeName": "the abandoned gatehouse on the east ring road",
+    "hint": "The east ring road gatehouse was decommissioned in 1922 after guards reported \"lions\" in the yard at night."
+   },
+   "districtNames": {
+    "citadel": "The North-West Palace",
+    "oldtown": "Lower City",
+    "harbor": "The Quay of Tribute",
+    "eastside": "Arsenal",
+    "westmarket": "Tribute Court",
+    "north": "Gate of Nergal",
+    "fields": "The Irrigated Land"
+   },
+   "lore": "The most feared army in the world is building a new capital with the labor of a hundred deported nations. Ashurnasirpal II has invited the whole empire to dinner.",
+   "insight": {
+    "title": "Fear Is a Loan",
+    "text": "Assyria ruled through terror and deportation, and it worked for two centuries. Then every subject people rose at once, and Nineveh burned so completely that its own location was forgotten. Fear buys obedience, but the interest compounds."
+   },
+   "yearLabel": "879 BCE"
+  },
+  {
+   "id": "greek",
+   "name": "The Polis",
+   "civ": "Greek",
+   "year": -338,
+   "tagline": "Philosophers argue in the agora while Philip of Macedon marches south. The age of free cities ends this year.",
+   "sky": 5940966,
+   "horizon": 15659765,
+   "fog": 13886446,
+   "fogDensity": 0.0024,
+   "sun": 16775658,
+   "sunIntensity": 2.7,
+   "ambient": 9411237,
+   "ground": 11643262,
+   "road": 13814707,
+   "dirt": 12365964,
+   "water": 1929116,
+   "layout": {
+    "pattern": "grid",
+    "blockW": 40,
+    "blockD": 34,
+    "streetWidth": 5.5,
+    "curve": 2,
+    "curveLen": 160,
+    "lotSize": 12,
+    "density": 0.78,
+    "extent": 0.6,
+    "fields": true,
+    "walls": true,
+    "pavedArterials": true
+   },
+   "buildings": [
+    {
+     "weight": 6,
+     "floors": [
+      1,
+      2
+     ],
+     "floorHeight": 3,
+     "footprint": [
+      0.65,
+      0.9
+     ],
+     "roof": "hip",
+     "roofColors": [
+      11883323,
+      11028527
+     ],
+     "wallColors": [
+      15854556,
+      15196107,
+      16183523
+     ],
+     "courtyard": true,
+     "tex": 0,
+     "roofTex": 4,
+     "windows": "square",
+     "features": [
+      "plinth",
+      "frames",
+      "shutters"
+     ],
+     "accent": 3824266
+    },
+    {
+     "weight": 3,
+     "floors": [
+      1,
+      2
+     ],
+     "floorHeight": 3,
+     "footprint": [
+      0.6,
+      0.85
+     ],
+     "roof": "gable",
+     "roofColors": [
+      11883323
+     ],
+     "wallColors": [
+      15524816,
+      15985887
+     ],
+     "tex": 0,
+     "roofTex": 4,
+     "windows": "square",
+     "features": [
+      "plinth",
+      "sills",
+      "eaves"
+     ]
+    },
+    {
+     "weight": 1,
+     "floors": [
+      1,
+      1
+     ],
+     "floorHeight": 5,
+     "footprint": [
+      0.8,
+      0.95
+     ],
+     "roof": "gable",
+     "roofColors": [
+      13088922
+     ],
+     "wallColors": [
+      16249574
+     ],
+     "tex": 2,
+     "roofTex": 4,
+     "windows": "none",
+     "features": [
+      "porch",
+      "pilasters",
+      "plinth",
+      "cornice"
+     ],
+     "tag": "temple"
+    },
+    {
+     "weight": 1,
+     "floors": [
+      1,
+      1
+     ],
+     "floorHeight": 4,
+     "footprint": [
+      0.85,
+      0.95
+     ],
+     "roof": "flat",
+     "roofColors": [
+      14274749
+     ],
+     "wallColors": [
+      15920352
+     ],
+     "tex": 2,
+     "windows": "none",
+     "features": [
+      "arcade",
+      "cornice",
+      "plinth"
+     ],
+     "tag": "stoa"
+    },
+    {
+     "weight": 1,
+     "floors": [
+      1,
+      1
+     ],
+     "floorHeight": 3.2,
+     "footprint": [
+      0.6,
+      0.8
+     ],
+     "roof": "hip",
+     "roofColors": [
+      11883323
+     ],
+     "wallColors": [
+      14272680
+     ],
+     "tex": 13,
+     "roofTex": 4,
+     "windows": "slit",
+     "features": [
+      "plinth"
+     ],
+     "tag": "workshop"
+    }
+   ],
+   "props": [
+    "statue",
+    "amphora",
+    "fountain",
+    "stall",
+    "pillar",
+    "altar",
+    "bench"
+   ],
+   "propDensity": 0.55,
+   "trees": "cypress",
+   "treeDensity": 0.4,
+   "landmarks": {
+    "citadel": "parthenon",
+    "harbor": "quay",
+    "arena": "theatre",
+    "plaza": "agora",
+    "sacred": "oracle",
+    "market": "stoa_market"
+   },
+   "npcs": [
+    {
+     "role": "Philosopher",
+     "outfit": "merchant",
+     "weight": 2,
+     "names": [
+      "Aristotle",
+      "Diogenes",
+      "Xenocrates",
+      "Hypatia",
+      "Speusippus"
+     ],
+     "lines": [
+      "A city is a group of people who have agreed on what a good life is. We no longer agree. Therefore we are no longer a city.",
+      "Diogenes lives in a jar and tells the truth. We put him up with it because he is not running for anything.",
+      "Philip buys cities with silver more cheaply than he takes them with spears. Our traitors are reasonably priced."
+     ]
+    },
+    {
+     "role": "Hoplite",
+     "outfit": "soldier",
+     "weight": 3,
+     "names": [
+      "Demosthenes",
+      "Phocion",
+      "Lysander",
+      "Chares",
+      "Iphicrates"
+     ],
+     "lines": [
+      "Shield wall. Eight deep. Your shield protects the man to your left. That is democracy with a spear.",
+      "Athens and Thebes have agreed to fight together. For the first time in my life. It took a Macedonian to do it.",
+      "Chaeronea. We march in a week. I have a feeling about Chaeronea."
+     ]
+    },
+    {
+     "role": "Citizen",
+     "outfit": "farmer",
+     "weight": 4,
+     "names": [
+      "Kleon",
+      "Nikias",
+      "Thrasybulus",
+      "Eucleia",
+      "Phryne"
+     ],
+     "lines": [
+      "Every citizen votes. Every citizen argues. Nothing gets decided until the enemy is at the gate.",
+      "The assembly spent a month debating the theatre fund and a day on the army.",
+      "The theatre is free for citizens. The tragedies tell us what happens to proud cities. We applaud and go home."
+     ]
+    },
+    {
+     "role": "Priestess",
+     "outfit": "priest",
+     "weight": 1,
+     "names": [
+      "Theano",
+      "Lysimache",
+      "Pythia",
+      "Chrysis",
+      "Hiereia"
+     ],
+     "lines": [
+      "Athena guards the city, but the city must guard itself as well.",
+      "Philip of Macedon sends gifts to the temple. Generous men who want something.",
+      "The oracle says what the city already believes. That is why it is always right."
+     ]
+    },
+    {
+     "role": "Potter",
+     "outfit": "artisan",
+     "weight": 3,
+     "names": [
+      "Exekias",
+      "Amasis",
+      "Lydos",
+      "Kleitias",
+      "Euphronios"
+     ],
+     "lines": [
+      "Black figures on red clay. Heroes and wine and the gods misbehaving.",
+      "Every city in the Greek world drinks from Athenian pots. Every city also hates Athens.",
+      "The northern king is coming. My pots will survive him. Pots survive everything."
+     ]
+    }
+   ],
+   "npcDensity": 0.8,
+   "ships": "galley",
+   "chronoport": {
+    "x": -250,
+    "z": -300,
+    "placeName": "the back stacks of the Old Town public library",
+    "hint": "A librarian complained that the philosophy stacks in the basement \"hum\" on cold nights."
+   },
+   "districtNames": {
+    "citadel": "Acropolis",
+    "oldtown": "The Agora Quarter",
+    "harbor": "Piraeus Landing",
+    "eastside": "Kerameikos",
+    "westmarket": "The Long Stoa",
+    "north": "Academy Groves",
+    "fields": "The Olive Country"
+   },
+   "lore": "A hundred quarrelling city-states, each certain it is the centre of the world. In the north, a king who has learned to use their quarrels against them.",
+   "insight": {
+    "title": "Divided Cities",
+    "text": "The Greek city-states invented democracy, philosophy and the theatre, and spent a century fighting one another. When Philip of Macedon came, they united too late and lost at Chaeronea in a single afternoon. Freedom that cannot cooperate is freedom waiting to be collected."
+   },
+   "yearLabel": "338 BCE"
+  },
+  {
+   "id": "mauryan",
+   "name": "Pataliputra of the Pillars",
+   "civ": "Mauryan",
+   "year": -250,
+   "tagline": "Ashoka has renounced war after Kalinga. His edicts stand on polished pillars. His elephants wait anyway.",
+   "sky": 8829158,
+   "horizon": 15787206,
+   "fog": 14472117,
+   "fogDensity": 0.0028,
+   "sun": 16774102,
+   "sunIntensity": 2.5,
+   "ambient": 9408364,
+   "ground": 9413470,
+   "road": 12033644,
+   "dirt": 11046496,
+   "water": 3833212,
+   "layout": {
+    "pattern": "grid",
+    "blockW": 52,
+    "blockD": 44,
+    "streetWidth": 6,
+    "curve": 3,
+    "curveLen": 220,
+    "lotSize": 13,
+    "density": 0.76,
+    "extent": 0.64,
+    "fields": true,
+    "walls": true,
+    "pavedArterials": true
+   },
+   "buildings": [
+    {
+     "weight": 6,
+     "floors": [
+      1,
+      2
+     ],
+     "floorHeight": 3,
+     "footprint": [
+      0.6,
+      0.9
+     ],
+     "roof": "hip",
+     "roofColors": [
+      9067066,
+      10251077
+     ],
+     "wallColors": [
+      15128242,
+      14206620,
+      15721156
+     ],
+     "tex": 1,
+     "texRepeat": 0.6,
+     "roofTex": 4,
+     "windows": "arch",
+     "features": [
+      "balcony",
+      "lattice",
+      "eaves",
+      "plinth"
+     ],
+     "accent": 8014380
+    },
+    {
+     "weight": 3,
+     "floors": [
+      1,
+      1
+     ],
+     "floorHeight": 3,
+     "footprint": [
+      0.55,
+      0.8
+     ],
+     "roof": "thatch",
+     "roofColors": [
+      12165226
+     ],
+     "wallColors": [
+      14271642,
+      13482126
+     ],
+     "tex": 13,
+     "roofTex": 5,
+     "windows": "square",
+     "features": [
+      "porch",
+      "plinth"
+     ]
+    },
+    {
+     "weight": 1,
+     "floors": [
+      1,
+      1
+     ],
+     "floorHeight": 3.6,
+     "footprint": [
+      0.7,
+      0.9
+     ],
+     "roof": "dome",
+     "roofColors": [
+      15327951
+     ],
+     "wallColors": [
+      15854036
+     ],
+     "round": true,
+     "tex": 1,
+     "windows": "none",
+     "features": [
+      "bands"
+     ],
+     "accent": 14263594,
+     "tag": "stupa"
+    },
+    {
+     "weight": 1,
+     "floors": [
+      2,
+      3
+     ],
+     "floorHeight": 3.4,
+     "footprint": [
+      0.8,
+      0.95
+     ],
+     "roof": "hip",
+     "roofColors": [
+      8014380
+     ],
+     "wallColors": [
+      15919312
+     ],
+     "tex": 0,
+     "roofTex": 3,
+     "windows": "arch",
+     "features": [
+      "porch",
+      "pilasters",
+      "balcony",
+      "eaves",
+      "cornice"
+     ],
+     "accent": 8014380,
+     "tag": "hall"
+    }
+   ],
+   "props": [
+    "pillar",
+    "stall",
+    "well",
+    "cart",
+    "shrine",
+    "amphora",
+    "altar"
+   ],
+   "propDensity": 0.55,
+   "trees": "jungle",
+   "treeDensity": 0.45,
+   "landmarks": {
+    "citadel": "palace_maurya",
+    "harbor": "quay",
+    "arena": "elephant_ground",
+    "plaza": "ashoka_pillar",
+    "sacred": "great_stupa",
+    "market": "bazaar"
+   },
+   "npcs": [
+    {
+     "role": "Monk",
+     "outfit": "priest",
+     "weight": 3,
+     "names": [
+      "Upagupta",
+      "Mahinda",
+      "Moggaliputta",
+      "Sanghamitta"
+     ],
+     "lines": [
+      "The emperor killed a hundred thousand at Kalinga, then wept, then wrote the rules on stone. We are the rules.",
+      "All beings wish to live. This is carved on the pillar. Also, the tax rate.",
+      "Dhamma is not a religion. It is a way of not needing an army. We will see."
+     ]
+    },
+    {
+     "role": "Official",
+     "outfit": "merchant",
+     "weight": 2,
+     "names": [
+      "Chanakya",
+      "Radhagupta",
+      "Pushyamitra",
+      "Kunala"
+     ],
+     "lines": [
+      "The Arthashastra has a chapter on spies. Several chapters. We are very well informed.",
+      "Roads every eight miles have a well and a rest house. The emperor wants the empire to be walkable.",
+      "An empire this size holds together by the will of one man. Think about what that means for the second man."
+     ]
+    },
+    {
+     "role": "Mahout",
+     "outfit": "farmer",
+     "weight": 3,
+     "names": [
+      "Bhadra",
+      "Airavata",
+      "Devala",
+      "Sumana"
+     ],
+     "lines": [
+      "Nine thousand elephants. The Greeks ran from them. The Greeks ran from everything after Alexander died.",
+      "An elephant remembers who fed it and who whipped it. Empires are the same.",
+      "The emperor says no more war. The elephants are still fed three times a day."
+     ]
+    },
+    {
+     "role": "Soldier",
+     "outfit": "soldier",
+     "weight": 3,
+     "names": [
+      "Chandra",
+      "Bhadrasena",
+      "Vikram",
+      "Senani",
+      "Gopala"
+     ],
+     "lines": [
+      "The emperor gave up war after Kalinga. The army did not get the message for a while.",
+      "Six hundred thousand foot, nine thousand elephants. Peace is expensive to keep.",
+      "We guard the roads now. Wells and rest houses every nine miles, by order."
+     ]
+    },
+    {
+     "role": "Weaver",
+     "outfit": "artisan",
+     "weight": 3,
+     "names": [
+      "Sunanda",
+      "Kumari",
+      "Devi",
+      "Lalita",
+      "Asha"
+     ],
+     "lines": [
+      "Cotton from the south, dye from the indigo fields. My cloth goes to Rome someday.",
+      "The edicts say be kind to animals. My loom is very kind; it eats nothing.",
+      "Taxes are fair this year. The emperor’s men even wrote them down where we can read them."
+     ]
+    }
+   ],
+   "npcDensity": 0.75,
+   "ships": "barque",
+   "chronoport": {
+    "x": -600,
+    "z": -100,
+    "placeName": "the overgrown bandstand in West Ring Park",
+    "hint": "The park bandstand on the west ring road is built on a round stone platform far older than the park."
+   },
+   "districtNames": {
+    "citadel": "The Pillared Hall",
+    "oldtown": "Old Pataliputra",
+    "harbor": "Ganga Landing",
+    "eastside": "Elephant Stables",
+    "westmarket": "Spice Bazaar",
+    "north": "Monastery Road",
+    "fields": "Rice Country"
+   },
+   "lore": "The largest empire India has ever seen, run by a conqueror who became a pacifist. The whole structure rests on his will.",
+   "insight": {
+    "title": "The Empire of One Man",
+    "text": "The Mauryan Empire was held together by Ashoka’s personal authority. Within fifty years of his death it had broken into pieces. A system that only works with one exceptional person at the top is a system with a built-in expiry date."
+   },
+   "yearLabel": "250 BCE"
+  },
+  {
+   "id": "roman",
+   "name": "Chronopolis Augusta",
+   "civ": "Roman",
+   "year": 112,
+   "tagline": "Trajan’s Forum is dedicated this year. The empire is at its largest. It will never be larger.",
+   "sky": 6596840,
+   "horizon": 15920349,
+   "fog": 14212052,
+   "fogDensity": 0.0026,
+   "sun": 16775140,
+   "sunIntensity": 2.6,
+   "ambient": 9080982,
+   "ground": 10788472,
+   "road": 9407878,
+   "dirt": 11575424,
+   "water": 2781084,
+   "layout": {
+    "pattern": "grid",
+    "blockW": 48,
+    "blockD": 36,
+    "streetWidth": 6.5,
+    "curve": 0,
+    "curveLen": 1,
+    "lotSize": 12,
+    "density": 0.88,
+    "extent": 0.78,
+    "fields": true,
+    "walls": true,
+    "pavedArterials": true
+   },
+   "buildings": [
+    {
+     "weight": 6,
+     "floors": [
+      3,
+      5
+     ],
+     "floorHeight": 3,
+     "footprint": [
+      0.78,
+      0.96
+     ],
+     "roof": "hip",
+     "roofColors": [
+      11554614,
+      10765100,
+      12409406
+     ],
+     "wallColors": [
+      14271392,
+      13612431,
+      14864302,
+      13217930
+     ],
+     "tex": 1,
+     "texRepeat": 0.7,
+     "roofTex": 4,
+     "windows": "square",
+     "features": [
+      "arcade",
+      "balcony",
+      "ledges",
+      "eaves"
+     ],
+     "accent": 5917242,
+     "tag": "insula"
+    },
+    {
+     "weight": 3,
+     "floors": [
+      1,
+      2
+     ],
+     "floorHeight": 3.2,
+     "footprint": [
+      0.75,
+      0.95
+     ],
+     "roof": "hip",
+     "roofColors": [
+      11554614
+     ],
+     "wallColors": [
+      15787212,
+      15260349
+     ],
+     "courtyard": true,
+     "tex": 0,
+     "roofTex": 4,
+     "windows": "slit",
+     "features": [
+      "plinth",
+      "bands",
+      "eaves"
+     ],
+     "accent": 10765100,
+     "tag": "domus"
+    },
+    {
+     "weight": 1,
+     "floors": [
+      1,
+      1
+     ],
+     "floorHeight": 6,
+     "footprint": [
+      0.8,
+      0.95
+     ],
+     "roof": "gable",
+     "roofColors": [
+      14274492
+     ],
+     "wallColors": [
+      16052196
+     ],
+     "tex": 2,
+     "roofTex": 4,
+     "windows": "none",
+     "features": [
+      "porch",
+      "pilasters",
+      "plinth",
+      "cornice"
+     ],
+     "tag": "temple"
+    },
+    {
+     "weight": 1,
+     "floors": [
+      1,
+      1
+     ],
+     "floorHeight": 5,
+     "footprint": [
+      0.85,
+      0.95
+     ],
+     "roof": "flat",
+     "roofColors": [
+      13089958
+     ],
+     "wallColors": [
+      15393488
+     ],
+     "tex": 2,
+     "windows": "arch",
+     "features": [
+      "arcade",
+      "cornice",
+      "plinth",
+      "pilasters"
+     ],
+     "tag": "basilica"
+    },
+    {
+     "weight": 1.5,
+     "floors": [
+      1,
+      2
+     ],
+     "floorHeight": 3.6,
+     "footprint": [
+      0.85,
+      0.95
+     ],
+     "roof": "gable",
+     "roofColors": [
+      10765100
+     ],
+     "wallColors": [
+      13217930,
+      12558456
+     ],
+     "tex": 1,
+     "texRepeat": 0.7,
+     "roofTex": 4,
+     "windows": "arch",
+     "features": [
+      "arcade",
+      "plinth"
+     ],
+     "tag": "horrea"
+    }
+   ],
+   "props": [
+    "statue",
+    "fountain",
+    "amphora",
+    "stall",
+    "pillar",
+    "cart",
+    "altar",
+    "bench"
+   ],
+   "propDensity": 0.6,
+   "trees": "cypress",
+   "treeDensity": 0.3,
+   "landmarks": {
+    "citadel": "capitol_rome",
+    "harbor": "quay_roman",
+    "arena": "colosseum",
+    "plaza": "forum",
+    "sacred": "pantheon",
+    "market": "thermae"
+   },
+   "npcs": [
+    {
+     "role": "Legionary",
+     "outfit": "soldier",
+     "weight": 3,
+     "names": [
+      "Marcus",
+      "Gaius",
+      "Lucius",
+      "Titus",
+      "Quintus"
+     ],
+     "lines": [
+      "Twenty-five years and you get land and citizenship. If you live. Most of us live. We are very good at this.",
+      "We build a road, a fort and a bathhouse, and in a generation the barbarians are complaining about taxes in Latin.",
+      "Dacia is taken. The gold is paying for the forum. Everyone is asking what we take next."
+     ]
+    },
+    {
+     "role": "Senator",
+     "outfit": "priest",
+     "weight": 1,
+     "names": [
+      "Pliny",
+      "Tacitus",
+      "Hadrian",
+      "Sura",
+      "Frontinus"
+     ],
+     "lines": [
+      "Bread and circuses. Two hundred thousand families on the grain dole. Cut it and Rome burns. Keep it and Rome goes broke. Slowly.",
+      "The emperor is good. That is the problem with emperors. You only need one bad one.",
+      "Senators do not trade. We own the land that the traders rent. It is more dignified and pays better."
+     ]
+    },
+    {
+     "role": "Plebeian",
+     "outfit": "farmer",
+     "weight": 5,
+     "names": [
+      "Fortunata",
+      "Felix",
+      "Sextus",
+      "Vitalis",
+      "Prima"
+     ],
+     "lines": [
+      "Fifth floor of an insula. If it burns, it burns from the bottom up, so you have time to think about it.",
+      "Water from the aqueduct, free. Bread from the dole, free. Games in the arena, free. Rent? Rent is not free.",
+      "The games today: forty gladiators and a giraffe. I have never seen a giraffe."
+     ]
+    },
+    {
+     "role": "Fuller",
+     "outfit": "artisan",
+     "weight": 3,
+     "names": [
+      "Verecundus",
+      "Fullo",
+      "Faustus",
+      "Marcus Vesonius",
+      "Ascula"
+     ],
+     "lines": [
+      "Wool cleaning, wool dyeing, and yes, we use what you think we use. It works.",
+      "The aqueduct brings more water than the city can drink. Rome wastes on a grand scale.",
+      "Every guild has a feast day. We have three. Nobody asked how."
+     ]
+    },
+    {
+     "role": "Merchant",
+     "outfit": "merchant",
+     "weight": 3,
+     "names": [
+      "Lucius Caecilius",
+      "Umbricius",
+      "Sergius",
+      "Cornelia",
+      "Aulus"
+     ],
+     "lines": [
+      "Grain from Egypt, oil from Spain, glass from Syria. Rome makes nothing and buys everything.",
+      "The emperor pays the army, the army keeps the peace, the peace keeps my ships afloat.",
+      "Every coin is a little lighter than last year. Nobody says it aloud."
+     ]
+    }
+   ],
+   "npcDensity": 0.95,
+   "ships": "galley",
+   "chronoport": {
+    "x": -18,
+    "z": -165,
+    "placeName": "the vaulted chamber under the west pier of the Meridian Bridge",
+    "hint": "Under the west end of the Meridian Bridge, where the old aqueduct footing shows at low water."
+   },
+   "districtNames": {
+    "citadel": "Capitolium",
+    "oldtown": "Forum Quarter",
+    "harbor": "Emporium",
+    "eastside": "Subura",
+    "westmarket": "Velabrum",
+    "north": "Campus Martius",
+    "fields": "The Latifundia"
+   },
+   "lore": "The empire at its greatest extent. Aqueducts, roads, an arena that seats fifty thousand, and a grain dole that feeds a fifth of the city.",
+   "insight": {
+    "title": "Too Big to Hold",
+    "text": "Rome reached its largest size in 117 CE and spent the next three centuries defending a frontier it could not afford. Growth became the only plan, and when growth stopped, every other problem arrived at once. No frontier is a goal."
+   },
+   "yearLabel": "112 CE"
+  },
+  {
+   "id": "mayan",
+   "name": "Mutal of the Jungle",
+   "civ": "Maya",
+   "year": 378,
+   "tagline": "Strangers from the west arrive the day the old king dies. The calendar says it is a bad sign.",
+   "sky": 7516630,
+   "horizon": 14084038,
+   "fog": 12178608,
+   "fogDensity": 0.0034,
+   "sun": 16774880,
+   "sunIntensity": 2.3,
+   "ambient": 7309931,
+   "ground": 5208636,
+   "road": 13222050,
+   "dirt": 9337426,
+   "water": 3111534,
+   "layout": {
+    "pattern": "organic",
+    "blockW": 58,
+    "blockD": 50,
+    "streetWidth": 6,
+    "curve": 14,
+    "curveLen": 200,
+    "lotSize": 14,
+    "density": 0.6,
+    "extent": 0.56,
+    "fields": true,
+    "walls": false,
+    "pavedArterials": true
+   },
+   "buildings": [
+    {
+     "weight": 6,
+     "floors": [
+      1,
+      1
+     ],
+     "floorHeight": 2.8,
+     "footprint": [
+      0.55,
+      0.8
+     ],
+     "roof": "thatch",
+     "roofColors": [
+      11902823,
+      11047516
+     ],
+     "wallColors": [
+      15260864,
+      14273706,
+      13219215
+     ],
+     "tex": 3,
+     "roofTex": 5,
+     "windows": "none",
+     "features": [
+      "plinth",
+      "ridge"
+     ]
+    },
+    {
+     "weight": 2,
+     "floors": [
+      1,
+      1
+     ],
+     "floorHeight": 3.4,
+     "footprint": [
+      0.7,
+      0.9
+     ],
+     "roof": "flat",
+     "roofColors": [
+      14075812
+     ],
+     "wallColors": [
+      15523778,
+      15918796
+     ],
+     "parapet": true,
+     "tex": 0,
+     "windows": "slit",
+     "features": [
+      "plinth",
+      "bands",
+      "cornice"
+     ],
+     "accent": 11551290,
+     "trim": 11551290
+    },
+    {
+     "weight": 1,
+     "floors": [
+      1,
+      1
+     ],
+     "floorHeight": 3,
+     "footprint": [
+      0.8,
+      0.95
+     ],
+     "roof": "stepped",
+     "roofColors": [
+      14471088
+     ],
+     "wallColors": [
+      15326400
+     ],
+     "tex": 2,
+     "windows": "none",
+     "features": [
+      "plinth",
+      "bands"
+     ],
+     "accent": 11551290,
+     "tag": "shrine"
+    },
+    {
+     "weight": 1,
+     "floors": [
+      1,
+      1
+     ],
+     "floorHeight": 3,
+     "footprint": [
+      0.8,
+      0.95
+     ],
+     "roof": "flat",
+     "roofColors": [
+      14075812
+     ],
+     "wallColors": [
+      14931637
+     ],
+     "courtyard": true,
+     "tex": 0,
+     "windows": "slit",
+     "features": [
+      "plinth",
+      "bands"
+     ],
+     "accent": 2854762,
+     "tag": "compound"
+    }
+   ],
+   "props": [
+    "stele",
+    "altar",
+    "stall",
+    "well",
+    "amphora",
+    "torch"
+   ],
+   "propDensity": 0.45,
+   "trees": "jungle",
+   "treeDensity": 0.9,
+   "landmarks": {
+    "citadel": "pyramid_maya",
+    "harbor": "canoe_landing",
+    "arena": "ballcourt",
+    "plaza": "stela_plaza",
+    "sacred": "observatory",
+    "market": "bazaar"
+   },
+   "npcs": [
+    {
+     "role": "Astronomer",
+     "outfit": "priest",
+     "weight": 2,
+     "names": [
+      "Yax Nuun",
+      "Chak Tok",
+      "K’inich",
+      "Ix Chel",
+      "Siyaj"
+     ],
+     "lines": [
+      "Venus returns every 584 days. The calendar is correct to the day across a thousand years. The kings are less reliable.",
+      "Eight-Deer, Eleven-Wind. Every day has a name and a fate. Today’s is not good.",
+      "The strangers from the west arrived on the day the king entered the water. We are writing it down very carefully."
+     ]
+    },
+    {
+     "role": "Farmer",
+     "outfit": "farmer",
+     "weight": 4,
+     "names": [
+      "Balam",
+      "Itzamna",
+      "Ixkik",
+      "Kan",
+      "Tohil"
+     ],
+     "lines": [
+      "Burn the forest, plant the maize, move on. The forest used to come back. It is slower now.",
+      "The reservoirs are the king’s. In the dry season, the king is god. In the wet season, nobody remembers him.",
+      "The city grows and the forest shrinks. Somebody should do the arithmetic."
+     ]
+    },
+    {
+     "role": "Warrior",
+     "outfit": "soldier",
+     "weight": 2,
+     "names": [
+      "Siyaj K’ak’",
+      "Spearthrower Owl",
+      "Jaguar Paw",
+      "Fire Born"
+     ],
+     "lines": [
+      "Teotihuacan sends its soldiers and its spear-throwers. We did not invite them. We will say we did.",
+      "Captives for the altar, blood for the rain. That is the deal with the gods. The gods are behind on their payments.",
+      "Every city-state fights every other. The jungle is full of causeways and ambushes."
+     ]
+    },
+    {
+     "role": "Painter",
+     "outfit": "artisan",
+     "weight": 2,
+     "names": [
+      "Ah Kan",
+      "Ix Chel",
+      "Kinich",
+      "Ah Puch",
+      "Ix Tab"
+     ],
+     "lines": [
+      "I paint the codices. Bark paper, lime, and the history of kings who all claim to be eternal.",
+      "The stelae record every victory. None of them record a drought.",
+      "The rains came late again. We painted a rain god on every wall. It did not help."
+     ]
+    },
+    {
+     "role": "Trader",
+     "outfit": "merchant",
+     "weight": 3,
+     "names": [
+      "Ek Chuah",
+      "Balam",
+      "Yax",
+      "Chak",
+      "Kukul"
+     ],
+     "lines": [
+      "Cacao beans are money. Salt from the coast, jade from the south, obsidian from the mountains.",
+      "The cities fight, the roads close, and trade dries up with the wells.",
+      "I walk the white roads between the cities. Fewer of them have guards at the gates now."
+     ]
+    }
+   ],
+   "npcDensity": 0.65,
+   "ships": "canoe",
+   "chronoport": {
+    "x": -590,
+    "z": 560,
+    "placeName": "the sinkhole in the vacant lot at the south-west corner of the ring road",
+    "hint": "A sinkhole opened at the south-west corner lot in 1934. The city fenced it. The fence keeps falling down."
+   },
+   "districtNames": {
+    "citadel": "The Great Acropolis",
+    "oldtown": "Plaza of the Stelae",
+    "harbor": "Reservoir Landing",
+    "eastside": "Lineage Compounds",
+    "westmarket": "The Causeway Market",
+    "north": "The Observatory Road",
+    "fields": "The Milpa"
+   },
+   "lore": "A jungle city of pyramids, reservoirs and astronomers who can predict eclipses. On this exact day a column of foreigners arrives from Teotihuacan and the king dies.",
+   "insight": {
+    "title": "The Forest Does Not Return",
+    "text": "The Classic Maya cleared forest for fields, warred over the fields, and then the rains failed for years at a time. Cities that had planned for a normal drought met a drought that was not normal. Plan for the worst year on record and then assume the record will be broken."
+   },
+   "yearLabel": "378 CE"
+  },
+  {
+   "id": "viking",
+   "name": "Jorvik of the Long Ships",
+   "civ": "Viking",
+   "year": 866,
+   "tagline": "The Great Heathen Army has just taken the town. Longships crowd the bay; longhouses rise on the ashes.",
+   "sky": 9415101,
+   "horizon": 13489880,
+   "fog": 12109000,
+   "fogDensity": 0.0038,
+   "sun": 16771272,
+   "sunIntensity": 1.8,
+   "ambient": 8030858,
+   "ground": 6257220,
+   "road": 9075294,
+   "dirt": 8220242,
+   "water": 3104624,
+   "layout": {
+    "pattern": "spread",
+    "blockW": 90,
+    "blockD": 80,
+    "streetWidth": 5,
+    "curve": 10,
+    "curveLen": 160,
+    "lotSize": 30,
+    "density": 0.5,
+    "extent": 0.62,
+    "fields": true,
+    "walls": true,
+    "pavedArterials": false
+   },
+   "buildings": [
+    {
+     "weight": 6,
+     "floors": [
+      1,
+      1
+     ],
+     "floorHeight": 2.6,
+     "footprint": [
+      0.75,
+      0.95
+     ],
+     "roof": "thatch",
+     "roofColors": [
+      7309882,
+      8030784,
+      10259029
+     ],
+     "wallColors": [
+      7230518,
+      8216896,
+      6047280
+     ],
+     "overhang": 0.9,
+     "tex": 3,
+     "roofTex": 10,
+     "windows": "none",
+     "features": [
+      "ridge",
+      "plinth"
+     ],
+     "tag": "longhouse"
+    },
+    {
+     "weight": 3,
+     "floors": [
+      1,
+      1
+     ],
+     "floorHeight": 2.4,
+     "footprint": [
+      0.4,
+      0.6
+     ],
+     "roof": "gable",
+     "roofColors": [
+      8022586
+     ],
+     "wallColors": [
+      7230518,
+      5915952
+     ],
+     "overhang": 0.6,
+     "tex": 3,
+     "roofTex": 5,
+     "windows": "none",
+     "features": [
+      "ridge"
+     ]
+    },
+    {
+     "weight": 1,
+     "floors": [
+      1,
+      1
+     ],
+     "floorHeight": 3.4,
+     "footprint": [
+      0.8,
+      0.95
+     ],
+     "roof": "gable",
+     "roofColors": [
+      5196346
+     ],
+     "wallColors": [
+      5126696
+     ],
+     "overhang": 1.1,
+     "tex": 3,
+     "roofTex": 3,
+     "windows": "none",
+     "features": [
+      "ridge",
+      "porch",
+      "plinth"
+     ],
+     "tag": "hall"
+    },
+    {
+     "weight": 1.5,
+     "floors": [
+      1,
+      1
+     ],
+     "floorHeight": 2.2,
+     "footprint": [
+      0.5,
+      0.7
+     ],
+     "roof": "gable",
+     "roofColors": [
+      9075274
+     ],
+     "wallColors": [
+      9079424
+     ],
+     "overhang": 0.5,
+     "tex": 2,
+     "roofTex": 5,
+     "windows": "none",
+     "tag": "byre"
+    }
+   ],
+   "props": [
+    "runestone",
+    "barrel",
+    "haystack",
+    "campfire",
+    "cart",
+    "totem",
+    "boulder"
+   ],
+   "propDensity": 0.5,
+   "trees": "pine",
+   "treeDensity": 0.7,
+   "landmarks": {
+    "citadel": "great_hall",
+    "harbor": "longship_harbor",
+    "arena": "thing_mound",
+    "plaza": "runestone_ring",
+    "sacred": "hof",
+    "market": "trading_post"
+   },
+   "npcs": [
+    {
+     "role": "Raider",
+     "outfit": "soldier",
+     "weight": 3,
+     "names": [
+      "Ivar",
+      "Halfdan",
+      "Ubba",
+      "Bjorn",
+      "Sigurd"
+     ],
+     "lines": [
+      "No horns on the helmet. Who told you about horns?",
+      "We came for silver and stayed for the farmland. Everyone does.",
+      "The English call us heathens. We call them a bank with no walls."
+     ]
+    },
+    {
+     "role": "Farmer",
+     "outfit": "farmer",
+     "weight": 4,
+     "names": [
+      "Astrid",
+      "Gudrun",
+      "Olaf",
+      "Thorvald",
+      "Sigrid"
+     ],
+     "lines": [
+      "Every family gets its own plot. Every family needs its own plot. We do not share well.",
+      "The winters are getting shorter. The old men say that is the gods being kind. I say it is the gods changing their minds.",
+      "A longhouse holds the family, the cattle and the smoke. Mostly the smoke."
+     ]
+    },
+    {
+     "role": "Skald",
+     "outfit": "priest",
+     "weight": 1,
+     "names": [
+      "Egil",
+      "Bragi",
+      "Thorbjorn",
+      "Kormak"
+     ],
+     "lines": [
+      "A man dies, his cattle die, but the word of a man’s deeds never dies. That is the only immortality we sell.",
+      "Ragnarok: the gods lose and the world ends and a new one grows. We tell children this so they are not afraid of endings.",
+      "The runestone remembers who paid for it. Mostly."
+     ]
+    },
+    {
+     "role": "Smith",
+     "outfit": "artisan",
+     "weight": 3,
+     "names": [
+      "Völund",
+      "Hallr",
+      "Brandr",
+      "Ulfberht",
+      "Thorkell"
+     ],
+     "lines": [
+      "Good iron is rare. A sword with my mark on it will outlive the man who swings it.",
+      "The raiders bring back silver, but they cannot eat it. The farms still feed us.",
+      "A blade needs a thousand folds. A kingdom needs more than one good summer."
+     ]
+    },
+    {
+     "role": "Trader",
+     "outfit": "merchant",
+     "weight": 3,
+     "names": [
+      "Ohthere",
+      "Hrafn",
+      "Gunnhild",
+      "Ketill",
+      "Bjarni"
+     ],
+     "lines": [
+      "Furs to the south, silver from the east, slaves from everywhere. The river roads go far.",
+      "In Miklagard they pay in gold. In Dublin they pay in trouble.",
+      "We are traders more than raiders. The songs just prefer the raids."
+     ]
+    }
+   ],
+   "npcDensity": 0.55,
+   "ships": "longship",
+   "chronoport": {
+    "x": 60,
+    "z": 520,
+    "placeName": "the derelict ferry slip south of the harbor",
+    "hint": "The old ferry slip south of the harbor is where the river tug crews swear they hear rowing at night."
+   },
+   "districtNames": {
+    "citadel": "The Jarl’s Hall",
+    "oldtown": "The Old Burh",
+    "harbor": "Ship Strand",
+    "eastside": "Smiths’ Row",
+    "westmarket": "Coppergate",
+    "north": "The Thing Fields",
+    "fields": "The Homesteads"
+   },
+   "lore": "A newly conquered trading town on a cold bay. The raiders have become settlers overnight and nobody is sure what the rules are yet.",
+   "insight": {
+    "title": "Short Summers",
+    "text": "The Norse expanded during a warm climate window and withdrew when it closed. Greenland’s settlers starved beside seas full of fish because they refused to live like the people who already knew how. Adaptation is not weakness."
+   },
+   "yearLabel": "866 CE"
+  },
+  {
+   "id": "khmer",
+   "name": "Angkor of the Waters",
+   "civ": "Khmer",
+   "year": 1150,
+   "tagline": "The largest city on Earth, fed by reservoirs the size of lakes. Angkor Wat has just been finished.",
+   "sky": 8173276,
+   "horizon": 15196605,
+   "fog": 13227186,
+   "fogDensity": 0.003,
+   "sun": 16774108,
+   "sunIntensity": 2.5,
+   "ambient": 8360048,
+   "ground": 5999174,
+   "road": 12694415,
+   "dirt": 10191960,
+   "water": 3902086,
+   "layout": {
+    "pattern": "radial",
+    "blockW": 56,
+    "blockD": 42,
+    "streetWidth": 6,
+    "curve": 0,
+    "curveLen": 1,
+    "lotSize": 14,
+    "density": 0.62,
+    "extent": 0.66,
+    "fields": true,
+    "walls": false,
+    "pavedArterials": true
+   },
+   "buildings": [
+    {
+     "weight": 6,
+     "floors": [
+      1,
+      1
+     ],
+     "floorHeight": 2.8,
+     "footprint": [
+      0.55,
+      0.8
+     ],
+     "roof": "thatch",
+     "roofColors": [
+      10259029,
+      9075274
+     ],
+     "wallColors": [
+      9071172,
+      8216380,
+      10254928
+     ],
+     "stilts": true,
+     "tex": 3,
+     "roofTex": 5,
+     "windows": "square",
+     "features": [
+      "ridge",
+      "ladder"
+     ]
+    },
+    {
+     "weight": 2,
+     "floors": [
+      1,
+      1
+     ],
+     "floorHeight": 3,
+     "footprint": [
+      0.65,
+      0.85
+     ],
+     "roof": "gable",
+     "roofColors": [
+      9062954
+     ],
+     "wallColors": [
+      11111002,
+      11833695
+     ],
+     "stilts": true,
+     "overhang": 0.8,
+     "tex": 3,
+     "roofTex": 4,
+     "windows": "square",
+     "features": [
+      "ridge",
+      "eaves",
+      "ladder"
+     ]
+    },
+    {
+     "weight": 1,
+     "floors": [
+      1,
+      2
+     ],
+     "floorHeight": 3.6,
+     "footprint": [
+      0.8,
+      0.95
+     ],
+     "roof": "pagoda",
+     "roofColors": [
+      9076848
+     ],
+     "wallColors": [
+      10129528,
+      11050630
+     ],
+     "tower": true,
+     "tex": 2,
+     "roofTex": 2,
+     "windows": "arch",
+     "features": [
+      "plinth",
+      "ridge",
+      "pilasters"
+     ],
+     "tag": "temple"
+    },
+    {
+     "weight": 1,
+     "floors": [
+      1,
+      1
+     ],
+     "floorHeight": 3.2,
+     "footprint": [
+      0.7,
+      0.9
+     ],
+     "roof": "hip",
+     "roofColors": [
+      9062954
+     ],
+     "wallColors": [
+      11833695
+     ],
+     "tex": 3,
+     "roofTex": 4,
+     "windows": "none",
+     "features": [
+      "arcade",
+      "eaves",
+      "ridge"
+     ],
+     "tag": "pavilion"
+    }
+   ],
+   "props": [
+    "shrine",
+    "statue",
+    "stall",
+    "well",
+    "amphora",
+    "lantern",
+    "altar"
+   ],
+   "propDensity": 0.5,
+   "trees": "jungle",
+   "treeDensity": 0.85,
+   "landmarks": {
+    "citadel": "angkor",
+    "harbor": "baray",
+    "arena": "elephant_terrace",
+    "plaza": "bayon_faces",
+    "sacred": "naga_bridge",
+    "market": "bazaar"
+   },
+   "npcs": [
+    {
+     "role": "Engineer",
+     "outfit": "priest",
+     "weight": 2,
+     "names": [
+      "Suryavarman",
+      "Jayavarman",
+      "Indravarman",
+      "Kambu"
+     ],
+     "lines": [
+      "The barays hold a year of rain. The canals move it to the rice. The rice moves it to the king. It is all one machine.",
+      "Every temple is also a reservoir. Every god is also a tax.",
+      "Silt. Every year a little more silt in the channels. We dredge. We are always dredging."
+     ]
+    },
+    {
+     "role": "Dancer",
+     "outfit": "artisan",
+     "weight": 2,
+     "names": [
+      "Apsara",
+      "Indradevi",
+      "Jayarajadevi",
+      "Mera"
+     ],
+     "lines": [
+      "Three thousand dancers at the temple. We are carved on every wall so the gods have something to watch.",
+      "The king built heaven on earth. Heaven requires a great deal of rice.",
+      "Vishnu faces west, toward sunset, toward death. Angkor Wat is a tomb that pretends to be a temple."
+     ]
+    },
+    {
+     "role": "Rice Farmer",
+     "outfit": "farmer",
+     "weight": 4,
+     "names": [
+      "Sok",
+      "Chan",
+      "Dara",
+      "Bopha",
+      "Vanna"
+     ],
+     "lines": [
+      "Two harvests a year, three if the canals are good. The canals are the king’s. So the harvest is the king’s.",
+      "The forest is cut for the temples. When the rains come, the hills come down with them.",
+      "My grandfather dug canals. My father dug canals. I dig canals. The gods are very thirsty."
+     ]
+    },
+    {
+     "role": "Soldier",
+     "outfit": "soldier",
+     "weight": 3,
+     "names": [
+      "Jayavarman",
+      "Sena",
+      "Kirti",
+      "Vira",
+      "Rudra"
+     ],
+     "lines": [
+      "The Cham burned the city once. Now the walls are taller and the moats wider.",
+      "We march with the elephants. When an elephant panics, so does the army.",
+      "The king builds temples, we build roads, and the farmers build everything else."
+     ]
+    },
+    {
+     "role": "Merchant",
+     "outfit": "merchant",
+     "weight": 3,
+     "names": [
+      "Srey",
+      "Chan",
+      "Mony",
+      "Bopha",
+      "Rith"
+     ],
+     "lines": [
+      "Chinese ships come up the river for kingfisher feathers and rhinoceros horn.",
+      "The reservoirs make three harvests a year. When they silt up, there will be one.",
+      "Prices rise when the canals clog. The canals clog more every season."
+     ]
+    }
+   ],
+   "npcDensity": 0.7,
+   "ships": "canoe",
+   "chronoport": {
+    "x": 300,
+    "z": 60,
+    "placeName": "the pump house in the east-bank water works",
+    "hint": "The east-bank water works were built on a stone channel the engineers could not date, and did not try."
+   },
+   "districtNames": {
+    "citadel": "The Temple Mountain",
+    "oldtown": "The Royal Enclosure",
+    "harbor": "The West Baray",
+    "eastside": "The East Baray",
+    "westmarket": "Causeway Market",
+    "north": "The Northern Canals",
+    "fields": "The Paddies"
+   },
+   "lore": "A city of a million people run by water. Reservoirs, canals and moats feed the rice that feeds the temples. The engineers are already losing to the silt.",
+   "insight": {
+    "title": "The Machine Needs Tending",
+    "text": "Angkor’s water system was the most sophisticated on Earth and it failed slowly: silted canals, floods that tore out the channels, droughts that emptied the reservoirs. Infrastructure is a promise to the future that the future has to keep paying for."
+   },
+   "yearLabel": "1150 CE"
+  },
+  {
+   "id": "mongol",
+   "name": "The Ordu on the Plain",
+   "civ": "Mongol",
+   "year": 1241,
+   "tagline": "The horde has crushed Europe’s knights and halted at the edge of the world. The Great Khan is dead; the princes ride home to choose a new one.",
+   "sky": 10469600,
+   "horizon": 15262415,
+   "fog": 13881279,
+   "fogDensity": 0.0022,
+   "sun": 16773848,
+   "sunIntensity": 2.4,
+   "ambient": 9079418,
+   "ground": 10133599,
+   "road": 11049580,
+   "dirt": 11049580,
+   "water": 3899283,
+   "layout": {
+    "pattern": "spread",
+    "blockW": 70,
+    "blockD": 70,
+    "streetWidth": 4,
+    "curve": 12,
+    "curveLen": 160,
+    "lotSize": 22,
+    "density": 0.55,
+    "extent": 0.9,
+    "fields": false,
+    "walls": false,
+    "pavedArterials": false
+   },
+   "buildings": [
+    {
+     "weight": 8,
+     "floors": [
+      1,
+      1
+     ],
+     "floorHeight": 2.2,
+     "footprint": [
+      0.5,
+      0.7
+     ],
+     "roof": "dome",
+     "roofColors": [
+      15328470,
+      14472902
+     ],
+     "wallColors": [
+      15789280,
+      14999248
+     ],
+     "round": true,
+     "tex": 0,
+     "roofTex": 0,
+     "windows": "none",
+     "features": [
+      "bands"
+     ],
+     "accent": 11547706,
+     "tag": "ger"
+    },
+    {
+     "weight": 2,
+     "floors": [
+      1,
+      1
+     ],
+     "floorHeight": 2.4,
+     "footprint": [
+      0.6,
+      0.8
+     ],
+     "roof": "dome",
+     "roofColors": [
+      13220000
+     ],
+     "wallColors": [
+      14207144
+     ],
+     "round": true,
+     "tex": 0,
+     "windows": "none",
+     "features": [
+      "bands"
+     ],
+     "accent": 4026288,
+     "trim": 4026288
+    },
+    {
+     "weight": 1,
+     "floors": [
+      1,
+      1
+     ],
+     "floorHeight": 3.6,
+     "footprint": [
+      0.8,
+      0.95
+     ],
+     "roof": "dome",
+     "roofColors": [
+      16052196
+     ],
+     "wallColors": [
+      16381678
+     ],
+     "round": true,
+     "tex": 0,
+     "windows": "none",
+     "features": [
+      "bands"
+     ],
+     "accent": 14263594,
+     "trim": 11547706,
+     "tag": "great_ger"
+    }
+   ],
+   "props": [
+    "campfire",
+    "cart",
+    "haystack",
+    "tent",
+    "totem",
+    "barrel",
+    "boulder"
+   ],
+   "propDensity": 0.55,
+   "trees": "none",
+   "treeDensity": 0.1,
+   "landmarks": {
+    "citadel": "khan_ordu",
+    "harbor": "ferry_camp",
+    "arena": "horse_field",
+    "plaza": "standard_pole",
+    "sacred": "ovoo",
+    "market": "caravan"
+   },
+   "npcs": [
+    {
+     "role": "Horse Archer",
+     "outfit": "soldier",
+     "weight": 4,
+     "names": [
+      "Subutai",
+      "Batu",
+      "Jebe",
+      "Kadan",
+      "Orda"
+     ],
+     "lines": [
+      "Five horses per man. We ride one, eat one, and the others carry what we took.",
+      "The knights of Hungary charged us at Mohi. We let them. Then we closed the circle.",
+      "The Khan is dead. Every prince must ride home to vote. So Europe lives. For now."
+     ]
+    },
+    {
+     "role": "Herder",
+     "outfit": "farmer",
+     "weight": 3,
+     "names": [
+      "Borte",
+      "Hoelun",
+      "Temulun",
+      "Sorghaghtani"
+     ],
+     "lines": [
+      "The ger comes down in an hour and goes up in an hour. The city moves with the grass.",
+      "We have no walls because we do not stay long enough to need them.",
+      "The grass decides where we go. The Khan only decides when."
+     ]
+    },
+    {
+     "role": "Envoy",
+     "outfit": "merchant",
+     "weight": 1,
+     "names": [
+      "Carpini",
+      "Rubruck",
+      "Yelu Chucai",
+      "Rashid"
+     ],
+     "lines": [
+      "A letter travels from here to Karakorum in two weeks. Nothing in Christendom moves that fast except rumor.",
+      "They tolerate every religion and tax every one of them. It is remarkably modern.",
+      "Four grandsons, four khanates. Watch what happens to an empire that is inherited like a herd."
+     ]
+    },
+    {
+     "role": "Shaman",
+     "outfit": "priest",
+     "weight": 1,
+     "names": [
+      "Kokochu",
+      "Teb Tengri",
+      "Abaqa",
+      "Boroqul",
+      "Odun"
+     ],
+     "lines": [
+      "Tengri watches the sky. The Great Khan watches everything else.",
+      "The Khan is dead in Karakorum. Riders are already turning their horses home.",
+      "All religions are welcome in the camp, as long as they pray for the Khan."
+     ]
+    },
+    {
+     "role": "Felt-maker",
+     "outfit": "artisan",
+     "weight": 3,
+     "names": [
+      "Sorqan",
+      "Alan",
+      "Toregene",
+      "Ebegei",
+      "Chagha"
+     ],
+     "lines": [
+      "Beat the wool, roll it, beat it again. A ger is only as warm as its felt.",
+      "Everything we own fits on three carts. Cities are a strange idea.",
+      "The armies need horses, the horses need grass, and the grass needs us to keep moving."
+     ]
+    }
+   ],
+   "npcDensity": 0.5,
+   "ships": "none",
+   "chronoport": {
+    "x": -700,
+    "z": -700,
+    "placeName": "the stone cairn on the hill beyond the north-west ring road",
+    "hint": "On the hill past the north-west corner of the ring road there is a cairn that shepherds have added to for longer than anyone can say."
+   },
+   "districtNames": {
+    "citadel": "The Golden Ordu",
+    "oldtown": "Captives’ Camp",
+    "harbor": "The Ferry Ford",
+    "eastside": "Remount Herds",
+    "westmarket": "Caravan Ground",
+    "north": "The Scouts’ Line",
+    "fields": "The Steppe"
+   },
+   "lore": "The largest contiguous empire in history, camped on a plain that was somebody else’s city last month. The news of the Great Khan’s death has just arrived.",
+   "insight": {
+    "title": "Inherited Like a Herd",
+    "text": "The Mongol Empire conquered half the world in fifty years and split into four warring khanates within a generation, because succession was settled by who could ride home fastest. A system with no rule for passing power has a civil war scheduled."
+   },
+   "yearLabel": "1241 CE"
+  },
+  {
+   "id": "aztec",
+   "name": "Tenochtitlan of the Lake",
+   "civ": "Aztec",
+   "year": 1519,
+   "tagline": "The largest city in the Americas floats on a lake. Strangers with horses have landed on the coast.",
+   "sky": 7319782,
+   "horizon": 15264978,
+   "fog": 13622212,
+   "fogDensity": 0.0026,
+   "sun": 16774882,
+   "sunIntensity": 2.7,
+   "ambient": 9083524,
+   "ground": 8034904,
+   "road": 13879725,
+   "dirt": 11048048,
+   "water": 3836556,
+   "layout": {
+    "pattern": "grid",
+    "blockW": 44,
+    "blockD": 44,
+    "streetWidth": 7,
+    "curve": 0,
+    "curveLen": 1,
+    "lotSize": 12,
+    "density": 0.82,
+    "extent": 0.7,
+    "fields": true,
+    "walls": false,
+    "pavedArterials": true
+   },
+   "buildings": [
+    {
+     "weight": 6,
+     "floors": [
+      1,
+      1
+     ],
+     "floorHeight": 3,
+     "footprint": [
+      0.7,
+      0.92
+     ],
+     "roof": "flat",
+     "roofColors": [
+      14208432
+     ],
+     "wallColors": [
+      15854556,
+      15327436,
+      16183524
+     ],
+     "parapet": true,
+     "tex": 0,
+     "windows": "slit",
+     "features": [
+      "plinth",
+      "bands"
+     ],
+     "accent": 13121325,
+     "trim": 13121325
+    },
+    {
+     "weight": 3,
+     "floors": [
+      1,
+      2
+     ],
+     "floorHeight": 3,
+     "footprint": [
+      0.65,
+      0.9
+     ],
+     "roof": "flat",
+     "roofColors": [
+      13482390
+     ],
+     "wallColors": [
+      15129796,
+      15392712
+     ],
+     "parapet": true,
+     "courtyard": true,
+     "tex": 0,
+     "windows": "slit",
+     "features": [
+      "plinth",
+      "bands",
+      "cornice"
+     ],
+     "accent": 2846640
+    },
+    {
+     "weight": 1,
+     "floors": [
+      1,
+      1
+     ],
+     "floorHeight": 3.4,
+     "footprint": [
+      0.8,
+      0.95
+     ],
+     "roof": "stepped",
+     "roofColors": [
+      14735036
+     ],
+     "wallColors": [
+      15985884
+     ],
+     "tex": 2,
+     "windows": "none",
+     "features": [
+      "plinth",
+      "bands"
+     ],
+     "accent": 2846640,
+     "trim": 2846640,
+     "tag": "shrine"
+    },
+    {
+     "weight": 1.5,
+     "floors": [
+      1,
+      1
+     ],
+     "floorHeight": 2.6,
+     "footprint": [
+      0.5,
+      0.75
+     ],
+     "roof": "thatch",
+     "roofColors": [
+      11902823
+     ],
+     "wallColors": [
+      13219215
+     ],
+     "tex": 3,
+     "roofTex": 5,
+     "windows": "none",
+     "features": [
+      "ridge"
+     ]
+    }
+   ],
+   "props": [
+    "altar",
+    "statue",
+    "stall",
+    "stele",
+    "well",
+    "amphora",
+    "torch"
+   ],
+   "propDensity": 0.55,
+   "trees": "palm",
+   "treeDensity": 0.3,
+   "landmarks": {
+    "citadel": "templo_mayor",
+    "harbor": "chinampas",
+    "arena": "ballcourt",
+    "plaza": "skull_rack",
+    "sacred": "sun_stone",
+    "market": "tlatelolco"
+   },
+   "npcs": [
+    {
+     "role": "Eagle Warrior",
+     "outfit": "soldier",
+     "weight": 2,
+     "names": [
+      "Cuauhtemoc",
+      "Tlacaelel",
+      "Moctezuma",
+      "Itzcoatl",
+      "Cuitlahuac"
+     ],
+     "lines": [
+      "We do not conquer to kill. We conquer to collect. Every city pays, every city hates us, every city waits.",
+      "Flower wars: battles arranged to take captives. The gods are hungry and the neighbors are convenient.",
+      "Men on the coast with deer the size of houses and sticks that thunder. The emperor sent them gold. I would have sent spears."
+     ]
+    },
+    {
+     "role": "Farmer",
+     "outfit": "farmer",
+     "weight": 4,
+     "names": [
+      "Xochitl",
+      "Itzel",
+      "Tochtli",
+      "Citlali",
+      "Nezahual"
+     ],
+     "lines": [
+      "Chinampas: floating gardens. Seven harvests a year. The lake feeds the city and the city feeds the lake.",
+      "Every street is also a canal. You walk or you paddle. Nobody rides. There is nothing to ride.",
+      "A thousand canoes bring food every morning. Cut the causeways and the city starves in a week."
+     ]
+    },
+    {
+     "role": "Priest",
+     "outfit": "priest",
+     "weight": 2,
+     "names": [
+      "Tlaloc",
+      "Quetzal",
+      "Huitzil",
+      "Tezcat"
+     ],
+     "lines": [
+      "The sun dies every night. We feed it so it rises. You may not like the price. The sun does not negotiate.",
+      "An omen every month this year. A comet. A temple fire. A woman weeping in the streets. Something is coming.",
+      "Quetzalcoatl was promised to return in a One Reed year. This is a One Reed year."
+     ]
+    },
+    {
+     "role": "Featherworker",
+     "outfit": "artisan",
+     "weight": 3,
+     "names": [
+      "Amantecatl",
+      "Xochitl",
+      "Citlali",
+      "Tlaco",
+      "Ayotl"
+     ],
+     "lines": [
+      "Quetzal feathers are worth more than gold. Gold is just shiny mud.",
+      "The strangers on the coast asked only about gold. They did not even look at the feathers.",
+      "Every headdress takes a season. The war captains want ten by the next festival."
+     ]
+    },
+    {
+     "role": "Pochteca",
+     "outfit": "merchant",
+     "weight": 3,
+     "names": [
+      "Ahuitzotl",
+      "Cuauhtli",
+      "Tlacotl",
+      "Miztli",
+      "Yaotl"
+     ],
+     "lines": [
+      "We trade, we travel, we listen. A merchant is a spy with better manners.",
+      "The tribute cities hate us. They pay, and they wait.",
+      "Bearded men with metal shirts landed at the coast. The Totonacs have been talking to them."
+     ]
+    }
+   ],
+   "npcDensity": 0.9,
+   "ships": "canoe",
+   "chronoport": {
+    "x": 120,
+    "z": 240,
+    "placeName": "the drained ornamental pond in Riverside Gardens",
+    "hint": "The ornamental pond in Riverside Gardens has a carved stone drain that is not on the 1890 plans or any plans."
+   },
+   "districtNames": {
+    "citadel": "The Sacred Precinct",
+    "oldtown": "Teopan",
+    "harbor": "The Chinampas",
+    "eastside": "Moyotlan",
+    "westmarket": "Tlatelolco Market",
+    "north": "Cuepopan",
+    "fields": "The Lake Shore"
+   },
+   "lore": "A capital of a quarter million people built on an island, fed by floating gardens and the tribute of two hundred subject cities. The subject cities are about to find an ally.",
+   "insight": {
+    "title": "Allies of the Enemy",
+    "text": "Five hundred Spaniards did not take Tenochtitlan. Tens of thousands of Tlaxcalans and other tributary peoples who hated the Aztecs did, and smallpox finished the work. An empire built on resentment hands its enemies an army."
+   },
+   "yearLabel": "1519 CE"
+  },
+  {
+   "id": "sengoku",
+   "name": "Castle Town of the Divided Realm",
+   "civ": "Sengoku Japan",
+   "year": 1600,
+   "tagline": "The armies gather at Sekigahara. One battle will decide who rules Japan for the next 268 years.",
+   "sky": 8892105,
+   "horizon": 15131866,
+   "fog": 13225156,
+   "fogDensity": 0.0032,
+   "sun": 16773592,
+   "sunIntensity": 2.1,
+   "ambient": 8358534,
+   "ground": 7309902,
+   "road": 12102798,
+   "dirt": 9404255,
+   "water": 3108735,
+   "layout": {
+    "pattern": "castle",
+    "blockW": 42,
+    "blockD": 30,
+    "streetWidth": 5,
+    "curve": 6,
+    "curveLen": 140,
+    "lotSize": 10,
+    "density": 0.84,
+    "extent": 0.62,
+    "fields": true,
+    "walls": true,
+    "pavedArterials": false
+   },
+   "buildings": [
+    {
+     "weight": 6,
+     "floors": [
+      1,
+      2
+     ],
+     "floorHeight": 2.8,
+     "footprint": [
+      0.75,
+      0.95
+     ],
+     "roof": "gable",
+     "roofColors": [
+      3815996,
+      3026482,
+      4868684
+     ],
+     "wallColors": [
+      15261900,
+      14274485,
+      10519384
+     ],
+     "overhang": 0.9,
+     "tex": 0,
+     "roofTex": 6,
+     "windows": "shoji",
+     "features": [
+      "lattice",
+      "eaves",
+      "plinth",
+      "ridge"
+     ],
+     "accent": 3811866,
+     "tag": "machiya"
+    },
+    {
+     "weight": 2,
+     "floors": [
+      1,
+      1
+     ],
+     "floorHeight": 3,
+     "footprint": [
+      0.6,
+      0.85
+     ],
+     "roof": "hip",
+     "roofColors": [
+      3815996
+     ],
+     "wallColors": [
+      15788244
+     ],
+     "overhang": 1.2,
+     "courtyard": true,
+     "tex": 0,
+     "roofTex": 6,
+     "windows": "shoji",
+     "features": [
+      "eaves",
+      "plinth",
+      "veranda"
+     ],
+     "accent": 3811866,
+     "tag": "samurai"
+    },
+    {
+     "weight": 1,
+     "floors": [
+      2,
+      3
+     ],
+     "floorHeight": 3.2,
+     "footprint": [
+      0.7,
+      0.9
+     ],
+     "roof": "pagoda",
+     "roofColors": [
+      3815996
+     ],
+     "wallColors": [
+      12073262,
+      14274485
+     ],
+     "tower": true,
+     "tex": 0,
+     "roofTex": 6,
+     "windows": "shoji",
+     "features": [
+      "eaves",
+      "ridge",
+      "plinth"
+     ],
+     "tag": "temple"
+    },
+    {
+     "weight": 1.5,
+     "floors": [
+      1,
+      2
+     ],
+     "floorHeight": 3,
+     "footprint": [
+      0.6,
+      0.8
+     ],
+     "roof": "gable",
+     "roofColors": [
+      3026482
+     ],
+     "wallColors": [
+      16052454
+     ],
+     "overhang": 0.5,
+     "tex": 0,
+     "roofTex": 6,
+     "windows": "slit",
+     "features": [
+      "plinth",
+      "bands"
+     ],
+     "accent": 2763306,
+     "tag": "kura"
+    }
+   ],
+   "props": [
+    "lantern",
+    "shrine",
+    "stall",
+    "barrel",
+    "well",
+    "torch",
+    "cart"
+   ],
+   "propDensity": 0.6,
+   "trees": "pine",
+   "treeDensity": 0.5,
+   "landmarks": {
+    "citadel": "castle_japan",
+    "harbor": "fishing_harbor",
+    "arena": "drill_ground",
+    "plaza": "torii",
+    "sacred": "pagoda_tower",
+    "market": "bazaar"
+   },
+   "npcs": [
+    {
+     "role": "Samurai",
+     "outfit": "soldier",
+     "weight": 3,
+     "names": [
+      "Ieyasu",
+      "Mitsunari",
+      "Masamune",
+      "Yukimura",
+      "Tadakatsu"
+     ],
+     "lines": [
+      "A hundred years of war. Every lord against every lord. Tomorrow, one battle ends it, one way or the other.",
+      "Honor is what you call loyalty after you have picked the winning side.",
+      "The arquebus. Three ranks, rotating fire. A peasant with one can kill a man whose family has trained for ten generations. Think about what that does to the family."
+     ]
+    },
+    {
+     "role": "Merchant",
+     "outfit": "merchant",
+     "weight": 3,
+     "names": [
+      "Rikyu",
+      "Shoan",
+      "Sotan",
+      "Yodoya",
+      "Sumitomo"
+     ],
+     "lines": [
+      "Merchants are the lowest class. We also own everything. The lords borrow from us to fight their wars.",
+      "Tea ceremony: an hour of silence that costs more than a horse. The lords love it. So do we.",
+      "Whoever wins at Sekigahara will owe money to someone in this street."
+     ]
+    },
+    {
+     "role": "Peasant",
+     "outfit": "farmer",
+     "weight": 4,
+     "names": [
+      "Taro",
+      "Hana",
+      "Jiro",
+      "Kiku",
+      "Gonbei"
+     ],
+     "lines": [
+      "The sword hunt took every blade in the village. Now only samurai have swords. Now only samurai have a say.",
+      "Rice is money. The lord is paid in rice. The samurai are paid in rice. We grow the rice and eat millet.",
+      "Ninja? My cousin is a ninja. He is mostly a farmer who is good at walking quietly."
+     ]
+    },
+    {
+     "role": "Monk",
+     "outfit": "priest",
+     "weight": 2,
+     "names": [
+      "Ennin",
+      "Saicho",
+      "Kukai",
+      "Shinran",
+      "Eisai"
+     ],
+     "lines": [
+      "The warrior monks of Mount Hiei were burned out. Now we pray more quietly.",
+      "Every lord asks the temple for victory. Most of them get defeat instead.",
+      "Peace will come. It always comes after everyone is too tired to fight."
+     ]
+    },
+    {
+     "role": "Weaver",
+     "outfit": "artisan",
+     "weight": 3,
+     "names": [
+      "Ochiyo",
+      "Hana",
+      "Sayo",
+      "Kiku",
+      "Fuji"
+     ],
+     "lines": [
+      "Silk for the lords, hemp for us. The pattern tells you which world you live in.",
+      "The new laws freeze everyone in their place. My daughters will weave until the end of time.",
+      "The Portuguese buy silk with silver from the mountains of Iwami. Funny how money travels."
+     ]
+    }
+   ],
+   "npcDensity": 0.85,
+   "ships": "junk",
+   "chronoport": {
+    "x": 450,
+    "z": -80,
+    "placeName": "the walled garden behind the Eastside tea house",
+    "hint": "The Eastside tea house has a walled garden with a stone lantern that the owners say was \"already there.\""
+   },
+   "districtNames": {
+    "citadel": "The Honmaru",
+    "oldtown": "Samurai Quarter",
+    "harbor": "Fishing Harbor",
+    "eastside": "Temple District",
+    "westmarket": "Merchant Street",
+    "north": "The Rice Stores",
+    "fields": "The Paddies"
+   },
+   "lore": "A castle town on the eve of Sekigahara, the battle that ends a century of civil war. Every lord has chosen a side. Several have chosen both.",
+   "insight": {
+    "title": "The Peace After the War",
+    "text": "A century of civil war ended when Tokugawa Ieyasu won at Sekigahara and then made peace boring: disarmed the peasants, froze the classes, closed the country. Two and a half centuries without war, bought with everything that war had made possible. Stability has a price too."
+   },
+   "yearLabel": "1600 CE"
+  },
+  {
+   "id": "buccaneer",
+   "name": "Port Royal of the Black Flag",
+   "civ": "Buccaneer",
+   "year": 1718,
+   "tagline": "Blackbeard has blockaded Charleston. The pirate republic of Nassau is about to be pardoned out of existence.",
+   "sky": 6271722,
+   "horizon": 15985877,
+   "fog": 14082790,
+   "fogDensity": 0.0024,
+   "sun": 16775400,
+   "sunIntensity": 2.8,
+   "ambient": 9412776,
+   "ground": 9414760,
+   "road": 13154190,
+   "dirt": 12099696,
+   "water": 1937320,
+   "layout": {
+    "pattern": "organic",
+    "blockW": 44,
+    "blockD": 36,
+    "streetWidth": 6,
+    "curve": 8,
+    "curveLen": 150,
+    "lotSize": 11,
+    "density": 0.7,
+    "extent": 0.5,
+    "fields": true,
+    "walls": false,
+    "pavedArterials": false
+   },
+   "buildings": [
+    {
+     "weight": 6,
+     "floors": [
+      1,
+      2
+     ],
+     "floorHeight": 3,
+     "footprint": [
+      0.65,
+      0.9
+     ],
+     "roof": "gable",
+     "roofColors": [
+      6965818,
+      8018501,
+      5917242
+     ],
+     "wallColors": [
+      15327176,
+      14272416,
+      13217928,
+      9416888
+     ],
+     "chimney": true,
+     "tex": 3,
+     "roofTex": 6,
+     "windows": "tall",
+     "features": [
+      "shutters",
+      "veranda",
+      "frames",
+      "chimneypots"
+     ],
+     "accent": 2775626
+    },
+    {
+     "weight": 2,
+     "floors": [
+      1,
+      1
+     ],
+     "floorHeight": 2.8,
+     "footprint": [
+      0.5,
+      0.75
+     ],
+     "roof": "thatch",
+     "roofColors": [
+      12165226
+     ],
+     "wallColors": [
+      10123866,
+      11569760
+     ],
+     "tex": 3,
+     "roofTex": 5,
+     "windows": "square",
+     "features": [
+      "porch"
+     ]
+    },
+    {
+     "weight": 1,
+     "floors": [
+      2,
+      2
+     ],
+     "floorHeight": 3.4,
+     "footprint": [
+      0.8,
+      0.95
+     ],
+     "roof": "hip",
+     "roofColors": [
+      9058858
+     ],
+     "wallColors": [
+      15919314
+     ],
+     "tex": 0,
+     "roofTex": 4,
+     "windows": "tall",
+     "features": [
+      "porch",
+      "pilasters",
+      "cornice",
+      "shutters",
+      "balcony"
+     ],
+     "accent": 2775626,
+     "tag": "governor"
+    },
+    {
+     "weight": 1.5,
+     "floors": [
+      1,
+      2
+     ],
+     "floorHeight": 3.6,
+     "footprint": [
+      0.8,
+      0.95
+     ],
+     "roof": "gable",
+     "roofColors": [
+      5917242
+     ],
+     "wallColors": [
+      10127992,
+      11049608
+     ],
+     "tex": 2,
+     "roofTex": 6,
+     "windows": "arch",
+     "features": [
+      "plinth",
+      "arcade"
+     ],
+     "tag": "warehouse"
+    },
+    {
+     "weight": 1,
+     "floors": [
+      2,
+      2
+     ],
+     "floorHeight": 3.2,
+     "footprint": [
+      0.7,
+      0.9
+     ],
+     "roof": "gable",
+     "roofColors": [
+      5917242
+     ],
+     "wallColors": [
+      14272416
+     ],
+     "chimney": true,
+     "tex": 3,
+     "roofTex": 6,
+     "windows": "square",
+     "features": [
+      "storefront",
+      "sign",
+      "balcony",
+      "shutters"
+     ],
+     "accent": 9054762,
+     "tag": "tavern"
+    }
+   ],
+   "props": [
+    "barrel",
+    "crate",
+    "cannon",
+    "lantern",
+    "cart",
+    "stall",
+    "signpost"
+   ],
+   "propDensity": 0.6,
+   "trees": "palm",
+   "treeDensity": 0.55,
+   "landmarks": {
+    "citadel": "fort_stone",
+    "harbor": "pirate_harbor",
+    "arena": "gallows_green",
+    "plaza": "tavern_square",
+    "sacred": "lighthouse",
+    "market": "bazaar"
+   },
+   "npcs": [
+    {
+     "role": "Pirate",
+     "outfit": "soldier",
+     "weight": 4,
+     "names": [
+      "Teach",
+      "Bonnet",
+      "Vane",
+      "Rackham",
+      "Bonny",
+      "Read"
+     ],
+     "lines": [
+      "One vote per man, equal shares, and the captain only gives orders in a fight. More democracy than any navy.",
+      "The king offers a pardon to any pirate who quits. Half of Nassau took it. The other half is in this tavern.",
+      "Blackbeard lights fuses in his beard before boarding. It is theatre. Theatre works."
+     ]
+    },
+    {
+     "role": "Merchant",
+     "outfit": "merchant",
+     "weight": 2,
+     "names": [
+      "Rogers",
+      "Eden",
+      "Hornigold",
+      "Jennings"
+     ],
+     "lines": [
+      "Sugar, rum, slaves. The triangle. Nobody in Europe asks what their sugar cost.",
+      "Pirates are a tax on trade. The navy is a tax on everyone. I know which I prefer.",
+      "Governor Rogers arrives in a month with four warships and a pardon. The age of pirates ends with paperwork."
+     ]
+    },
+    {
+     "role": "Dockhand",
+     "outfit": "farmer",
+     "weight": 3,
+     "names": [
+      "Caesar",
+      "Toussaint",
+      "Benjamin",
+      "Jacquotte",
+      "Sam"
+     ],
+     "lines": [
+      "Freer on a pirate ship than anywhere else in this ocean, and that is a low bar.",
+      "A hurricane took the harbor two years ago. We rebuilt it in the same place. We always rebuild in the same place.",
+      "The treasure is mostly cloth and sugar. The gold is a story for the gallows crowd."
+     ]
+    },
+    {
+     "role": "Chaplain",
+     "outfit": "priest",
+     "weight": 1,
+     "names": [
+      "Father Labat",
+      "Brother Esquemeling",
+      "Reverend Gaunt",
+      "Father Dominic"
+     ],
+     "lines": [
+      "I bless the ships going out and bury the men coming back. The ledger never balances.",
+      "The articles say every man gets a share and a vote. More than the navy offers.",
+      "Governor Rogers is coming with pardons and hangings. Choose quickly which you want."
+     ]
+    },
+    {
+     "role": "Carpenter",
+     "outfit": "artisan",
+     "weight": 3,
+     "names": [
+      "Jem Rook",
+      "Silas Pegg",
+      "Tom Fairweather",
+      "Ned Ash",
+      "Josiah Crane"
+     ],
+     "lines": [
+      "Careen her, scrape her, tar her. A clean hull is a fast ship, and fast ships live.",
+      "Every prize we take needs mending. Shot holes do not fix themselves.",
+      "The worm eats the planks in these waters. Everything here gets eaten eventually."
+     ]
+    }
+   ],
+   "npcDensity": 0.7,
+   "ships": "galleon",
+   "chronoport": {
+    "x": -150,
+    "z": 470,
+    "placeName": "the smugglers’ cove below the south-west sea wall",
+    "hint": "Below the south-west sea wall there is a cove the customs men have never been able to find twice."
+   },
+   "districtNames": {
+    "citadel": "Fort Charles",
+    "oldtown": "Thames Street",
+    "harbor": "Careening Cove",
+    "eastside": "The Warehouses",
+    "westmarket": "Rum Row",
+    "north": "The Plantations",
+    "fields": "Cane Country"
+   },
+   "lore": "A lawless port in the last year of the golden age of piracy. The pirates have a constitution and a vote. The Royal Navy has more ships.",
+   "insight": {
+    "title": "Pardoned Out of Existence",
+    "text": "The pirate republic was not defeated by battle. It was dissolved by a pardon, a governor and a navy that made honesty cheaper than theft. Movements built on grievance evaporate the moment the grievance is cheaper to settle than to fight."
+   },
+   "yearLabel": "1718 CE"
+  },
+  {
+   "id": "victorian",
+   "name": "The Crystal City",
+   "civ": "Victorian",
+   "year": 1851,
+   "tagline": "The Great Exhibition has opened. Steam, iron, glass, and a city choking on its own coal smoke.",
+   "sky": 10465464,
+   "horizon": 14275784,
+   "fog": 12564909,
+   "fogDensity": 0.0042,
+   "sun": 16770756,
+   "sunIntensity": 1.7,
+   "ambient": 8027778,
+   "ground": 6254410,
+   "road": 6974056,
+   "dirt": 8221282,
+   "water": 4153186,
+   "layout": {
+    "pattern": "grid",
+    "blockW": 52,
+    "blockD": 30,
+    "streetWidth": 8,
+    "curve": 2,
+    "curveLen": 300,
+    "lotSize": 9,
+    "density": 0.92,
+    "extent": 0.82,
+    "fields": false,
+    "walls": false,
+    "pavedArterials": true
+   },
+   "buildings": [
+    {
+     "weight": 6,
+     "floors": [
+      3,
+      4
+     ],
+     "floorHeight": 3.3,
+     "footprint": [
+      0.85,
+      0.98
+     ],
+     "roof": "gable",
+     "roofColors": [
+      4868690,
+      3816002
+     ],
+     "wallColors": [
+      9067076,
+      10119758,
+      8015418,
+      14274751
+     ],
+     "chimney": true,
+     "tex": 1,
+     "texRepeat": 0.8,
+     "roofTex": 6,
+     "windows": "tall",
+     "features": [
+      "sills",
+      "frames",
+      "bay",
+      "plinth",
+      "chimneypots",
+      "cornice"
+     ],
+     "accent": 15261904,
+     "tag": "terrace"
+    },
+    {
+     "weight": 2,
+     "floors": [
+      4,
+      6
+     ],
+     "floorHeight": 3.4,
+     "footprint": [
+      0.85,
+      0.98
+     ],
+     "roof": "hip",
+     "roofColors": [
+      3816002
+     ],
+     "wallColors": [
+      13219994,
+      14273712
+     ],
+     "tex": 2,
+     "texRepeat": 0.3,
+     "roofTex": 6,
+     "windows": "arch",
+     "features": [
+      "pilasters",
+      "cornice",
+      "ledges",
+      "plinth",
+      "frames"
+     ],
+     "tag": "civic"
+    },
+    {
+     "weight": 2,
+     "floors": [
+      2,
+      3
+     ],
+     "floorHeight": 4.2,
+     "footprint": [
+      0.9,
+      0.98
+     ],
+     "roof": "gable",
+     "roofColors": [
+      4868690
+     ],
+     "wallColors": [
+      8015418,
+      6965818
+     ],
+     "smokestack": true,
+     "tex": 1,
+     "texRepeat": 0.8,
+     "roofTex": 6,
+     "windows": "arch",
+     "features": [
+      "plinth",
+      "ledges"
+     ],
+     "tag": "mill"
+    },
+    {
+     "weight": 1,
+     "floors": [
+      1,
+      1
+     ],
+     "floorHeight": 8,
+     "footprint": [
+      0.7,
+      0.9
+     ],
+     "roof": "gable",
+     "roofColors": [
+      3816002
+     ],
+     "wallColors": [
+      10132122,
+      11579568
+     ],
+     "tower": true,
+     "tex": 2,
+     "texRepeat": 0.3,
+     "roofTex": 6,
+     "windows": "arch",
+     "features": [
+      "buttress",
+      "plinth"
+     ],
+     "tag": "church"
+    },
+    {
+     "weight": 1.5,
+     "floors": [
+      2,
+      3
+     ],
+     "floorHeight": 3.3,
+     "footprint": [
+      0.85,
+      0.98
+     ],
+     "roof": "gable",
+     "roofColors": [
+      3816002
+     ],
+     "wallColors": [
+      6965818,
+      3820090
+     ],
+     "chimney": true,
+     "tex": 1,
+     "texRepeat": 0.8,
+     "roofTex": 6,
+     "windows": "tall",
+     "features": [
+      "storefront",
+      "sign",
+      "sills",
+      "plinth",
+      "chimneypots"
+     ],
+     "accent": 2767402,
+     "tag": "pub"
+    }
+   ],
+   "props": [
+    "gaslamp",
+    "bench",
+    "cart",
+    "crate",
+    "statue",
+    "fountain",
+    "signpost"
+   ],
+   "propDensity": 0.6,
+   "trees": "oak",
+   "treeDensity": 0.3,
+   "landmarks": {
+    "citadel": "parliament",
+    "harbor": "steam_docks",
+    "arena": "crystal_palace",
+    "plaza": "victoria_square",
+    "sacred": "gothic_cathedral",
+    "market": "covered_market"
+   },
+   "npcs": [
+    {
+     "role": "Factory Hand",
+     "outfit": "farmer",
+     "weight": 4,
+     "names": [
+      "Tom",
+      "Nell",
+      "Alf",
+      "Bess",
+      "Ned"
+     ],
+     "lines": [
+      "Fourteen hours in the mill, six days. The engine never sleeps, so neither do we.",
+      "The river is black and the air is brown and the Exhibition has a glass palace. Progress.",
+      "They passed a law: no children under nine in the mills. My sister is ten. Lucky her."
+     ]
+    },
+    {
+     "role": "Gentleman",
+     "outfit": "merchant",
+     "weight": 2,
+     "names": [
+      "Brunel",
+      "Paxton",
+      "Albert",
+      "Dickens",
+      "Gladstone"
+     ],
+     "lines": [
+      "A hundred thousand exhibits under a million panes of glass. The future is on display and the tickets are a shilling.",
+      "The railway has abolished distance. The telegraph has abolished delay. What will we abolish next?",
+      "Cholera is in the east end again. Something in the air, the doctors say. Something in the water, says Dr. Snow."
+     ]
+    },
+    {
+     "role": "Street Vendor",
+     "outfit": "artisan",
+     "weight": 3,
+     "names": [
+      "Sal",
+      "Jack",
+      "Polly",
+      "Bert",
+      "Maggie"
+     ],
+     "lines": [
+      "Hot pies, penny a piece. Made of what, you ask? Hot pies, penny a piece.",
+      "The city doubles every twenty years. Nobody planned it. Nobody plans anything, it just happens.",
+      "Fog so thick you could spread it on bread. My gran says it did not used to be like this."
+     ]
+    },
+    {
+     "role": "Vicar",
+     "outfit": "priest",
+     "weight": 1,
+     "names": [
+      "Reverend Hale",
+      "Reverend Ashby",
+      "Canon Whitlock",
+      "Reverend Moss"
+     ],
+     "lines": [
+      "The Great Exhibition shows the wonders of the age. My parish shows its price.",
+      "Cholera again in the lower streets. The doctors argue about bad air; I bury the poor.",
+      "Progress is a fine word. I wish it came to every street at once."
+     ]
+    },
+    {
+     "role": "Reformer",
+     "outfit": "soldier",
+     "weight": 2,
+     "names": [
+      "Harriet Martin",
+      "Caroline Norton",
+      "Mary Carpenter",
+      "Eliza Cook",
+      "Ada Lovell"
+     ],
+     "lines": [
+      "Children of nine in the mills, twelve hours a day. Parliament calls it the free market.",
+      "The Factory Acts are a beginning. The inspectors are four men for a whole county.",
+      "The machines will make us all rich, they say. They have not said when."
+     ]
+    }
+   ],
+   "npcDensity": 0.95,
+   "ships": "steamer",
+   "chronoport": {
+    "x": -330,
+    "z": -560,
+    "placeName": "the bricked-up platform of the abandoned North Station",
+    "hint": "North Station closed in 1901. There is a bricked-up platform that the rail company left off the demolition order."
+   },
+   "districtNames": {
+    "citadel": "Parliament Hill",
+    "oldtown": "The City",
+    "harbor": "The Docks",
+    "eastside": "Millbank",
+    "westmarket": "Covent Row",
+    "north": "Railway Town",
+    "fields": "The Suburbs"
+   },
+   "lore": "The workshop of the world. Steam engines, iron bridges, a glass palace full of machines, and a city that has grown faster than anyone can govern it.",
+   "insight": {
+    "title": "Growth Without Governance",
+    "text": "Victorian cities doubled every generation and outran their sewers, their air and their laws. Cholera and smog were not accidents; they were the bill for growth nobody was managing. Speed without stewardship is just a faster way to arrive at the crisis."
+   },
+   "yearLabel": "1851 CE"
+  },
+  {
+   "id": "wildwest",
+   "name": "Deadwood on the Line",
+   "civ": "Wild West",
+   "year": 1876,
+   "tagline": "Gold in the hills, a railroad on the way, and the news from Little Bighorn is a week old.",
+   "sky": 8369120,
+   "horizon": 15786434,
+   "fog": 14865592,
+   "fogDensity": 0.0024,
+   "sun": 16773842,
+   "sunIntensity": 2.7,
+   "ambient": 9865594,
+   "ground": 12033130,
+   "road": 11571813,
+   "dirt": 11571813,
+   "water": 4882316,
+   "layout": {
+    "pattern": "grid",
+    "blockW": 60,
+    "blockD": 40,
+    "streetWidth": 12,
+    "curve": 0,
+    "curveLen": 1,
+    "lotSize": 12,
+    "density": 0.7,
+    "extent": 0.48,
+    "fields": true,
+    "walls": false,
+    "pavedArterials": false
+   },
+   "buildings": [
+    {
+     "weight": 5,
+     "floors": [
+      1,
+      2
+     ],
+     "floorHeight": 3.2,
+     "footprint": [
+      0.7,
+      0.95
+     ],
+     "roof": "gable",
+     "roofColors": [
+      6965818,
+      5917242
+     ],
+     "wallColors": [
+      11569754,
+      10123858,
+      13213808,
+      14274485
+     ],
+     "tex": 3,
+     "roofTex": 3,
+     "windows": "tall",
+     "features": [
+      "falsefront",
+      "porch",
+      "storefront",
+      "sign",
+      "frames"
+     ],
+     "accent": 9054762,
+     "tag": "falsefront"
+    },
+    {
+     "weight": 2,
+     "floors": [
+      2,
+      2
+     ],
+     "floorHeight": 3.3,
+     "footprint": [
+      0.8,
+      0.95
+     ],
+     "roof": "gable",
+     "roofColors": [
+      5917242
+     ],
+     "wallColors": [
+      13213808,
+      14268552
+     ],
+     "tex": 3,
+     "roofTex": 3,
+     "windows": "tall",
+     "features": [
+      "falsefront",
+      "porch",
+      "balcony",
+      "storefront",
+      "sign",
+      "awning"
+     ],
+     "accent": 2771578,
+     "tag": "saloon"
+    },
+    {
+     "weight": 2,
+     "floors": [
+      1,
+      1
+     ],
+     "floorHeight": 2.8,
+     "footprint": [
+      0.5,
+      0.75
+     ],
+     "roof": "gable",
+     "roofColors": [
+      5917242
+     ],
+     "wallColors": [
+      9071178,
+      8018490
+     ],
+     "chimney": true,
+     "tex": 3,
+     "roofTex": 3,
+     "windows": "square",
+     "features": [
+      "porch",
+      "frames"
+     ]
+    },
+    {
+     "weight": 1,
+     "floors": [
+      2,
+      2
+     ],
+     "floorHeight": 3.4,
+     "footprint": [
+      0.8,
+      0.95
+     ],
+     "roof": "flat",
+     "roofColors": [
+      4864554
+     ],
+     "wallColors": [
+      14274485,
+      12098168
+     ],
+     "parapet": true,
+     "tex": 1,
+     "texRepeat": 0.7,
+     "windows": "arch",
+     "features": [
+      "cornice",
+      "pilasters",
+      "sign",
+      "plinth"
+     ],
+     "accent": 2763306,
+     "tag": "bank"
+    },
+    {
+     "weight": 1,
+     "floors": [
+      1,
+      1
+     ],
+     "floorHeight": 4.2,
+     "footprint": [
+      0.8,
+      0.95
+     ],
+     "roof": "gable",
+     "roofColors": [
+      6961706
+     ],
+     "wallColors": [
+      10107434,
+      9058858
+     ],
+     "tex": 3,
+     "roofTex": 3,
+     "windows": "none",
+     "features": [
+      "plinth"
+     ],
+     "tag": "barn"
+    }
+   ],
+   "props": [
+    "barrel",
+    "wagon",
+    "signpost",
+    "cactus",
+    "haystack",
+    "crate",
+    "well"
+   ],
+   "propDensity": 0.55,
+   "trees": "dead",
+   "treeDensity": 0.25,
+   "landmarks": {
+    "citadel": "fort_timber",
+    "harbor": "railroad_depot",
+    "arena": "corral",
+    "plaza": "town_square",
+    "sacred": "church_white",
+    "market": "general_store"
+   },
+   "npcs": [
+    {
+     "role": "Cowboy",
+     "outfit": "outlaw",
+     "weight": 4,
+     "names": [
+      "Wyatt",
+      "Calamity",
+      "Bill",
+      "Bass",
+      "Annie",
+      "Seth"
+     ],
+     "lines": [
+      "The railroad gets here next year. Then the cattle drives end, and so does every job I know how to do.",
+      "There is no law here. There is a sheriff. He is not the same thing.",
+      "Custer took two hundred men against two thousand. News travels slow. Lessons travel slower."
+     ]
+    },
+    {
+     "role": "Prospector",
+     "outfit": "merchant",
+     "weight": 3,
+     "names": [
+      "Zeke",
+      "Lou",
+      "Jedediah",
+      "Pearl",
+      "Cornelius"
+     ],
+     "lines": [
+      "This is Lakota land by treaty. The treaty lasted until somebody found gold.",
+      "Every claim is a lawsuit. Every lawsuit is a shooting. The lawyers are the only ones striking it rich.",
+      "Boom towns bust. The ones that live get a railroad. The rest get a plaque."
+     ]
+    },
+    {
+     "role": "Townsfolk",
+     "outfit": "farmer",
+     "weight": 3,
+     "names": [
+      "Martha",
+      "Al",
+      "Sol",
+      "Doc",
+      "Jane"
+     ],
+     "lines": [
+      "A telegraph, a newspaper and a saloon. Civilization, in order of arrival.",
+      "The buffalo are gone. Sixty million, gone in twenty years. We did that on purpose.",
+      "Every month someone new arrives who is going to clean this town up."
+     ]
+    },
+    {
+     "role": "Preacher",
+     "outfit": "priest",
+     "weight": 2,
+     "names": [
+      "Reverend Pike",
+      "Brother Amos",
+      "Reverend Doyle",
+      "Elder Strand"
+     ],
+     "lines": [
+      "The railroad brings settlers, whiskey and lawyers, in that order.",
+      "The buffalo are gone from the north range. Hunters took the hides and left the rest.",
+      "This town grew in a summer. It can vanish just as fast."
+     ]
+    },
+    {
+     "role": "Doctor",
+     "outfit": "doctor",
+     "weight": 1,
+     "names": [
+      "Dr. Ada Holt",
+      "Dr. Mae Carver",
+      "Dr. Eliza Ward",
+      "Dr. Clara Boone"
+     ],
+     "lines": [
+      "Snakebite, gunshot, cholera, and stubbornness. The last one kills the most.",
+      "The water at the north well is bad. Nobody listens until they are sick.",
+      "I came west because nobody back east would let me practice. Out here nobody asks."
+     ]
+    }
+   ],
+   "npcDensity": 0.6,
+   "ships": "steamer",
+   "chronoport": {
+    "x": -420,
+    "z": 40,
+    "placeName": "the dry well in the old livery yard off Kings Road",
+    "hint": "The livery yard off Kings Road still has a dry well that the blacksmith refuses to fill in."
+   },
+   "districtNames": {
+    "citadel": "Fort Hill",
+    "oldtown": "Main Street",
+    "harbor": "The Depot",
+    "eastside": "The Claims",
+    "westmarket": "Chinatown",
+    "north": "The Badlands Road",
+    "fields": "The Open Range"
+   },
+   "lore": "A gold-rush boomtown in a year of broken treaties and a railroad coming over the horizon to end the frontier it opened.",
+   "insight": {
+    "title": "The Frontier Closes",
+    "text": "The West was sold as endless. It took one generation to kill the buffalo, fence the range and lay a railroad across it. A frontier is not a resource. It is a countdown."
+   },
+   "yearLabel": "1876 CE"
+  },
+  {
+   "id": "industrial",
+   "name": "Chronopolis",
+   "civ": "Industrial",
+   "year": 1938,
+   "tagline": "Home. Smokestacks, breadlines, a new skyline, and a madman on the radio from Europe.",
+   "sky": 9279910,
+   "horizon": 13222578,
+   "fog": 11775394,
+   "fogDensity": 0.0038,
+   "sun": 16771532,
+   "sunIntensity": 1.9,
+   "ambient": 8159108,
+   "ground": 7042400,
+   "road": 5197650,
+   "dirt": 8023902,
+   "water": 3888736,
+   "layout": {
+    "pattern": "grid",
+    "blockW": 56,
+    "blockD": 34,
+    "streetWidth": 11,
+    "curve": 0,
+    "curveLen": 1,
+    "lotSize": 11,
+    "density": 0.93,
+    "extent": 0.9,
+    "fields": false,
+    "walls": false,
+    "pavedArterials": true
+   },
+   "buildings": [
+    {
+     "weight": 5,
+     "floors": [
+      4,
+      7
+     ],
+     "floorHeight": 3.3,
+     "footprint": [
+      0.85,
+      0.98
+     ],
+     "roof": "flat",
+     "roofColors": [
+      4868682,
+      3815994
+     ],
+     "wallColors": [
+      9067076,
+      10119758,
+      8018506,
+      11051152
+     ],
+     "parapet": true,
+     "tex": 1,
+     "texRepeat": 0.8,
+     "windows": "tall",
+     "features": [
+      "fireEscape",
+      "sills",
+      "cornice",
+      "rooftank",
+      "plinth",
+      "storefront"
+     ],
+     "accent": 2763306,
+     "tag": "tenement"
+    },
+    {
+     "weight": 2,
+     "floors": [
+      10,
+      22
+     ],
+     "floorHeight": 3.4,
+     "footprint": [
+      0.8,
+      0.95
+     ],
+     "roof": "flat",
+     "roofColors": [
+      4868690
+     ],
+     "wallColors": [
+      13222578,
+      12103840,
+      14275266,
+      9079442
+     ],
+     "setback": true,
+     "parapet": true,
+     "tex": 15,
+     "texRepeat": 0.3,
+     "windows": "tall",
+     "features": [
+      "ledges",
+      "cornice",
+      "pilasters"
+     ],
+     "tag": "tower"
+    },
+    {
+     "weight": 2,
+     "floors": [
+      2,
+      3
+     ],
+     "floorHeight": 4.5,
+     "footprint": [
+      0.9,
+      0.98
+     ],
+     "roof": "flat",
+     "roofColors": [
+      3815994
+     ],
+     "wallColors": [
+      6965818,
+      8018506,
+      5921370
+     ],
+     "smokestack": true,
+     "parapet": true,
+     "tex": 1,
+     "texRepeat": 0.8,
+     "windows": "wide",
+     "features": [
+      "plinth",
+      "ledges",
+      "rooftank"
+     ],
+     "tag": "factory"
+    },
+    {
+     "weight": 1,
+     "floors": [
+      2,
+      4
+     ],
+     "floorHeight": 3.6,
+     "footprint": [
+      0.85,
+      0.98
+     ],
+     "roof": "flat",
+     "roofColors": [
+      4868682
+     ],
+     "wallColors": [
+      14274751,
+      13222062
+     ],
+     "parapet": true,
+     "tex": 2,
+     "texRepeat": 0.3,
+     "windows": "arch",
+     "features": [
+      "pilasters",
+      "cornice",
+      "plinth",
+      "porch"
+     ],
+     "tag": "civic"
+    },
+    {
+     "weight": 2,
+     "floors": [
+      2,
+      3
+     ],
+     "floorHeight": 3.4,
+     "footprint": [
+      0.85,
+      0.98
+     ],
+     "roof": "flat",
+     "roofColors": [
+      4868682
+     ],
+     "wallColors": [
+      11569770,
+      10123866,
+      9079434
+     ],
+     "parapet": true,
+     "tex": 1,
+     "texRepeat": 0.8,
+     "windows": "wide",
+     "features": [
+      "storefront",
+      "awning",
+      "sign",
+      "cornice",
+      "sills"
+     ],
+     "accent": 9054762,
+     "tag": "shop"
+    },
+    {
+     "weight": 1,
+     "floors": [
+      1,
+      2
+     ],
+     "floorHeight": 4,
+     "footprint": [
+      0.9,
+      0.98
+     ],
+     "roof": "flat",
+     "roofColors": [
+      4868682
+     ],
+     "wallColors": [
+      9075306,
+      8022618
+     ],
+     "parapet": true,
+     "tex": 15,
+     "texRepeat": 0.4,
+     "windows": "slit",
+     "features": [
+      "plinth",
+      "sign"
+     ],
+     "tag": "warehouse"
+    }
+   ],
+   "props": [
+    "lamp",
+    "hydrant",
+    "automobile",
+    "crate",
+    "bench",
+    "signpost",
+    "barrel"
+   ],
+   "propDensity": 0.65,
+   "trees": "oak",
+   "treeDensity": 0.25,
+   "landmarks": {
+    "citadel": "city_hall",
+    "harbor": "steam_docks",
+    "arena": "stadium",
+    "plaza": "war_memorial",
+    "sacred": "cathedral_stone",
+    "market": "covered_market"
+   },
+   "npcs": [
+    {
+     "role": "Worker",
+     "outfit": "farmer",
+     "weight": 4,
+     "names": [
+      "Sal",
+      "Mike",
+      "Rosie",
+      "Stan",
+      "Ida",
+      "Frank"
+     ],
+     "lines": [
+      "Nine years since the crash. The breadline is shorter. It is still a breadline.",
+      "The plant is hiring again. Making what? Parts. Parts for what? Nobody asks.",
+      "My old man came back from France in 1919 and never talked about it. Then the radio started talking about Germany, and he started talking."
+     ]
+    },
+    {
+     "role": "Newsboy",
+     "outfit": "priest",
+     "weight": 2,
+     "names": [
+      "Danny",
+      "Pip",
+      "Eddie",
+      "Lou"
+     ],
+     "lines": [
+      "Extra! Austria annexed! Extra! Read all about it, two cents!",
+      "The Sudetenland! Munich! Peace in our time, the man says. Two cents.",
+      "Chronoport raid on the east side! Bureau seals another one! Two cents!"
+     ]
+    },
+    {
+     "role": "Bureau Agent",
+     "outfit": "soldier",
+     "weight": 1,
+     "names": [
+      "Agent Cole",
+      "Agent Marsh",
+      "Agent Vance",
+      "Agent Pryce"
+     ],
+     "lines": [
+      "Temporal Compliance. Nothing to see here. Move along, citizen.",
+      "Chronoports are sealed for your safety. Anyone found using one will be prosecuted under the Act of 1921.",
+      "We know there are more. We will find them. Every single one."
+     ]
+    },
+    {
+     "role": "Citizen",
+     "outfit": "merchant",
+     "weight": 4,
+     "names": [
+      "Mrs. Keane",
+      "Walt",
+      "Dot",
+      "Harold",
+      "Pearl",
+      "Vic"
+     ],
+     "lines": [
+      "My father saw the trenches. He says this next one will not have trenches. He says that like it is good news.",
+      "They say the old city under the city is full of doors. The Bureau pays a bounty for every door you report.",
+      "The skyline gets taller every year and the lines get longer. Somebody is doing well."
+     ]
+    },
+    {
+     "role": "Inventor",
+     "outfit": "inventor",
+     "weight": 1,
+     "names": [
+      "Mr. Tesla",
+      "Hedda Kroll",
+      "Otto Brandt",
+      "Mrs. Fairchild",
+      "Archie Lamb"
+     ],
+     "lines": [
+      "I have three patents and no money. The Hale company has my fourth.",
+      "Electricity in every home by 1950, they say. Most homes on my street are still waiting for 1920.",
+      "Machines do not cause unemployment. Men who own the machines decide that."
+     ]
+    }
+   ],
+   "npcDensity": 1,
+   "ships": "steamer",
+   "chronoport": null,
+   "districtNames": {
+    "citadel": "Capitol Hill",
+    "oldtown": "Old Town",
+    "harbor": "The Docks",
+    "eastside": "Eastside",
+    "westmarket": "West Market",
+    "north": "Northgate",
+    "fields": "The Outskirts"
+   },
+   "lore": "Your city. Nine years into the Depression, the factories are humming again and nobody wants to say why. The Bureau of Temporal Compliance seals the old doors as fast as it finds them.",
+   "insight": {
+    "title": "Home",
+    "text": "Every civilization you visit thought it was permanent. Yours thinks so too."
+   },
+   "yearLabel": "1938 CE"
+  }
+ ]
+}
